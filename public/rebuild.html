@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASHFLOW.SYS — Personal Finance Terminal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<link rel="stylesheet" href="rebuild.css">
+</head>
+<body>
+<div class="shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+    </div>
+    <div class="nav-group">
+      <div class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')" title="Dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </div>
+      <div class="nav-item" data-view="transactions" onclick="switchView('transactions')" title="Transactions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      </div>
+      <div class="nav-item" data-view="budget" onclick="switchView('budget')" title="Budget">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><line x1="12" y1="6" x2="12" y2="18"/></svg>
+      </div>
+      <div class="nav-item" data-view="goals" onclick="switchView('goals')" title="Goals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="nav-item" data-view="analytics" onclick="switchView('analytics')" title="Analytics">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+    </div>
+    <div class="nav-bottom">
+      <div class="nav-item" title="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M20 12h-2M17.66 17.66l-1.41-1.41M12 20v-2M6.34 17.66l1.41-1.41M4 12h2M6.34 6.34l1.41 1.41"/></svg>
+      </div>
+      <div class="user-avatar" title="User">AP</div>
+    </div>
+  </nav>
+
+  <!-- Main -->
+  <div class="main">
+    <div class="topbar">
+      <div class="page-title"><span>CASHFLOW</span>.SYS / <span id="pageSubtitle">dashboard</span><span class="cursor"></span></div>
+      <div class="topbar-actions">
+        <div class="terminal-greeting"><span class="prompt">></span><span class="text" id="topbarDate">APR 2025</span></div>
+        <div class="currency-badge" onclick="cycleCurrency()" id="currencyToggle">IDR</div>
+        <button class="btn btn-icon" title="Notifications" style="position:relative">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notif-dot"></span>
+        </button>
+        <button class="btn btn-ghost" onclick="openModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add Transaction
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="view active" id="view-dashboard">
+        <div class="metrics-row" id="metricsRow"></div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title">Cash Flow</div>
+              <div class="period-tabs">
+                <div class="period-tab" onclick="setPeriod(this,'7d')">7D</div>
+                <div class="period-tab active" onclick="setPeriod(this,'1M')">1M</div>
+                <div class="period-tab" onclick="setPeriod(this,'3M')">3M</div>
+                <div class="period-tab" onclick="setPeriod(this,'1Y')">1Y</div>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas id="cashflowChart"></canvas></div>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot" style="background:#3dd68c"></span>Income</span>
+              <span class="legend-item"><span class="legend-dot" style="background:#f05252"></span>Expenses</span>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title">By Category</div>
+              <div class="tag tag-gold">This Month</div>
+            </div>
+            <div class="donut-wrap">
+              <canvas id="categoryChart" width="160" height="160"></canvas>
+              <div class="donut-center">
+                <div class="donut-center-val" id="donutCenterVal">Rp 0</div>
+                <div class="donut-center-label">Spent</div>
+              </div>
+            </div>
+            <div class="category-list" id="catBreakdown"></div>
+          </div>
+        </div>
+        <div class="bottom-row">
+          <div class="transactions-card">
+            <div class="card-header">
+              <div class="card-title">Recent Transactions</div>
+              <button class="btn btn-ghost btn-sm" onclick="switchView('transactions')">View All →</button>
+            </div>
+            <div class="transaction-list" id="recentTxns"></div>
+          </div>
+          <div class="goals-card">
+            <div class="card-header">
+              <div class="card-title">Savings Goals</div>
+              <button class="btn btn-ghost btn-sm" onclick="switchView('goals')">View All →</button>
+            </div>
+            <div id="goalsList"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ TRANSACTIONS ═══ -->
+      <div class="view" id="view-transactions">
+        <div class="page-section">
+          <div class="filter-bar">
+            <input type="text" class="search-input" placeholder="Search transactions..." id="txnSearch" oninput="renderAllTxns()">
+            <div class="filter-chip active" data-filter="all" onclick="filterType(this,'all')">All</div>
+            <div class="filter-chip" data-filter="income" onclick="filterType(this,'income')">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+              Income
+            </div>
+            <div class="filter-chip" data-filter="expense" onclick="filterType(this,'expense')">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
+              Expense
+            </div>
+            <span class="chip-divider"></span>
+            <span id="catChips"></span>
+            <button class="btn btn-gold" style="margin-left:auto" onclick="openModal()">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add
+            </button>
+          </div>
+          <div class="section-label" id="txSectionLabel">TRANSACTIONS</div>
+          <div class="transaction-list" id="allTxns"></div>
+        </div>
+      </div>
+
+      <!-- ═══ BUDGET ═══ -->
+      <div class="view" id="view-budget">
+        <div class="view-header">
+          <div class="view-header-left">
+            <div class="view-header-title">Monthly Budget</div>
+            <div class="view-header-sub" id="budgetMonthLabel">April 2025</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div class="tag tag-green" id="budgetStatusTag">On Track</div>
+            <button class="btn btn-ghost btn-sm">Edit Budgets</button>
+          </div>
+        </div>
+        <div class="chart-card" style="margin-bottom:16px">
+          <div class="budget-summary-row">
+            <div>
+              <div class="budget-summary-label">Monthly Budget Used</div>
+              <div class="budget-summary-value" id="budgetUsedVal">Rp 0 <span id="budgetLimitVal">/ Rp 0</span></div>
+            </div>
+            <div style="text-align:right">
+              <div class="budget-summary-pct" id="budgetPctVal">0%</div>
+              <div class="budget-summary-days" id="budgetDaysLeft">— days left</div>
+            </div>
+          </div>
+          <div class="budget-master-bar"><div class="budget-master-fill" id="budgetMasterFill"></div></div>
+        </div>
+        <div class="budget-grid" id="budgetGrid"></div>
+      </div>
+
+      <!-- ═══ GOALS ═══ -->
+      <div class="view" id="view-goals">
+        <div class="view-header">
+          <div class="view-header-title">Savings Goals</div>
+          <button class="btn btn-gold" onclick="openModal()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            New Goal
+          </button>
+        </div>
+        <div class="goals-grid" id="goalsGrid"></div>
+      </div>
+
+      <!-- ═══ ANALYTICS ═══ -->
+      <div class="view" id="view-analytics">
+        <div class="charts-row" style="margin-bottom:12px">
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Monthly Spending Trend</div><div class="tag tag-gold">6 Months</div></div>
+            <div class="chart-canvas-wrap" style="height:240px"><canvas id="trendChart"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header"><div class="chart-title">Income Sources</div></div>
+            <div class="donut-wrap">
+              <canvas id="incomeChart" width="160" height="160"></canvas>
+              <div class="donut-center"><div class="donut-center-val" id="incomeTotal">Rp 0</div><div class="donut-center-label">Total</div></div>
+            </div>
+            <div class="category-list" id="incomeBreakdown"></div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header"><div class="chart-title">Daily Spending — This Month</div></div>
+          <div class="chart-canvas-wrap" style="height:160px"><canvas id="dailyChart"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeModalOnBackdrop(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">New Transaction</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="type-toggle">
+        <div class="type-btn active-expense" id="expenseBtn" onclick="setTxnType('expense')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/></svg>
+          Expense
+        </div>
+        <div class="type-btn" id="incomeBtn" onclick="setTxnType('income')">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          Income
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Amount (IDR)</div>
+        <div class="amount-input-wrap">
+          <span class="amount-prefix">Rp</span>
+          <input type="number" class="form-input" placeholder="0" id="amountInput">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Description</div>
+        <input type="text" class="form-input" placeholder="e.g. Lunch at Warung Padang" id="descInput">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">Category</div>
+          <select class="form-select" id="catSelect"></select>
+        </div>
+        <div class="form-group">
+          <div class="form-label">Date</div>
+          <input type="date" class="form-input form-select" id="dateInput">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Note (optional)</div>
+        <input type="text" class="form-input" placeholder="Add a note..." id="noteInput">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-gold" onclick="addTransaction()">Save Transaction</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="rebuild.js"></script>
+</body>
+</html>
