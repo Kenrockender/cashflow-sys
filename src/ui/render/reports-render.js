@@ -7,13 +7,40 @@
 
 /* ── REPORTS ─────────────────────────────────────────────── */
 function renderReports() {
-  renderYoY();
   const TV = getTxView();
+  renderReportPdfPeriodControls(TV);
+  renderYoY();
   Charts.renderCompare(TV);
   Charts.renderMonthly(TV);
   const mExpenses = TV.filter(t => t.date?.startsWith(thisMonth()) && isExpenseTx(t));
   Charts.renderPie(mExpenses);
   document.getElementById('top-expenses').innerHTML = renderTxItems([...mExpenses].sort((a, b) => b.amount - a.amount).slice(0, 10), false);
+}
+
+function renderReportPdfPeriodControls(txs = getTxView()) {
+  const monthSel = document.getElementById('report-month-select');
+  const yearSel = document.getElementById('report-year-select');
+  if (!monthSel || !yearSel) return;
+
+  const [curYear, curMonth] = thisMonth().split('-');
+  const prevMonth = monthSel.value || curMonth;
+  const prevYear = yearSel.value || curYear;
+  const locale = getLang() === 'id' ? 'id-ID' : 'en-US';
+
+  monthSel.innerHTML = Array.from({ length: 12 }, (_, idx) => {
+    const monthValue = String(idx + 1).padStart(2, '0');
+    const monthLabel = new Date(2000, idx, 1).toLocaleDateString(locale, { month: 'long' });
+    return `<option value="${monthValue}">${monthLabel}</option>`;
+  }).join('');
+
+  const years = [...new Set([
+    curYear,
+    ...txs.map(tx => (tx.date || '').slice(0, 4)).filter(y => /^\d{4}$/.test(y)),
+  ])].sort((a, b) => Number(b) - Number(a));
+  yearSel.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join('');
+
+  monthSel.value = [...monthSel.options].some(o => o.value === prevMonth) ? prevMonth : curMonth;
+  yearSel.value = [...yearSel.options].some(o => o.value === prevYear) ? prevYear : curYear;
 }
 
 function renderYoY() {

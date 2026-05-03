@@ -125,6 +125,7 @@ window.TRANSLATIONS.id = {
 
     /* ── REPORTS TAB ──────────────────────────────────────── */
     'reports.title':       'Laporan Keuangan',
+    'reports.year':        'Tahun',
     'reports.compare':     'Pemasukan vs Pengeluaran',
     'reports.monthly':     'Pengeluaran Bulanan',
     'reports.pie':         'Distribusi Kategori (Bulan Ini)',

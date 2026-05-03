@@ -111,10 +111,25 @@ async function exportXLSX() {
 }
 
 /** Full PDF financial report using jsPDF (already bundled in index.html). */
+function getReportPeriodSelection() {
+  const [curYear, curMonth] = thisMonth().split('-');
+  const monthRaw = document.getElementById('report-month-select')?.value || curMonth;
+  const yearRaw  = document.getElementById('report-year-select')?.value  || curYear;
+
+  const monthNum = Number(monthRaw);
+  const month = monthNum >= 1 && monthNum <= 12 ? String(monthNum).padStart(2, '0') : curMonth;
+  const year = /^\d{4}$/.test(yearRaw) ? yearRaw : curYear;
+
+  const locale = getLang() === 'id' ? 'id-ID' : 'en-US';
+  const label = new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+  return { ym: `${year}-${month}`, label };
+}
+
 async function exportPDFWithCharts() {
   if (!window.jspdf) { toast(t('toast.export.error')); return; }
   const { jsPDF } = window.jspdf;
   toast(t('toast.pdf.generating'));
+  const { ym: reportYm, label: reportLabel } = getReportPeriodSelection();
 
   const doc  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const W = 210, M = 15;
@@ -125,10 +140,10 @@ async function exportPDFWithCharts() {
   doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(200, 169, 110);
   doc.text('CASHFLOW.SYS', M, y); addY(6);
   doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(130, 130, 130);
-  doc.text(`${t('pdf.generated')} ${new Date().toLocaleDateString()}  ·  ${thisMonth()}`, M, y); addY(10);
+  doc.text(`${t('pdf.generated')} ${new Date().toLocaleDateString()}  ·  ${reportLabel}`, M, y); addY(10);
 
   // ── Month summary ────────────────────────────────────────
-  const tmon = thisMonth();
+  const tmon = reportYm;
   const TV   = getTxView();
   const mExp = TV.filter(tx => tx.date?.startsWith(tmon) && isExpenseTx(tx));
   const mInc = TV.filter(tx => tx.date?.startsWith(tmon) && isIncomeTx(tx));
@@ -205,7 +220,7 @@ async function exportPDFWithCharts() {
     doc.text(`${t('pdf.col.page')} ${i} ${t('pdf.col.of')} ${totalPages}`, W / 2, 291, { align: 'center' });
   }
 
-  doc.save(`cashflow-report-${todayKey()}.pdf`);
+  doc.save(`cashflow-report-${reportYm}.pdf`);
   toast(t('toast.export.pdf'));
 }
 

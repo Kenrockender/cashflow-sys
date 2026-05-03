@@ -843,6 +843,10 @@ select.form-input{cursor:pointer}
   .budget-header{flex-direction:column;gap:.6rem}
   .budget-mode-toggle{align-self:flex-start}
   .reports-hdr{flex-direction:column;align-items:flex-start;gap:.5rem}
+  .reports-actions{width:100%}
+  .reports-period-controls{width:100%}
+  .reports-period-item{flex:1}
+  .reports-period-select{width:100%;min-width:0}
   .btn-voice{display:none}
   .tx-item{padding:.52rem .65rem;gap:.5rem}
   .tx-cat-icon{width:26px;height:26px}
@@ -1247,6 +1251,11 @@ input[data-amount-init]{letter-spacing:.02em}
 
 /* ── REPORTS SECTION ─────────────────────────────────────── */
 .reports-hdr{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem .5rem;flex-wrap:wrap;gap:.6rem}
+.reports-actions{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.reports-period-controls{display:flex;gap:.5rem;align-items:flex-end;flex-wrap:wrap}
+.reports-period-item{display:flex;flex-direction:column;gap:.2rem;font-family:var(--mono);font-size:.44rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3)}
+.reports-period-select{min-width:118px;background:var(--bg2);border:1px solid var(--line2);color:var(--text2);padding:.34rem .5rem;font-family:var(--mono);font-size:.52rem;letter-spacing:.08em}
+.reports-period-select option{background:var(--bg1);color:var(--text2)}
 .reports-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line)}
 .reports-grid>div{border-right:1px solid var(--line)}
 .reports-grid>div:last-child{border-right:none}

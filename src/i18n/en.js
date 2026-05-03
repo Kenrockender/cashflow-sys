@@ -125,6 +125,7 @@ window.TRANSLATIONS.en = {
 
     /* ── REPORTS TAB ──────────────────────────────────────── */
     'reports.title':       'Financial Reports',
+    'reports.year':        'Year',
     'reports.compare':     'Income vs Expense',
     'reports.monthly':     'Monthly Spending',
     'reports.pie':         'Category Distribution (This Month)',
