@@ -537,7 +537,5 @@ window.TRANSLATIONS.id = {
     'yoy.title':                 'Perbandingan Tahunan',
     'yoy.vs.last.year':          'vs bulan yang sama tahun lalu',
     'yoy.no.data':               'Tidak ada data dari tahun lalu',
-    'yoy.change':                '{pct}% {dir} dari tahun lalu',
-  }
-
+    'yoy.change':                '{pct}% {dir} dari tahun lalu'
 };

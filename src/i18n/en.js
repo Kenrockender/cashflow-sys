@@ -538,6 +538,4 @@ window.TRANSLATIONS.en = {
     'yoy.vs.last.year':          'vs same month last year',
     'yoy.no.data':               'No data from last year',
     'yoy.change':                '{pct}% {dir} from last year'
-  },
-
 };

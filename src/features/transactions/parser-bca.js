@@ -178,25 +178,6 @@ function detectCategory(description, txType, debitTx) {
 
 // ─── Description Builder ──────────────────────────────────────────────────────
 
-const NOISE_LINE = /
-  ^\d{4}\/FT[A-Z]+\/WS\d+$  |   # ref codes like 0205/FTSCY/WS95271
-  ^\d+\.\d{2}$               |   # raw amounts
-  ^-$                         |   # dash separators
-  ^\d{10,}$                   |   # long phone/account numbers
-  ^Q\d{3,}[A-Z0-9]*$         |   # QRIS codes
-  ^@                          |   # @ prefixes
-  ^BIF\s                      |   # BI-FAST prefix
-  ^NTRF@                      |   # KR OTOMATIS ref
-  ^RTGS-                      |   # RTGS ref
-  ^\d{2}\/\d{2}\s+WSID        |   # CDM ref
-  ^TGL:\s*\d{2}\/\d{2}$       |   # date labels
-  ^QR\s+\d{3}$                |   # QR CBG codes
-  ^QRC?\d+$                   |   # QRC codes
-  ^[A-Z0-9]{6,}$              |   # pure uppercase codes
-  ^TANGGAL\s*:                    # TANGGAL annotation
-/x;
-
-// Simplified version without verbose flag
 function isNoiseLine(line) {
   return (
     /^\d{4}\/FT[A-Z]+\/WS\d+$/.test(line) ||

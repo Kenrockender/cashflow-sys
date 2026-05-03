@@ -11,7 +11,7 @@ export function extractAmountFromText(text) {
   for (const p of pats) {
     const m = text.match(p);
     if (!m) continue;
-    let n = parseFloat(m[1].replace(/\./g, '').replace(',', '.'));
+    let n = parseFloat(m[1].replace(/\.(?=\d{3}(\D|$))/g, '').replace(',', '.'));
     const s = (m[2] || '').toLowerCase();
     const x = SHORTHANDS[s] || 1;
     if (!isNaN(n) && n > 0) return Math.round(n * x);

@@ -7,7 +7,6 @@
      setLang('id')       → switch language + re-render page
 ══════════════════════════════════════════════════════════ */
 
-const TRANSLATIONS = {
 window.TRANSLATIONS = window.TRANSLATIONS || {};
 
 /* ── ENGINE ──────────────────────────────────────────────── */
