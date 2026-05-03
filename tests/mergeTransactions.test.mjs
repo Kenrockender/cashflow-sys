@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { mergeTransactionsAfterQueueFlush } from '../lib/mergeTransactions.mjs';
+import { mergeTransactionsAfterQueueFlush } from '../src/utils/lib/mergeTransactions.mjs';
 
 const fp = t => `${t.date}|${Number(t.amount)}|${String(t.description || '').trim().toLowerCase()}`;
 
