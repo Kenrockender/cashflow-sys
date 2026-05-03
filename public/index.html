@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>CASHFLOW.SYS</title>
+  <base href="/public/"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="icon" type="image/svg+xml" href="logo.svg"/>
   <link rel="apple-touch-icon" href="logo.svg"/>
@@ -1039,6 +1040,9 @@
 <script src="../src/ui/render/filters-render.js"></script>
 <script src="../src/ui/render/modals-render.js"></script>
 <script src="../src/ui/render/ui-render.js"></script>
+<!-- Services: Auth (must load BEFORE events.js) -->
+<script src="../src/services/auth.js"></script>
+
 <script src="../src/ui/components/events.js"></script>
 
 <!-- Features: Transactions -->
@@ -1063,9 +1067,6 @@
 <script src="../src/features/reimbursement/reimburse.js"></script>
 <script src="../src/features/ai-insights/ai-insights.js"></script>
 <script src="../src/features/notifications/cf-notifications.js"></script>
-
-<!-- Services -->
-<script src="../src/services/auth.js"></script>
 
 <!-- App Initialization -->
 <script src="../src/app.js"></script>
