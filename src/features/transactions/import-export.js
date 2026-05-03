@@ -267,14 +267,20 @@ async function exportPDFWithCharts() {
   // ─────────────────────────────────────────────────────────
 
   // Safely extract a canvas as a PNG data URL.
-  // Returns null if the canvas doesn't exist, is empty, or is tainted.
+  // Composites onto white first — fixes transparent Chart.js canvases
+  // (doughnut/pie charts render with alpha and appear blank without this).
   const canvasImg = (id) => {
     try {
       const el = document.getElementById(id);
-      if (!el || !el.getContext) return null;
-      const dataUrl = el.toDataURL('image/png');
-      // An empty/blank canvas returns the minimal PNG stub
-      if (!dataUrl || dataUrl === 'data:,' || dataUrl.length < 200) return null;
+      if (!el || !el.getContext || el.width < 10 || el.height < 10) return null;
+      const tmp = document.createElement('canvas');
+      tmp.width = el.width; tmp.height = el.height;
+      const ctx = tmp.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, tmp.width, tmp.height);
+      ctx.drawImage(el, 0, 0);
+      const dataUrl = tmp.toDataURL('image/png');
+      if (!dataUrl || dataUrl.length < 500) return null;
       return { dataUrl, aspect: el.width / Math.max(el.height, 1) };
     } catch (_) { return null; }
   };
@@ -284,57 +290,31 @@ async function exportPDFWithCharts() {
   const imgMonthly = canvasImg('monthly-chart'); // Monthly spending bar
 
   if (imgCompare || imgPie || imgMonthly) {
-    // Start charts on a fresh page so tables don't crowd them
-    if (y > 180) { doc.addPage(); y = M; pageHeader(); }
+    // Charts always get their own page — clean visual block, no table crowding
+    doc.addPage(); y = M; pageHeader();
     section('Visual Overview');
 
-    // ── Income vs Expense — full width ───────────────────────
-    if (imgCompare) {
-      const imgW = W - 2 * M;
-      const imgH = Math.min(imgW / imgCompare.aspect, 58);
-      if (y + imgH + 8 > 278) { doc.addPage(); y = M; pageHeader(); }
+    const imgW = W - 2 * M;
 
-      // Subtle white card background
-      fillR(M - 2, y - 2, imgW + 4, imgH + 8, 1.5, [252, 252, 252]);
+    // Helper: draw one full-width chart card
+    const chartCard = (img, label, maxH) => {
+      if (!img) return;
+      const h = Math.min(imgW / img.aspect, maxH);
+      if (y + h + 12 > 278) { doc.addPage(); y = M; pageHeader(); }
+      // Card shell with white bg (covers any residual transparency)
+      fillR(M - 2, y - 2, imgW + 4, h + 10, 2, [252, 252, 252]);
       doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
-      doc.roundedRect(M - 2, y - 2, imgW + 4, imgH + 8, 1.5, 1.5, 'S');
+      doc.roundedRect(M - 2, y - 2, imgW + 4, h + 10, 2, 2, 'S');
+      doc.addImage(img.dataUrl, 'PNG', M, y, imgW, h);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...C.gray);
+      doc.text(label, M + 1, y + h + 6);
+      addY(h + 14);
+    };
 
-      doc.addImage(imgCompare.dataUrl, 'PNG', M, y, imgW, imgH);
-      doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
-      doc.text('Income vs Expense — Last 6 Months', M, y + imgH + 4.5);
-      addY(imgH + 10);
-    }
-
-    // ── Pie + Monthly — side by side ─────────────────────────
-    if (imgPie || imgMonthly) {
-      const halfW  = (W - 2 * M - 6) / 2;
-      const pieH   = imgPie     ? Math.min(halfW / imgPie.aspect,     55) : 0;
-      const monthH = imgMonthly ? Math.min(halfW / imgMonthly.aspect, 55) : 0;
-      const rowH   = Math.max(pieH, monthH);
-
-      if (y + rowH + 12 > 278) { doc.addPage(); y = M; pageHeader(); }
-
-      if (imgPie) {
-        fillR(M - 2, y - 2, halfW + 4, pieH + 8, 1.5, [252, 252, 252]);
-        doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
-        doc.roundedRect(M - 2, y - 2, halfW + 4, pieH + 8, 1.5, 1.5, 'S');
-        doc.addImage(imgPie.dataUrl, 'PNG', M, y, halfW, pieH);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
-        doc.text('Category Distribution', M, y + pieH + 4.5);
-      }
-
-      if (imgMonthly) {
-        const cx = M + halfW + 6;
-        fillR(cx - 2, y - 2, halfW + 4, monthH + 8, 1.5, [252, 252, 252]);
-        doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
-        doc.roundedRect(cx - 2, y - 2, halfW + 4, monthH + 8, 1.5, 1.5, 'S');
-        doc.addImage(imgMonthly.dataUrl, 'PNG', cx, y, halfW, monthH);
-        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
-        doc.text('Monthly Spending', cx, y + monthH + 4.5);
-      }
-
-      addY(rowH + 12);
-    }
+    // Stack all three full-width for maximum readability
+    chartCard(imgCompare, 'Income vs Expense — Last 6 Months', 72);
+    chartCard(imgPie,     'Category Distribution',              80);
+    chartCard(imgMonthly, 'Monthly Spending',                   65);
   }
 
   // ─────────────────────────────────────────────────────────
@@ -358,7 +338,8 @@ async function exportPDFWithCharts() {
   addY(3.5);
 
   activeCats.forEach((cat, idx) => {
-    if (y > 265) { doc.addPage(); y = M; pageHeader(); }
+    // Break early enough to keep at least 2 rows together — avoids single orphan rows
+    if (y > 258) { doc.addPage(); y = M; pageHeader(); }
     const spent  = catTotals[cat.id] || 0;
     const budget = S.budgets[cat.id] || 0;
     const over   = budget > 0 && spent > budget;
