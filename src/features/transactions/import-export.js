@@ -263,6 +263,81 @@ async function exportPDFWithCharts() {
   }
 
   // ─────────────────────────────────────────────────────────
+  // CHARTS — capture live Chart.js canvases from the DOM
+  // ─────────────────────────────────────────────────────────
+
+  // Safely extract a canvas as a PNG data URL.
+  // Returns null if the canvas doesn't exist, is empty, or is tainted.
+  const canvasImg = (id) => {
+    try {
+      const el = document.getElementById(id);
+      if (!el || !el.getContext) return null;
+      const dataUrl = el.toDataURL('image/png');
+      // An empty/blank canvas returns the minimal PNG stub
+      if (!dataUrl || dataUrl === 'data:,' || dataUrl.length < 200) return null;
+      return { dataUrl, aspect: el.width / Math.max(el.height, 1) };
+    } catch (_) { return null; }
+  };
+
+  const imgCompare = canvasImg('compare-chart'); // Income vs Expense 6-month bar
+  const imgPie     = canvasImg('pie-chart');     // Category doughnut
+  const imgMonthly = canvasImg('monthly-chart'); // Monthly spending bar
+
+  if (imgCompare || imgPie || imgMonthly) {
+    // Start charts on a fresh page so tables don't crowd them
+    if (y > 180) { doc.addPage(); y = M; pageHeader(); }
+    section('Visual Overview');
+
+    // ── Income vs Expense — full width ───────────────────────
+    if (imgCompare) {
+      const imgW = W - 2 * M;
+      const imgH = Math.min(imgW / imgCompare.aspect, 58);
+      if (y + imgH + 8 > 278) { doc.addPage(); y = M; pageHeader(); }
+
+      // Subtle white card background
+      fillR(M - 2, y - 2, imgW + 4, imgH + 8, 1.5, [252, 252, 252]);
+      doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
+      doc.roundedRect(M - 2, y - 2, imgW + 4, imgH + 8, 1.5, 1.5, 'S');
+
+      doc.addImage(imgCompare.dataUrl, 'PNG', M, y, imgW, imgH);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+      doc.text('Income vs Expense — Last 6 Months', M, y + imgH + 4.5);
+      addY(imgH + 10);
+    }
+
+    // ── Pie + Monthly — side by side ─────────────────────────
+    if (imgPie || imgMonthly) {
+      const halfW  = (W - 2 * M - 6) / 2;
+      const pieH   = imgPie     ? Math.min(halfW / imgPie.aspect,     55) : 0;
+      const monthH = imgMonthly ? Math.min(halfW / imgMonthly.aspect, 55) : 0;
+      const rowH   = Math.max(pieH, monthH);
+
+      if (y + rowH + 12 > 278) { doc.addPage(); y = M; pageHeader(); }
+
+      if (imgPie) {
+        fillR(M - 2, y - 2, halfW + 4, pieH + 8, 1.5, [252, 252, 252]);
+        doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
+        doc.roundedRect(M - 2, y - 2, halfW + 4, pieH + 8, 1.5, 1.5, 'S');
+        doc.addImage(imgPie.dataUrl, 'PNG', M, y, halfW, pieH);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+        doc.text('Category Distribution', M, y + pieH + 4.5);
+      }
+
+      if (imgMonthly) {
+        const cx = M + halfW + 6;
+        fillR(cx - 2, y - 2, halfW + 4, monthH + 8, 1.5, [252, 252, 252]);
+        doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
+        doc.roundedRect(cx - 2, y - 2, halfW + 4, monthH + 8, 1.5, 1.5, 'S');
+        doc.addImage(imgMonthly.dataUrl, 'PNG', cx, y, halfW, monthH);
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+        doc.text('Monthly Spending', cx, y + monthH + 4.5);
+      }
+
+      addY(rowH + 12);
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────
   // BUDGET BREAKDOWN WITH PROGRESS BARS
   // ─────────────────────────────────────────────────────────
   section(t('pdf.budget.breakdown'));
