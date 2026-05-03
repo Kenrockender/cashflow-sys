@@ -1043,30 +1043,31 @@
 <!-- Services: Auth (must load BEFORE events.js) -->
 <script src="../src/services/auth.js"></script>
 
-<script src="../src/ui/components/events.js"></script>
-
-<!-- Features: Transactions -->
+<!-- Features: Transactions (must load BEFORE events.js — events.js binds handleSaveTx, handleConfirmImport) -->
 <script src="../src/features/transactions/transactions.js"></script>
 <script src="../src/features/transactions/recurring.js"></script>
 <script src="../src/features/transactions/import-export.js"></script>
 
-<!-- Features: Goals -->
+<!-- Features: Goals (must load BEFORE events.js) -->
 <script src="../src/features/goals/goals.js"></script>
 <script src="../src/features/goals/contributions.js"></script>
 <script src="../src/features/goals/milestones.js"></script>
 
-<!-- Features: Budget -->
+<!-- Features: Budget (must load BEFORE events.js) -->
 <script src="../src/features/budget/budget.js"></script>
 
-<!-- Features: Accounts -->
+<!-- Features: Accounts (must load BEFORE events.js) -->
 <script src="../src/features/accounts/accounts.js"></script>
 <script src="../src/features/accounts/transfers.js"></script>
 <script src="../src/features/accounts/categories.js"></script>
 
-<!-- Features: Other -->
+<!-- Features: Other (must load BEFORE events.js) -->
 <script src="../src/features/reimbursement/reimburse.js"></script>
 <script src="../src/features/ai-insights/ai-insights.js"></script>
 <script src="../src/features/notifications/cf-notifications.js"></script>
+
+<!-- Events: DOM bindings (LAST — all handler functions must exist before this runs) -->
+<script src="../src/ui/components/events.js"></script>
 
 <!-- App Initialization -->
 <script src="../src/app.js"></script>
