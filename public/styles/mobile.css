@@ -429,11 +429,6 @@
   transition: opacity .18s, transform .22s var(--ease-spring);
 }
 
-.bnav-btn.active::before {
-  opacity: .7;
-  transform: scaleX(1);
-}
-
 .bnav-btn span {
   font-family: var(--mono);
   font-size: .42rem;

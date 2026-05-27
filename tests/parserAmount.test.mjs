@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { extractAmountFromText } from '../lib/parserAmount.mjs';
+import { extractAmountFromText } from '../src/utils/lib/parserAmount.mjs';
 
 describe('extractAmountFromText', () => {
   it('parses Indonesian shorthands', () => {

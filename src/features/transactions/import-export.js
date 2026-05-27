@@ -111,101 +111,394 @@ async function exportXLSX() {
 }
 
 /** Full PDF financial report using jsPDF (already bundled in index.html). */
+function getReportPeriodSelection() {
+  const [curYear, curMonth] = thisMonth().split('-');
+  const monthRaw = document.getElementById('report-month-select')?.value || curMonth;
+  const yearRaw  = document.getElementById('report-year-select')?.value  || curYear;
+
+  const monthNum = Number(monthRaw);
+  const month = monthNum >= 1 && monthNum <= 12 ? String(monthNum).padStart(2, '0') : curMonth;
+  const year = /^\d{4}$/.test(yearRaw) ? yearRaw : curYear;
+
+  const locale = getLang() === 'id' ? 'id-ID' : 'en-US';
+  const label = new Date(Number(year), Number(month) - 1, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+  return { ym: `${year}-${month}`, label };
+}
+
 async function exportPDFWithCharts() {
   if (!window.jspdf) { toast(t('toast.export.error')); return; }
   const { jsPDF } = window.jspdf;
   toast(t('toast.pdf.generating'));
+  const { ym: reportYm, label: reportLabel } = getReportPeriodSelection();
 
-  const doc  = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const W = 210, M = 15;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, H = 297, M = 14;
   let y = M;
-  const addY = (n = 5) => { y += n; if (y > 274) { doc.addPage(); y = M; } };
 
-  // ── Header ──────────────────────────────────────────────
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(16); doc.setTextColor(200, 169, 110);
-  doc.text('CASHFLOW.SYS', M, y); addY(6);
-  doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(130, 130, 130);
-  doc.text(`${t('pdf.generated')} ${new Date().toLocaleDateString()}  ·  ${thisMonth()}`, M, y); addY(10);
+  // ── Color palette ─────────────────────────────────────────
+  const C = {
+    gold:      [200, 169, 110],
+    goldLight: [252, 246, 233],
+    green:     [39,  174, 96],
+    greenBg:   [235, 250, 241],
+    red:       [192, 57,  43],
+    redBg:     [252, 237, 235],
+    orange:    [230, 140, 50],
+    dark:      [30,  30,  30],
+    mid:       [70,  70,  70],
+    gray:      [140, 140, 140],
+    stripe:    [247, 247, 247],
+    rule:      [220, 220, 220],
+    white:     [255, 255, 255],
+  };
 
-  // ── Month summary ────────────────────────────────────────
-  const tmon = thisMonth();
+  // ── Drawing helpers ───────────────────────────────────────
+  const fill = (x, ry, w, h, col) => {
+    doc.setFillColor(...col);
+    doc.rect(x, ry, w, h, 'F');
+  };
+  const fillR = (x, ry, w, h, r, col) => {
+    doc.setFillColor(...col);
+    doc.roundedRect(x, ry, w, h, r, r, 'F');
+  };
+
+  // Repeating page header for pages 2+
+  const pageHeader = () => {
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(...C.gold);
+    doc.text('CASHFLOW.SYS', M, y);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.gray);
+    doc.text(reportLabel, W - M, y, { align: 'right' });
+    y += 2;
+    doc.setDrawColor(...C.gold); doc.setLineWidth(0.25); doc.line(M, y, W - M, y);
+    y += 5;
+  };
+
+  // Advance y with auto page break
+  const addY = (n = 5) => {
+    y += n;
+    if (y > 278) { doc.addPage(); y = M; pageHeader(); }
+  };
+
+  // Section title bar (gold-tinted background + bold label)
+  const section = (title) => {
+    if (y > 260) { doc.addPage(); y = M; pageHeader(); }
+    fill(M, y - 1, W - 2 * M, 7.5, C.goldLight);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(8.5); doc.setTextColor(...C.gold);
+    doc.text(title, M + 2.5, y + 4.5);
+    addY(11);
+  };
+
+  // ─────────────────────────────────────────────────────────
+  // PAGE 1 — COVER HEADER
+  // ─────────────────────────────────────────────────────────
+  fill(0, 0, W, 3.5, C.gold);   // Top accent bar
+  fill(0, H - 3.5, W, 3.5, C.gold); // Bottom accent bar (pre-draw for page 1)
+
+  y = 12;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(...C.gold);
+  doc.text('CASHFLOW', M, y);
+  const cashW = doc.getTextWidth('CASHFLOW');
+  doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.dark);
+  doc.text('.SYS', M + cashW, y);
+
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...C.gray);
+  doc.text('Personal Finance Report', M, y + 5);
+
+  doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...C.gray);
+  doc.text(`${t('pdf.generated')}: ${new Date().toLocaleDateString()}`, W - M, y, { align: 'right' });
+  doc.setFont('helvetica', 'bold'); doc.setTextColor(...C.dark);
+  doc.text(reportLabel, W - M, y + 5, { align: 'right' });
+
+  y += 12;
+  doc.setDrawColor(...C.gold); doc.setLineWidth(0.4); doc.line(M, y, W - M, y);
+  y += 9;
+
+  // ── KPI SUMMARY CARDS (2 × 2 grid) ───────────────────────
   const TV   = getTxView();
-  const mExp = TV.filter(tx => tx.date?.startsWith(tmon) && isExpenseTx(tx));
-  const mInc = TV.filter(tx => tx.date?.startsWith(tmon) && isIncomeTx(tx));
+  const mExp = TV.filter(tx => tx.date?.startsWith(reportYm) && isExpenseTx(tx));
+  const mInc = TV.filter(tx => tx.date?.startsWith(reportYm) && isIncomeTx(tx));
   const totE = sum(mExp), totI = sum(mInc), net = totI - totE;
   const totB = Object.values(S.budgets).reduce((a, b) => a + b, 0);
 
-  doc.setDrawColor(200, 169, 110); doc.setLineWidth(0.2); doc.line(M, y, W - M, y); addY(4);
-  for (const [lbl, val, r, g2, b2] of [
-    [t('pdf.income'),  fmtFull(totI), 39,  174, 96],
-    [t('pdf.expense'), fmtFull(totE), 200, 169, 110],
-    [t('pdf.net'),     (net >= 0 ? '+' : '') + fmtFull(net), ...(net >= 0 ? [39, 174, 96] : [192, 57, 43])],
-    ['Budget',         fmtFull(totB), 150, 150, 150],
-  ]) {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(80, 80, 80);
-    doc.text(lbl, M, y);
-    doc.setFont('helvetica', 'bold'); doc.setTextColor(r, g2, b2);
-    doc.text(val, W - M, y, { align: 'right' });
-    addY(5);
-  }
-  doc.line(M, y, W - M, y); addY(8);
+  const cardW = (W - 2 * M - 5) / 2;
+  const cardH = 20;
+  const cards = [
+    { label: t('pdf.income'),  value: fmtFull(totI), color: C.green,              bg: C.greenBg },
+    { label: t('pdf.expense'), value: fmtFull(totE), color: [210, 80, 50],         bg: C.redBg   },
+    { label: t('pdf.net'),     value: (net >= 0 ? '+' : '') + fmtFull(net),
+      color: net >= 0 ? C.green : C.red,                                           bg: net >= 0 ? C.greenBg : C.redBg },
+    { label: 'Budget',         value: fmtFull(totB), color: C.gold,               bg: C.goldLight },
+  ];
 
-  // ── Budget breakdown ─────────────────────────────────────
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(200, 169, 110);
-  doc.text(t('pdf.budget.breakdown'), M, y); addY(6);
+  const startCardsY = y;
+  cards.forEach((card, i) => {
+    const cx = M + (i % 2) * (cardW + 5);
+    const cy = startCardsY + Math.floor(i / 2) * (cardH + 4);
+    fillR(cx, cy, cardW, cardH, 2, card.bg);
+    // Accent left bar
+    fillR(cx, cy, 2.5, cardH, 1, card.color);
+    // Label
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+    doc.text(card.label.toUpperCase(), cx + 6, cy + 6.5);
+    // Value
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(...card.color);
+    doc.text(card.value, cx + 6, cy + 15);
+  });
+
+  y = startCardsY + 2 * (cardH + 4) + 6;
+
+  // ── SAVINGS RATE BADGE ────────────────────────────────────
+  if (totI > 0) {
+    const rate = Math.round((net / totI) * 100);
+    const rateColor = rate >= 20 ? C.green : rate >= 0 ? C.gold : C.red;
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7.5); doc.setTextColor(...rateColor);
+    doc.text(`Savings Rate: ${rate}%`, M, y);
+    const budgetUsed = totB > 0 ? Math.round((totE / totB) * 100) : null;
+    if (budgetUsed !== null) {
+      const buColor = budgetUsed > 100 ? C.red : budgetUsed > 80 ? C.orange : C.green;
+      doc.setFont('helvetica', 'normal'); doc.setTextColor(...buColor);
+      doc.text(`Budget Used: ${budgetUsed}%`, W - M, y, { align: 'right' });
+    }
+    addY(8);
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // CHARTS — capture live Chart.js canvases from the DOM
+  // ─────────────────────────────────────────────────────────
+
+  // Safely extract a canvas as a PNG data URL.
+  // Composites onto white first — fixes transparent Chart.js canvases
+  // (doughnut/pie charts render with alpha and appear blank without this).
+  const canvasImg = (id) => {
+    try {
+      const el = document.getElementById(id);
+      if (!el || !el.getContext || el.width < 10 || el.height < 10) return null;
+      const tmp = document.createElement('canvas');
+      tmp.width = el.width; tmp.height = el.height;
+      const ctx = tmp.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, tmp.width, tmp.height);
+      ctx.drawImage(el, 0, 0);
+      const dataUrl = tmp.toDataURL('image/png');
+      if (!dataUrl || dataUrl.length < 500) return null;
+      return { dataUrl, aspect: el.width / Math.max(el.height, 1) };
+    } catch (_) { return null; }
+  };
+
+  const imgCompare = canvasImg('compare-chart'); // Income vs Expense 6-month bar
+  const imgPie     = canvasImg('pie-chart');     // Category doughnut
+  const imgMonthly = canvasImg('monthly-chart'); // Monthly spending bar
+
+  if (imgCompare || imgPie || imgMonthly) {
+    // Charts always get their own page — clean visual block, no table crowding
+    doc.addPage(); y = M; pageHeader();
+    section('Visual Overview');
+
+    const imgW = W - 2 * M;
+
+    // Helper: draw one full-width chart card
+    const chartCard = (img, label, maxH) => {
+      if (!img) return;
+      const h = Math.min(imgW / img.aspect, maxH);
+      if (y + h + 12 > 278) { doc.addPage(); y = M; pageHeader(); }
+      // Card shell with white bg (covers any residual transparency)
+      fillR(M - 2, y - 2, imgW + 4, h + 10, 2, [252, 252, 252]);
+      doc.setDrawColor(...C.rule); doc.setLineWidth(0.2);
+      doc.roundedRect(M - 2, y - 2, imgW + 4, h + 10, 2, 2, 'S');
+      doc.addImage(img.dataUrl, 'PNG', M, y, imgW, h);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...C.gray);
+      doc.text(label, M + 1, y + h + 6);
+      addY(h + 14);
+    };
+
+    // Stack all three full-width for maximum readability
+    chartCard(imgCompare, 'Income vs Expense — Last 6 Months', 72);
+    chartCard(imgPie,     'Category Distribution',              80);
+    chartCard(imgMonthly, 'Monthly Spending',                   65);
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // BUDGET BREAKDOWN WITH PROGRESS BARS
+  // ─────────────────────────────────────────────────────────
+  section(t('pdf.budget.breakdown'));
 
   const catTotals = {};
   for (const tx of mExp) catTotals[tx.category] = (catTotals[tx.category] || 0) + tx.amount;
-  const colW = (W - 2 * M) / 3;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(120, 120, 120);
-  doc.text(t('pdf.col.category'), M, y);
-  doc.text(t('pdf.col.spent'),    M + colW, y, { align: 'right' });
-  doc.text(t('pdf.col.budget'),   W - M, y, { align: 'right' });
-  addY(4);
+  const activeCats = getAllCategories().filter(c => catTotals[c.id] || S.budgets[c.id]);
 
-  for (const cat of getAllCategories()) {
+  // Column positions: Category | Spent | Budget | [progress bar]
+  const bc1 = M, bc2 = M + 60, bc3 = M + 105, bc4 = M + 130;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+  doc.text(t('pdf.col.category'), bc1, y);
+  doc.text(t('pdf.col.spent'),    bc2, y, { align: 'right' });
+  doc.text(t('pdf.col.budget'),   bc3, y, { align: 'right' });
+  doc.text('% Used', W - M, y, { align: 'right' });
+  y += 2;
+  doc.setDrawColor(...C.rule); doc.setLineWidth(0.15); doc.line(M, y, W - M, y);
+  addY(3.5);
+
+  activeCats.forEach((cat, idx) => {
+    // Break early enough to keep at least 2 rows together — avoids single orphan rows
+    if (y > 258) { doc.addPage(); y = M; pageHeader(); }
     const spent  = catTotals[cat.id] || 0;
     const budget = S.budgets[cat.id] || 0;
-    if (!spent && !budget) continue;
-    const over = budget > 0 && spent > budget;
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8);
+    const over   = budget > 0 && spent > budget;
+    const pct    = budget > 0 ? Math.min(spent / budget, 1) : 0;
+    const rowH   = 7;
+
+    // Alternate row stripe
+    if (idx % 2 === 0) fill(M, y - 1.5, W - 2 * M, rowH, C.stripe);
+
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
     doc.setTextColor(over ? 192 : 50, over ? 57 : 50, over ? 43 : 50);
-    doc.text(getCat(cat.id).label.slice(0, 22), M, y);
-    doc.text(fmtFull(spent), M + colW, y, { align: 'right' });
-    if (budget > 0) doc.text(fmtFull(budget), W - M, y, { align: 'right' });
-    addY(5);
+    doc.text(getCat(cat.id).label.slice(0, 28), bc1, y + 2.5);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(7);
+    doc.text(fmtFull(spent), bc2, y + 2.5, { align: 'right' });
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.gray);
+    if (budget > 0) doc.text(fmtFull(budget), bc3, y + 2.5, { align: 'right' });
+
+    // Mini progress bar
+    const barX = bc4, barY = y + 1, barW = W - M - bc4, barH = 2.5;
+    fillR(barX, barY, barW, barH, 0.8, C.rule);
+    if (pct > 0) {
+      const barColor = over ? C.red : pct > 0.8 ? C.orange : C.green;
+      fillR(barX, barY, barW * pct, barH, 0.8, barColor);
+    }
+    if (budget > 0) {
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(6); doc.setTextColor(...(over ? C.red : C.gray));
+      doc.text(`${Math.round(pct * 100)}%`, W - M, y + 4.5, { align: 'right' });
+    }
+    addY(rowH);
+  });
+
+  if (!activeCats.length) {
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...C.gray);
+    doc.text('No budget or spending data for this period.', M, y); addY(8);
   }
-  addY(5);
+  addY(6);
 
-  // ── Top expenses ─────────────────────────────────────────
-  if (y > 240) { doc.addPage(); y = M; }
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(200, 169, 110);
-  doc.text(t('pdf.top.expenses'), M, y); addY(6);
+  // ─────────────────────────────────────────────────────────
+  // TOP EXPENSES TABLE
+  // ─────────────────────────────────────────────────────────
+  if (y > 230) { doc.addPage(); y = M; pageHeader(); }
+  section(t('pdf.top.expenses'));
 
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(120, 120, 120);
-  doc.text(t('pdf.col.date'),        M, y);
-  doc.text(t('pdf.col.description'), M + 22, y);
-  doc.text(t('pdf.col.amount'),      W - M, y, { align: 'right' });
-  addY(4);
+  const tc1 = M, tc2 = M + 25, tc3 = M + 120, tc4 = W - M;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+  doc.text(t('pdf.col.date'),        tc1, y);
+  doc.text(t('pdf.col.description'), tc2, y);
+  doc.text('Category',               tc3, y);
+  doc.text(t('pdf.col.amount'),      tc4, y, { align: 'right' });
+  y += 2;
+  doc.setDrawColor(...C.rule); doc.setLineWidth(0.15); doc.line(M, y, W - M, y);
+  addY(3.5);
 
   const topExp = [...mExp].sort((a, b) => b.amount - a.amount).slice(0, 10);
-  for (const tx of topExp) {
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(50, 50, 50);
-    doc.text(tx.date || '',                       M, y);
-    doc.text((tx.description || '').slice(0, 38), M + 22, y);
-    doc.text(fmtFull(tx.amount),                  W - M, y, { align: 'right' });
-    addY(5);
+  topExp.forEach((tx, idx) => {
+    if (y > 270) { doc.addPage(); y = M; pageHeader(); }
+    if (idx % 2 === 0) fill(M, y - 1.5, W - 2 * M, 7, C.stripe);
+
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...C.mid);
+    doc.text(tx.date || '', tc1, y + 2.5);
+    doc.text((tx.description || '').slice(0, 44), tc2, y + 2.5);
+    doc.setTextColor(...C.gray);
+    doc.text(getCat(tx.category).label.slice(0, 18), tc3, y + 2.5);
+    doc.setFont('helvetica', 'bold'); doc.setTextColor(...C.red);
+    doc.text(fmtFull(tx.amount), tc4, y + 2.5, { align: 'right' });
+    addY(7);
+  });
+
+  if (!topExp.length) {
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...C.gray);
+    doc.text('No expense transactions for this period.', M, y); addY(8);
+  }
+  addY(6);
+
+  // ─────────────────────────────────────────────────────────
+  // INCOME SOURCES
+  // ─────────────────────────────────────────────────────────
+  if (mInc.length) {
+    if (y > 220) { doc.addPage(); y = M; pageHeader(); }
+    section('Income This Month');
+
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+    doc.text(t('pdf.col.date'),        tc1, y);
+    doc.text(t('pdf.col.description'), tc2, y);
+    doc.text(t('pdf.col.amount'),      tc4, y, { align: 'right' });
+    y += 2;
+    doc.setDrawColor(...C.rule); doc.setLineWidth(0.15); doc.line(M, y, W - M, y);
+    addY(3.5);
+
+    [...mInc].sort((a, b) => b.amount - a.amount).slice(0, 10).forEach((tx, idx) => {
+      if (y > 270) { doc.addPage(); y = M; pageHeader(); }
+      if (idx % 2 === 0) fill(M, y - 1.5, W - 2 * M, 7, C.stripe);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...C.mid);
+      doc.text(tx.date || '', tc1, y + 2.5);
+      doc.text((tx.description || '').slice(0, 58), tc2, y + 2.5);
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(...C.green);
+      doc.text(fmtFull(tx.amount), tc4, y + 2.5, { align: 'right' });
+      addY(7);
+    });
+    addY(6);
   }
 
-  // ── Page numbers ─────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────
+  // SAVINGS GOALS
+  // ─────────────────────────────────────────────────────────
+  if (S.goals && S.goals.length) {
+    if (y > 230) { doc.addPage(); y = M; pageHeader(); }
+    section('Savings Goals');
+
+    S.goals.forEach((goal, idx) => {
+      if (y > 262) { doc.addPage(); y = M; pageHeader(); }
+      const saved  = goal.saved  || 0;
+      const target = goal.target || 1;
+      const pct    = Math.min(saved / target, 1);
+      const done   = pct >= 1;
+      const gColor = done ? C.green : C.gold;
+
+      if (idx % 2 === 0) fill(M, y - 1.5, W - 2 * M, 13, C.stripe);
+
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(...C.dark);
+      doc.text((goal.name || 'Goal').slice(0, 34), M + 3, y + 2.5);
+
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(...C.gray);
+      doc.text(`${fmtFull(saved)} / ${fmtFull(target)}`, W - M - 20, y + 2.5, { align: 'right' });
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(...gColor);
+      doc.text(`${Math.round(pct * 100)}%`, W - M, y + 2.5, { align: 'right' });
+
+      if (goal.deadline) {
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(6.5); doc.setTextColor(...C.gray);
+        doc.text(`Deadline: ${goal.deadline}`, M + 3, y + 6.5);
+      }
+
+      // Progress bar
+      const barX = M + 3, barY = y + 8.5, barW = W - 2 * M - 6, barH = 2.5;
+      fillR(barX, barY, barW, barH, 1, C.rule);
+      if (pct > 0) fillR(barX, barY, barW * pct, barH, 1, gColor);
+      addY(14);
+    });
+    addY(4);
+  }
+
+  // ─────────────────────────────────────────────────────────
+  // FOOTER ON EVERY PAGE
+  // ─────────────────────────────────────────────────────────
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    doc.setFont('helvetica', 'normal'); doc.setFontSize(7); doc.setTextColor(150, 150, 150);
-    doc.text(`${t('pdf.col.page')} ${i} ${t('pdf.col.of')} ${totalPages}`, W / 2, 291, { align: 'center' });
+    // Bottom bar
+    fill(0, H - 8, W, 8, C.dark);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.gold);
+    doc.text('CASHFLOW.SYS', M, H - 3.5);
+    doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.gray);
+    doc.text('Personal Finance Terminal', M + doc.getTextWidth('CASHFLOW.SYS') + 3, H - 3.5);
+    doc.text(`${t('pdf.col.page')} ${i} / ${totalPages}`, W - M, H - 3.5, { align: 'right' });
+    // Top gold bar on pages 2+
+    if (i > 1) fill(0, 0, W, 3.5, C.gold);
   }
 
-  doc.save(`cashflow-report-${todayKey()}.pdf`);
+  doc.save(`cashflow-report-${reportYm}.pdf`);
   toast(t('toast.export.pdf'));
 }
 

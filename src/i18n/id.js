@@ -125,6 +125,7 @@ window.TRANSLATIONS.id = {
 
     /* ── REPORTS TAB ──────────────────────────────────────── */
     'reports.title':       'Laporan Keuangan',
+    'reports.year':        'Tahun',
     'reports.compare':     'Pemasukan vs Pengeluaran',
     'reports.monthly':     'Pengeluaran Bulanan',
     'reports.pie':         'Distribusi Kategori (Bulan Ini)',
@@ -537,7 +538,5 @@ window.TRANSLATIONS.id = {
     'yoy.title':                 'Perbandingan Tahunan',
     'yoy.vs.last.year':          'vs bulan yang sama tahun lalu',
     'yoy.no.data':               'Tidak ada data dari tahun lalu',
-    'yoy.change':                '{pct}% {dir} dari tahun lalu',
-  }
-
+    'yoy.change':                '{pct}% {dir} dari tahun lalu'
 };

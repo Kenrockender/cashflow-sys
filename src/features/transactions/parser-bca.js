@@ -178,25 +178,6 @@ function detectCategory(description, txType, debitTx) {
 
 // ─── Description Builder ──────────────────────────────────────────────────────
 
-const NOISE_LINE = /
-  ^\d{4}\/FT[A-Z]+\/WS\d+$  |   # ref codes like 0205/FTSCY/WS95271
-  ^\d+\.\d{2}$               |   # raw amounts
-  ^-$                         |   # dash separators
-  ^\d{10,}$                   |   # long phone/account numbers
-  ^Q\d{3,}[A-Z0-9]*$         |   # QRIS codes
-  ^@                          |   # @ prefixes
-  ^BIF\s                      |   # BI-FAST prefix
-  ^NTRF@                      |   # KR OTOMATIS ref
-  ^RTGS-                      |   # RTGS ref
-  ^\d{2}\/\d{2}\s+WSID        |   # CDM ref
-  ^TGL:\s*\d{2}\/\d{2}$       |   # date labels
-  ^QR\s+\d{3}$                |   # QR CBG codes
-  ^QRC?\d+$                   |   # QRC codes
-  ^[A-Z0-9]{6,}$              |   # pure uppercase codes
-  ^TANGGAL\s*:                    # TANGGAL annotation
-/x;
-
-// Simplified version without verbose flag
 function isNoiseLine(line) {
   return (
     /^\d{4}\/FT[A-Z]+\/WS\d+$/.test(line) ||
@@ -443,7 +424,7 @@ function deduplicate(transactions) {
 /**
  * Detect if a text blob is from a BCA statement.
  */
-export function isBCAStatement(text) {
+function isBCAStatement(text) {
   return /REKENING\s+TAHAPAN|BANK\s+CENTRAL\s+ASIA|KCP\s+.*BCA|LAPORAN\s+MUTASI/i.test(text);
 }
 
@@ -453,7 +434,7 @@ export function isBCAStatement(text) {
  * @param {File} file
  * @returns {Promise<{transactions, meta, summary, warnings, skipped?}>}
  */
-export async function parseBCAStatement(file) {
+async function parseBCAStatement(file) {
   const warnings = [];
 
   let extracted;
@@ -517,7 +498,7 @@ export async function parseBCAStatement(file) {
  * @param {FileList|File[]} files
  * @returns {Promise<{transactions, metas, summary, warnings}>}
  */
-export async function parseBCAStatements(files) {
+async function parseBCAStatements(files) {
   const results = await Promise.all(Array.from(files).map(f => parseBCAStatement(f).catch(err => ({
     transactions: [],
     meta: { accountNo: '', period: f.name },
@@ -551,7 +532,7 @@ export async function parseBCAStatements(files) {
  * @param {Array} bcaTransactions - output of parseBCAStatement / parseBCAStatements
  * @returns {Array} app-ready transaction objects
  */
-export function toAppTransactions(bcaTransactions) {
+function toAppTransactions(bcaTransactions) {
   return bcaTransactions.map((tx, i) => ({
     id:          `bca_${tx.date}_${i}_${tx.amount}`,
     date:        tx.date,           // "YYYY-MM-DD"

@@ -125,6 +125,7 @@ window.TRANSLATIONS.en = {
 
     /* ── REPORTS TAB ──────────────────────────────────────── */
     'reports.title':       'Financial Reports',
+    'reports.year':        'Year',
     'reports.compare':     'Income vs Expense',
     'reports.monthly':     'Monthly Spending',
     'reports.pie':         'Category Distribution (This Month)',
@@ -537,7 +538,5 @@ window.TRANSLATIONS.en = {
     'yoy.title':                 'Year-over-Year',
     'yoy.vs.last.year':          'vs same month last year',
     'yoy.no.data':               'No data from last year',
-    'yoy.change':                '{pct}% {dir} from last year',
-  },
-
+    'yoy.change':                '{pct}% {dir} from last year'
 };

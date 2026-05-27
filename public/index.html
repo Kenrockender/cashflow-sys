@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <title>CASHFLOW.SYS</title>
+  <base href="/public/"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="icon" type="image/svg+xml" href="logo.svg"/>
   <link rel="apple-touch-icon" href="logo.svg"/>
@@ -472,7 +473,17 @@
       <div id="tab-reports" class="tab-content hidden">
         <div class="reports-hdr">
           <span class="sec-title" style="opacity:1" data-i18n="reports.title">Financial Reports</span>
-          <div style="display:flex;gap:.5rem;align-items:center">
+          <div class="reports-actions">
+            <div class="reports-period-controls">
+              <label class="reports-period-item">
+                <span data-i18n="period.month">Month</span>
+                <select id="report-month-select" class="reports-period-select" aria-label="Report month"></select>
+              </label>
+              <label class="reports-period-item">
+                <span data-i18n="reports.year">Year</span>
+                <select id="report-year-select" class="reports-period-select" aria-label="Report year"></select>
+              </label>
+            </div>
             <button class="btn-export-csv" onclick="exportCSV()">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               CSV
@@ -1039,33 +1050,34 @@
 <script src="../src/ui/render/filters-render.js"></script>
 <script src="../src/ui/render/modals-render.js"></script>
 <script src="../src/ui/render/ui-render.js"></script>
-<script src="../src/ui/components/events.js"></script>
+<!-- Services: Auth (must load BEFORE events.js) -->
+<script src="../src/services/auth.js"></script>
 
-<!-- Features: Transactions -->
+<!-- Features: Transactions (must load BEFORE events.js — events.js binds handleSaveTx, handleConfirmImport) -->
 <script src="../src/features/transactions/transactions.js"></script>
 <script src="../src/features/transactions/recurring.js"></script>
 <script src="../src/features/transactions/import-export.js"></script>
 
-<!-- Features: Goals -->
+<!-- Features: Goals (must load BEFORE events.js) -->
 <script src="../src/features/goals/goals.js"></script>
 <script src="../src/features/goals/contributions.js"></script>
 <script src="../src/features/goals/milestones.js"></script>
 
-<!-- Features: Budget -->
+<!-- Features: Budget (must load BEFORE events.js) -->
 <script src="../src/features/budget/budget.js"></script>
 
-<!-- Features: Accounts -->
+<!-- Features: Accounts (must load BEFORE events.js) -->
 <script src="../src/features/accounts/accounts.js"></script>
 <script src="../src/features/accounts/transfers.js"></script>
 <script src="../src/features/accounts/categories.js"></script>
 
-<!-- Features: Other -->
+<!-- Features: Other (must load BEFORE events.js) -->
 <script src="../src/features/reimbursement/reimburse.js"></script>
 <script src="../src/features/ai-insights/ai-insights.js"></script>
 <script src="../src/features/notifications/cf-notifications.js"></script>
 
-<!-- Services -->
-<script src="../src/services/auth.js"></script>
+<!-- Events: DOM bindings (LAST — all handler functions must exist before this runs) -->
+<script src="../src/ui/components/events.js"></script>
 
 <!-- App Initialization -->
 <script src="../src/app.js"></script>
