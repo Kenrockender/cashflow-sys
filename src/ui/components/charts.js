@@ -18,12 +18,12 @@ const Charts = (() => {
 
   /* ── theme helpers ───────────────────────────────────────── */
   const css  = v  => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-  const FONT = () => ({ family: "'DM Mono',monospace", size: 10, weight: '300' });
+  const FONT = () => ({ family: "'IBM Plex Mono',ui-monospace,monospace", size: 9, weight: '400' });
   const baseOpts = (extra = {}) => ({
     responsive: true,
     maintainAspectRatio: false,
     animation: { duration: 400, easing: 'easeOutQuart' },
-    plugins: { legend: { display: false }, tooltip: { backgroundColor: css('--bg3') || '#201d2a', titleColor: css('--gold') || '#d4a843', bodyColor: css('--text2') || 'rgba(240,232,245,0.62)', borderColor: css('--gold4') || 'rgba(212,168,67,0.34)', borderWidth: 1, padding: 10, titleFont: { family: "'DM Mono',monospace", size: 10, weight: '500' }, bodyFont: { family: "'DM Mono',monospace", size: 10 }, cornerRadius: 0, displayColors: false }, ...(extra.plugins || {}) },
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: css('--bg3') || '#201d2a', titleColor: css('--gold') || '#d4a843', bodyColor: css('--text2') || 'rgba(240,232,245,0.62)', borderColor: css('--gold4') || 'rgba(212,168,67,0.34)', borderWidth: 1, padding: 10, titleFont: { family: "'IBM Plex Mono',ui-monospace,monospace", size: 10, weight: '500' }, bodyFont: { family: "'IBM Plex Mono',ui-monospace,monospace", size: 10 }, cornerRadius: 0, displayColors: false }, ...(extra.plugins || {}) },
     scales: {
       x: { ticks: { color: css('--text3'), font: FONT(), maxTicksLimit: 8 }, grid: { color: css('--line'), drawBorder: false }, border: { color: 'transparent' } },
       y: { ticks: { color: css('--text3'), font: FONT(), callback: v => v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v }, grid: { color: css('--line'), drawBorder: false }, border: { color: 'transparent' } },
@@ -53,7 +53,7 @@ const Charts = (() => {
     }
     dc = new Chart(ctx, {
       type: 'bar',
-      data: { labels: days, datasets: [{ data: amounts, backgroundColor: amounts.map(a => a > 0 ? g + '44' : 'transparent'), borderColor: amounts.map(a => a > 0 ? g : 'transparent'), borderWidth: 1, borderRadius: 3 }] },
+      data: { labels: days, datasets: [{ data: amounts, backgroundColor: amounts.map(a => a > 0 ? g + '55' : 'transparent'), borderColor: amounts.map(a => a > 0 ? g : 'transparent'), borderWidth: 1, borderRadius: 0, borderSkipped: false }] },
       options: baseOpts(),
     });
     _lastDaily = h;
@@ -71,7 +71,7 @@ const Charts = (() => {
     const data   = keys.map(k => mm[k]);
     const g = css('--gold');
     if (mc) { mc.data.labels = labels; mc.data.datasets[0].data = data; mc.update('none'); _lastMonthly = h; return; }
-    mc = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Expense', data, backgroundColor: g + 'bb', borderColor: g, borderWidth: 1, borderRadius: 5 }] }, options: baseOpts() });
+    mc = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Expense', data, backgroundColor: g + '88', borderColor: g, borderWidth: 1, borderRadius: 0, borderSkipped: false }] }, options: baseOpts() });
     _lastMonthly = h;
   };
 
@@ -87,8 +87,8 @@ const Charts = (() => {
     if (pc) { pc.destroy(); pc = null; }
     pc = new Chart(ctx, {
       type: 'doughnut',
-      data: { labels: cats.map(c => getCat(c.id).label), datasets: [{ data: cats.map(c => tot[c.id]), backgroundColor: cats.map(c => c.color + 'cc'), borderWidth: 2, borderColor: css('--bg1') || '#0d0d0d' }] },
-      options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, plugins: { legend: { position: 'right', labels: { color: css('--text3'), font: FONT(), boxWidth: 12, padding: 12, usePointStyle: true } } } },
+      data: { labels: cats.map(c => getCat(c.id).label), datasets: [{ data: cats.map(c => tot[c.id]), backgroundColor: cats.map(c => c.color + 'cc'), borderWidth: 1, borderColor: css('--bg') || '#000000' }] },
+      options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, cutout: '62%', plugins: { legend: { position: 'right', labels: { color: css('--text3'), font: FONT(), boxWidth: 8, padding: 10, usePointStyle: false, textTransform: 'uppercase' } } } },
     });
     _lastPie = h;
   };
@@ -108,8 +108,8 @@ const Charts = (() => {
     cc = new Chart(ctx, {
       type: 'bar',
       data: { labels, datasets: [
-        { label: 'Income',  data: inc, backgroundColor: ok + '55', borderColor: ok, borderWidth: 1, borderRadius: 3 },
-        { label: 'Expense', data: exp, backgroundColor: g  + '44', borderColor: g,  borderWidth: 1, borderRadius: 3 },
+        { label: 'Income',  data: inc, backgroundColor: ok + '44', borderColor: ok, borderWidth: 1, borderRadius: 0, borderSkipped: false },
+        { label: 'Expense', data: exp, backgroundColor: g  + '55', borderColor: g,  borderWidth: 1, borderRadius: 0, borderSkipped: false },
       ]},
       options: {
         responsive: true, maintainAspectRatio: false, animation: { duration: 400 },

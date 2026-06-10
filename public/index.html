@@ -15,10 +15,12 @@
   <meta name="theme-color" content="#c8a96e"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,200..600;0,9..144,300..600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles/styles.css"/>
   <link rel="stylesheet" href="styles/mobile.css"/>
   <link rel="stylesheet" href="styles/reimburse.css"/>
+  <link rel="stylesheet" href="styles/cashflow-override.css"/>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
@@ -57,9 +59,9 @@
 <!-- ══ AUTH SCREEN ══════════════════════════════════════════ -->
 <div id="auth-screen" class="auth-screen">
   <div class="auth-box">
-    <div class="auth-eyebrow" data-i18n="auth.eyebrow">Personal Finance Terminal</div>
-    <div class="auth-wordmark">Cash<span>flow</span></div>
-    <div class="auth-tagline" data-i18n="auth.tagline">Track · Control · Grow</div>
+    <div class="auth-eyebrow" data-i18n="auth.eyebrow">Ledger Terminal · Auth Required</div>
+    <div class="auth-wordmark">CASHFLOW<span>.SYS</span></div>
+    <div class="auth-tagline" data-i18n="auth.tagline">[ v2.6 ] · Private · Offline-Capable · GMT+7</div>
     <div class="auth-divider"></div>
     <button id="btn-google-login" class="btn-login">
       <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
@@ -68,46 +70,55 @@
         <path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="currentColor" opacity=".7"/>
         <path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="currentColor"/>
       </svg>
-      <span data-i18n="auth.login.btn">Sign in with Google</span>
+      <span data-i18n="auth.login.btn">Authenticate · Google</span>
     </button>
-    <div style="margin-top:1.8rem;font-family:var(--mono);font-size:.44rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text3);opacity:.5">Secured · Private · Offline-Ready</div>
+    <div style="margin-top:28px;font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);opacity:1">/ ID.001 / FY26 Q2 / SECURE CHANNEL</div>
   </div>
 </div>
 
 <!-- ══ APP SHELL ══════════════════════════════════════════════ -->
 <div id="app" class="shell hidden">
 
+  <!-- ── LIVE TICKER BAR ─────────────────────────────────── -->
+  <div class="ticker" id="ticker-bar">
+    <div class="ticker-brand">
+      <span>CASHFLOW</span><span class="sig">.SYS</span><span class="ver">[ v2.6 ]</span>
+    </div>
+    <div class="ticker-feed">
+      <span class="ticker-cell"><span class="blip"></span><span class="lbl">MTD</span><span class="val" id="tk-mtd">Rp —</span></span>
+      <span class="ticker-cell"><span class="lbl">TXN</span><span class="val" id="tk-txn">—</span></span>
+      <span class="ticker-cell is-signal"><span class="lbl">USD·IDR</span><span class="val" id="tk-fx">—</span></span>
+      <span class="ticker-cell is-time"><span class="lbl">/</span><span class="val" id="tk-time">00:00:00 GMT+7</span></span>
+    </div>
+  </div>
+
   <!-- Mobile sidebar overlay -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-  <!-- ── ICON SIDEBAR ──────────────────────────────────────── -->
+  <!-- ── SIDEBAR ─────────────────────────────────────────── -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
         <polyline points="17 6 23 6 23 12"/>
       </svg>
+      <span class="sidebar-logo">OPS<span>.MENU</span></span>
     </div>
 
     <nav class="sidebar-nav">
-      <button class="tab active" data-tab="dashboard" title="Dashboard">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      <button class="tab active" data-tab="dashboard" data-num="01" title="Dashboard">
         <span data-i18n="nav.dashboard">Dashboard</span>
       </button>
-      <button class="tab" data-tab="transactions" title="Transactions">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1" fill="currentColor"/><circle cx="3" cy="12" r="1" fill="currentColor"/><circle cx="3" cy="18" r="1" fill="currentColor"/></svg>
-        <span data-i18n="nav.transactions">Transactions</span>
+      <button class="tab" data-tab="transactions" data-num="02" title="Transactions">
+        <span data-i18n="nav.transactions">Txns</span>
       </button>
-      <button class="tab" data-tab="budget" title="Budget">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <button class="tab" data-tab="budget" data-num="03" title="Budget">
         <span data-i18n="nav.budget">Budget</span>
       </button>
-      <button class="tab" data-tab="goals" title="Goals">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span data-i18n="nav.goals">Savings</span>
+      <button class="tab" data-tab="goals" data-num="04" title="Goals">
+        <span data-i18n="nav.goals">Goals</span>
       </button>
-      <button class="tab" data-tab="reports" title="Reports">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      <button class="tab" data-tab="reports" data-num="05" title="Reports">
         <span data-i18n="nav.reports">Reports</span>
       </button>
     </nav>
@@ -194,9 +205,9 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
 
-      <!-- Terminal title -->
+      <!-- Page label -->
       <div class="topbar-title">
-        <span class="brand">CASHFLOW</span><span class="topbar-sep">.SYS</span> /
+        <span class="topbar-sep">/</span>
         <span id="topbar-page">dashboard</span><span class="topbar-cursor"></span>
       </div>
 
@@ -1184,6 +1195,74 @@
     document.getElementById('auth-screen').style.display = 'none';
     document.getElementById('app').classList.remove('hidden');
   }
+
+  /* ══ LIVE TICKER ═════════════════════════════════════════════════
+     Updates every 1s. Pulls real numbers from S (app state) when
+     available; falls back gracefully when state isn't loaded yet.
+     ─────────────────────────────────────────────────────────────── */
+  (function liveTicker() {
+    const $mtd  = document.getElementById('tk-mtd');
+    const $txn  = document.getElementById('tk-txn');
+    const $fx   = document.getElementById('tk-fx');
+    const $time = document.getElementById('tk-time');
+    if (!$mtd || !$txn || !$fx || !$time) return;
+
+    const pad = n => String(n).padStart(2, '0');
+
+    // Compact rupiah formatting: 4.235k / 1.23M / 12.5M
+    const fmtRp = (n) => {
+      if (!n || !isFinite(n)) return 'Rp 0';
+      const abs = Math.abs(n);
+      if (abs >= 1e9)  return 'Rp ' + (n / 1e9).toFixed(2) + 'B';
+      if (abs >= 1e6)  return 'Rp ' + (n / 1e6).toFixed(2) + 'M';
+      if (abs >= 1e3)  return 'Rp ' + (n / 1e3).toFixed(1) + 'k';
+      return 'Rp ' + Math.round(n);
+    };
+    // FX: integer with thousands separator, like "16,200"
+    const fmtFx = (n) => {
+      if (!n || !isFinite(n)) return '—';
+      return Math.round(n).toLocaleString('en-US');
+    };
+
+    const tick = () => {
+      // Time — Jakarta timezone (GMT+7), HH:MM:SS
+      const now = new Date();
+      const ymdLocal = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Jakarta' }); // YYYY-MM-DD
+      const hms = now.toLocaleTimeString('en-GB', { timeZone: 'Asia/Jakarta', hour12: false });
+      $time.textContent = hms + ' GMT+7';
+
+      // Pull live state if available
+      const S = window.S;
+      if (S && Array.isArray(S.transactions)) {
+        const monthKey = ymdLocal.slice(0, 7); // YYYY-MM
+        let mtdExpense = 0;
+        let todayCount = 0;
+        for (const t of S.transactions) {
+          if (!t || !t.date) continue;
+          if (t.type !== 'income' && t.date.startsWith(monthKey)) {
+            mtdExpense += (t.amount || 0);
+          }
+          if (t.date === ymdLocal) todayCount++;
+        }
+        $mtd.textContent = fmtRp(mtdExpense);
+        $txn.textContent = pad(todayCount) + ' TDY';
+
+        // USD/IDR rate from S.exchangeRates.USD
+        const usd = S.exchangeRates && S.exchangeRates.USD;
+        $fx.textContent = fmtFx(usd);
+      } else {
+        // Fallback — show dashes while state initializes
+        if ($mtd.textContent === 'Rp —') {
+          $mtd.textContent = 'Rp —';
+          $txn.textContent = '—';
+          $fx.textContent  = '—';
+        }
+      }
+    };
+
+    tick();
+    setInterval(tick, 1000);
+  })();
 </script>
 </body>
 </html>

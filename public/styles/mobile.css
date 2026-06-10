@@ -1,10 +1,12 @@
-/* ══════════════════════════════════════════════════════════
-   CASHFLOW.SYS — MOBILE.CSS  [UPGRADED]
-   Enhanced touch device fixes, bottom nav, safe areas.
-   Load AFTER styles.css.
-══════════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════════════
+   CASHFLOW.SYS — mobile.css
+   ────────────────────────────────────────────────────────────────────
+   Touch-device refinements, safe areas, tap targets.
+   Loads after styles.css. Light layer — most responsive behavior
+   already lives in styles.css media queries.
+   ──────────────────────────────────────────────────────────────────── */
 
-/* ── SAFE AREA (iPhone notch / home bar) ─────────────────── */
+/* Safe area variables for notch / home indicator */
 :root {
   --sab: env(safe-area-inset-bottom, 0px);
   --sat: env(safe-area-inset-top, 0px);
@@ -12,560 +14,56 @@
   --sar: env(safe-area-inset-right, 0px);
 }
 
-/* ── TX ACTIONS: always visible on touch ─────────────────── */
+/* Touch devices — always-visible row actions, larger tap targets */
 @media (hover: none), (pointer: coarse) {
-  .tx-actions {
-    opacity: 1 !important;
-    display: flex;
-    gap: .2rem;
-    flex-shrink: 0;
-  }
-
-  .tx-act-btn {
-    padding: .28rem .42rem;
-    font-size: .56rem;
-    min-width: 36px;
-    min-height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .tx-right {
-    flex-direction: row;
-    align-items: center;
-    gap: .35rem;
-  }
-
+  .tx-actions { opacity: 1 !important; display: flex; gap: 4px; flex-shrink: 0; }
+  .tx-act-btn { padding: 5px 7px; font-size: 9px; min-width: 30px; min-height: 30px; display: flex; align-items: center; justify-content: center; }
+  .tx-right { flex-direction: row-reverse; align-items: center; gap: 6px; }
   .tx-type-tag { display: none; }
-}
+  .tx-item { padding: 12px 8px; }
 
-/* ── MODAL: BOTTOM SHEET ─────────────────────────────────── */
-@media (max-width: 640px) {
-  .modal {
-    align-items: flex-end;
-    padding: 0;
-  }
+  .goal-actions { opacity: 1 !important; }
+  .account-actions { opacity: 1 !important; }
 
-  .modal-box {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 18px 18px 0 0;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
-    border-top: 2px solid var(--gold);
-    max-height: 92vh;
-    animation: sheetUp .28s cubic-bezier(.4, 0, .2, 1);
-    box-shadow:
-      0 -12px 60px rgba(0,0,0,.7),
-      0 -1px 0 var(--gold3),
-      0 0 0 1px var(--gold4);
-    padding-top: .5rem;
-  }
-
-  .modal-box::before {
-    content: '';
-    display: block;
-    width: 36px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--gold4), transparent);
-    border-radius: 2px;
-    margin: 0 auto .5rem;
-  }
-
-  @keyframes sheetUp {
-    from { transform: translateY(100%); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-
-  @keyframes modalIn {
-    from { transform: translateY(60px); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-
-  .modal-foot {
-    position: sticky;
-    bottom: 0;
-    background: var(--bg1, #fff);
-    z-index: 10;
-    padding-bottom: max(1.2rem, var(--sab));
-    padding-top: .7rem;
-    box-shadow: 0 -2px 16px 0 rgba(0,0,0,0.07);
-    display: flex;
-    gap: 1.2rem;
-    justify-content: space-between;
-  }
-}
-
-/* ── TOPBAR: comfortable on mobile ──────────────────────── */
-@media (max-width: 640px) {
-  .topbar {
-    padding: .55rem .85rem;
-    gap: .5rem;
-  }
-
-  .quickadd-input {
-    font-size: .88rem;
-  }
-
-  .quickadd-input:focus {
-    scroll-margin-top: 60px;
-  }
-
-  .ai-preview {
-    position: fixed;
-    left: 0; right: 0;
-    top: auto;
-    bottom: 0;
-    padding: .55rem 1rem;
-    padding-bottom: max(.55rem, var(--sab));
-    border-bottom: none;
-    border-top: 1px solid var(--gold);
-    z-index: 25;
-    flex-wrap: wrap;
-    gap: .4rem;
-  }
-
-  .ai-amount { margin-left: 0; }
-}
-
-/* ── TOUCH TARGETS: 44px minimum ────────────────────────── */
-@media (hover: none), (pointer: coarse) {
-  .btn-primary,
-  .btn-secondary,
-  .btn-qadd,
-  .btn-login,
-  .hamburger {
-    min-height: 44px;
-  }
-
-  .tab {
-    padding: .85rem 1.4rem;
-  }
-
-  .mood-pill {
-    padding: .38rem .6rem;
-    font-size: .5rem;
-  }
-
-  .period-btn {
-    padding: .35rem .7rem;
+  /* Tap-friendly buttons */
+  .btn-primary, .btn-secondary, .btn-pdf, .btn-export-csv,
+  .btn-ai-insights, .btn-rollover-reset, .btn-trash-restore,
+  .btn-filter-save, .btn-filter-clear, .btn-load-more,
+  .btn-ob-action, .btn-mark-recurring, .btn-refresh-rates,
+  .sidebar-action-btn, .reimb-open-btn {
     min-height: 32px;
   }
 
-  .cat-chip {
-    padding: .85rem .7rem;
-    font-size: .92rem;
-    border-radius: 1.2rem;
-    margin: .18rem .12rem;
-    min-width: 44px;
-    min-height: 44px;
-    box-shadow: 0 1px 4px 0 rgba(0,0,0,0.04);
-    transition: background 0.15s, border-color 0.15s;
-  }
-
-  .type-btn {
-    padding: 1rem 1.1rem;
-    font-size: 1.05rem;
-    border-radius: 1.1rem;
-    min-width: 44px;
-    min-height: 44px;
-  }
-
-  .qa-action {
-    width: 36px;
-    height: 36px;
+  /* Prevent iOS auto-zoom on focus by ensuring 16px input baseline on small */
+  @media (max-width: 480px) {
+    .form-input, .quickadd-input, .bud-input, .currency-rate-input,
+    .reports-period-select, .recurring-frequency-select, .recurring-day-select {
+      font-size: 16px;
+    }
   }
 }
 
-/* ── SIDEBAR: swipe-friendly ─────────────────────────────── */
+/* Bottom nav respect safe area */
 @media (max-width: 900px) {
-  .sidebar {
-    width: 240px;
-  }
-
-  .sidebar.open {
-    box-shadow: 6px 0 48px rgba(0, 0, 0, .7);
-  }
-
-  .sidebar-action-btn {
-    padding: .65rem .85rem;
-    font-size: .56rem;
-    min-height: 44px;
-  }
-
-  .tab {
-    padding: .8rem 1.4rem;
-    font-size: .58rem;
-  }
+  .bottom-nav { padding-bottom: var(--sab); }
+  .pwa-install-bar { bottom: 56px; bottom: calc(56px + var(--sab)); }
 }
 
-/* ── SUMMARY CARDS: very small screens ──────────────────── */
-@media (max-width: 400px) {
-  .summary-grid {
-    grid-template-columns: 1fr 1fr;
-    margin: .6rem .6rem;
-    gap: 1px;
-  }
+/* Pull-to-refresh space */
+.main-content { overscroll-behavior-y: contain; }
 
-  .summary-card { padding: .75rem .65rem; }
-  .card-val {
-    font-size: 0.92rem;
-    word-break: break-all;
-    overflow-wrap: anywhere;
-    max-width: 100%;
-    line-height: 1.1;
-  }
+/* PWA standalone — extra top breathing room under iOS status bar */
+@media all and (display-mode: standalone) {
+  .ticker { padding-top: var(--sat); height: calc(26px + var(--sat)); }
+  .sidebar { top: calc(26px + var(--sat)); height: calc(100vh - 26px - var(--sat)); }
+  .topbar { top: calc(26px + var(--sat)); }
 }
 
-/* ── CHART HEIGHT ────────────────────────────────────────── */
-@media (max-width: 560px) {
-  .chart-wrap            { height: 150px; }
-  .compare-chart-wrap    { height: 150px; }
-}
-
-/* ── TX LIST PADDING ─────────────────────────────────────── */
-@media (max-width: 560px) {
-  .tx-list { padding: 0 .75rem; }
-  .tx-month-sep { padding: .7rem .75rem .3rem; }
-  .btn-load-more { width: 100%; }
-}
-
-/* ── BUDGET COMPACT ──────────────────────────────────────── */
-@media (max-width: 560px) {
-  .budget-items {
-    grid-template-columns: 1fr;
-    padding: 0 .75rem 1rem;
-  }
-  .bud-input { width: 80px; }
-}
-
-/* ── TOAST: above safe area ──────────────────────────────── */
-.toast {
-  bottom: calc(1.8rem + var(--sab));
-}
-
-/* ── PWA BAR: safe area ──────────────────────────────────── */
-.pwa-install-bar {
-  padding-bottom: max(.65rem, var(--sab));
-}
-
-/* ── GOALS: action buttons always visible on touch ───────── */
-@media (hover: none), (pointer: coarse) {
-  .goal-actions {
-    opacity: 1 !important;
-  }
-
-  .tx-act-btn, .goal-actions .tx-act-btn {
-    min-height: 36px;
-  }
-}
-
-/* ── FORM INPUTS: prevent iOS zoom (font≥16px) ───────────── */
-@media (max-width: 640px) {
-  .form-input,
-  .bud-input,
-  .quickadd-input {
-    font-size: 16px !important;
-    min-height: 44px;
-    border-radius: .7rem;
-    padding: .7rem .9rem;
-  }
-  .form-input::placeholder { font-size: .88rem; }
-}
-
-/* ── SIDEBAR ACTION BUTTONS ──────────────────────────────── */
-.sidebar-action-btn {
-  padding: .38rem .62rem;
-  font-size: .5rem;
-}
-
-/* ── DATE FILTER WRAPPER ─────────────────────────────────── */
-.date-filter-wrap {
-  display: inline-flex;
-  flex-direction: column;
-  gap: .18rem;
-  flex-shrink: 0;
-}
-.date-filter-lbl {
-  font-family: var(--mono);
-  font-size: .44rem;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .65;
-  padding-left: .1rem;
-  pointer-events: none;
-}
-.date-filter-wrap .form-input { margin-top: 0; }
-@media (min-width: 641px) {
-  .date-filter-wrap .form-input { width: 138px; }
-}
-
-/* ── TX TOOLBAR: responsive ──────────────────────────────── */
-/* Base layout lives in styles.css — only overrides here */
-.tx-filters-grid .date-filter-wrap { width: 100%; min-width: 0; }
-.tx-filters-grid .date-filter-wrap .form-input,
-.tx-filters-grid #tx-date-from,
-.tx-filters-grid #tx-date-to,
-.tx-filters-grid #tx-filter-type,
-.tx-filters-grid #tx-filter-cat {
-  width: 100%; min-width: 0; max-width: 100%; box-sizing: border-box;
-}
-.tx-filters-grid input[type="date"] { -webkit-appearance: none; appearance: none; }
-@media (max-width: 420px) {
-  .tx-filters-grid { grid-template-columns: 1fr; }
-}
-@media (min-width: 641px) {
-  .tx-filter-toggle { display: none; }
-  .tx-filters-panel { display: block !important; }
-  .date-filter-wrap .form-input { width: 138px; }
-  #tx-filter-type { width: 130px; flex-shrink: 0; }
-  #tx-filter-cat  { width: 150px; flex-shrink: 0; }
-}
-
-/* ── VOICE BUTTON ────────────────────────────────────────── */
-@media (max-width: 560px) {
-  .btn-voice { display: flex !important; }
-}
-
-/* ── REPORTS MOBILE ──────────────────────────────────────── */
-@media (max-width: 560px) {
-  .reports-grid { gap: 0; }
-  .compare-chart-wrap { margin: 0 .75rem .5rem; }
-}
-
-/* ── ONBOARDING COMPACT ──────────────────────────────────── */
-@media (max-width: 560px) {
-  .onboarding-box { padding: 2rem 1.25rem 1.5rem; }
-}
-
-/* ── HIDE SCROLLBAR ON TOUCH ─────────────────────────────── */
+/* Disable text-selection chrome that fights the terminal aesthetic on touch */
 @media (hover: none) {
-  ::-webkit-scrollbar { width: 0; height: 0; }
-}
-
-/* ── SECURITY BANNER COMPACT ─────────────────────────────── */
-@media (max-width: 560px) {
-  .security-banner {
-    flex-wrap: wrap;
-    gap: .3rem;
-    font-size: .6rem;
-    padding: .5rem .75rem;
+  .tab, .bnav-btn, .mood-pill, .tx-chip, .period-btn, .btn-primary, .btn-login {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+            user-select: none;
   }
 }
-
-/* ── SAFE AREA: status bar overlap ──────────────────────── */
-@media (max-width: 900px) {
-  .topbar {
-    padding-top: calc(.6rem + env(safe-area-inset-top, 0px));
-  }
-  .sidebar-brand {
-    padding-top: calc(1.5rem + env(safe-area-inset-top, 0px));
-  }
-}
-
-/* ══════════════════════════════════════════════════════════
-   BOTTOM NAV BAR — mobile only (UPGRADED)
-══════════════════════════════════════════════════════════ */
-.bottom-nav {
-  display: none;
-}
-
-@media (max-width: 900px) {
-  .bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 50;
-    background: rgba(9,8,13,0.94);
-    border-top: 1px solid var(--line2);
-    padding-bottom: max(.2rem, var(--sab));
-    box-shadow:
-      0 -8px 48px rgba(0,0,0,.65),
-      0 -1px 0 var(--gold4),
-      inset 0 1px 0 rgba(212,168,67,.06);
-    backdrop-filter: blur(20px) saturate(1.3);
-    -webkit-backdrop-filter: blur(20px) saturate(1.3);
-  }
-
-  .main-content {
-    padding-bottom: calc(4.5rem + var(--sab)) !important;
-  }
-
-  .sidebar-nav { display: none; }
-  .sidebar-brand { padding-bottom: .75rem; }
-}
-
-.bnav-btn {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: .24rem;
-  padding: .58rem .2rem .42rem;
-  background: none;
-  border: none;
-  color: var(--text3);
-  cursor: pointer;
-  transition: color .18s;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 54px;
-  position: relative;
-}
-
-.bnav-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 20%; right: 20%;
-  height: 1px;
-  background: var(--gold);
-  opacity: 0;
-  transition: opacity .18s, width .18s;
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: opacity .18s, transform .22s var(--ease-spring);
-}
-
-.bnav-btn span {
-  font-family: var(--mono);
-  font-size: .42rem;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.bnav-btn svg {
-  transition: transform .2s var(--ease-spring), filter .18s;
-}
-.bnav-btn.active {
-  color: var(--gold);
-}
-.bnav-btn.active svg {
-  transform: translateY(-2px) scale(1.05);
-  filter: drop-shadow(0 0 6px var(--gold4));
-}
-.bnav-btn:active svg {
-  transform: scale(.88);
-}
-
-/* Center FAB */
-.bnav-center {
-  flex-shrink: 0;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold) 0%, var(--gold2) 100%);
-  color: var(--bg0) !important;
-  margin-top: -22px;
-  box-shadow:
-    0 4px 28px var(--gold4),
-    0 0 0 3px var(--bg1),
-    0 0 0 4.5px var(--gold4),
-    0 8px 24px rgba(0,0,0,.5);
-  border: none !important;
-  transition: transform .2s var(--ease-spring), box-shadow .2s !important;
-}
-.bnav-center:active {
-  transform: scale(.9) !important;
-  box-shadow:
-    0 2px 14px var(--gold4),
-    0 0 0 3px var(--bg1),
-    0 0 0 4.5px var(--gold4) !important;
-}
-.bnav-center span { display: none; }
-.bnav-center::before { display: none !important; }
-
-/* ── RECURRING PANEL ─────────────────────────────────────── */
-.recurring-panel {
-  margin: 0 2rem .75rem;
-  border: 1px solid var(--gold4);
-  background: linear-gradient(135deg, var(--gold3) 0%, transparent 100%);
-  position: relative;
-  overflow: hidden;
-}
-.recurring-panel::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, var(--gold4), transparent 70%);
-}
-@media (max-width: 900px) {
-  .recurring-panel { margin: 0 1rem .75rem; }
-}
-
-.recurring-hdr {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  padding: .48rem .88rem;
-  border-bottom: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: .52rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--gold);
-  opacity: .85;
-}
-
-.recurring-total {
-  margin-left: auto;
-  font-family: var(--mono);
-  font-size: .58rem;
-  color: var(--gold);
-  opacity: 1;
-}
-
-.recurring-rows {
-  display: flex;
-  flex-direction: column;
-}
-
-.recurring-row {
-  display: flex;
-  align-items: center;
-  gap: .6rem;
-  padding: .42rem .88rem;
-  border-bottom: 1px solid var(--line);
-  font-size: .78rem;
-  transition: background .15s;
-}
-.recurring-row:last-child { border-bottom: none; }
-.recurring-row:hover { background: rgba(255,255,255,.025); }
-
-.recurring-icon { flex-shrink: 0; display: flex; align-items: center; }
-.recurring-desc { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text2); }
-.recurring-amt  { font-family: var(--mono); font-size: .68rem; color: var(--text3); flex-shrink: 0; }
-
-/* ── THEME TRANSITION ────────────────────────────────────── */
-html {
-  transition:
-    background-color .3s ease,
-    color .25s ease;
-}
-
-.sidebar,
-.topbar,
-.auth-screen,
-.auth-box,
-.summary-card,
-.cat-item,
-.tx-item,
-.budget-row,
-.goal-card,
-.modal-box,
-.ai-insights-panel,
-.budget-alert-panel,
-.recurring-panel,
-.forecast-strip {
-  transition:
-    background-color .28s ease,
-    border-color .28s ease,
-    color .22s ease !important;
-}
-
-body { transition: background-color .3s ease; }
-body::before { transition: none !important; }

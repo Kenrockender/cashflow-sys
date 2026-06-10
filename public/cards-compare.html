@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Card Style Comparison — CASHFLOW.SYS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue: #4f6ef7;
+  --blue-dim: rgba(79,110,247,0.12);
+  --blue-mid: rgba(79,110,247,0.22);
+  --red: #f76f6f;
+  --green: #4ade80;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding: 28px 24px 48px;
+  font-size: 13px;
+  background: #0d0d12;
+  color: #f0eeea;
+}
+
+h1 {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(240,238,234,0.4);
+  text-align: center; margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 11px; color: rgba(240,238,234,0.25);
+  text-align: center; margin-bottom: 36px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.option-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--blue);
+  padding-bottom: 8px; border-bottom: 1px solid rgba(240,238,234,0.07);
+}
+.option-label span { color: rgba(240,238,234,0.35); font-weight: 400; margin-left: 8px; }
+
+/* ══════════════════════════════════════════════════════════════
+   OPTION A — SUBTLE ELEVATION
+   ══════════════════════════════════════════════════════════════ */
+.scene-a {
+  background: #0d0d12;
+  border-radius: 14px;
+  border: 1px solid rgba(240,238,234,0.06);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scene-a .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.scene-a .stat {
+  background: #161620;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.scene-a .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(240,238,234,0.45); margin-bottom: 6px; }
+.scene-a .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.scene-a .stat-val.pos { color: var(--blue); }
+.scene-a .stat-val.neg { color: var(--red); }
+.scene-a .stat-sub { font-size: 9px; color: rgba(240,238,234,0.3); margin-top: 4px; }
+
+.scene-a .chart-card {
+  background: #161620;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.scene-a .chart-title { font-size: 11px; font-weight: 600; color: rgba(240,238,234,0.5); margin-bottom: 10px; }
+.chart-bars { display: flex; align-items: flex-end; gap: 4px; height: 70px; }
+.bar { flex: 1; background: var(--blue-dim); border-radius: 3px 3px 0 0; min-height: 4px; }
+.bar.active { background: var(--blue); }
+
+.scene-a .tx-card {
+  background: #161620;
+  border-radius: 12px;
+  padding: 4px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+
+/* TX items shared */
+.tx { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+.tx + .tx { border-top: 1px solid rgba(240,238,234,0.06); }
+.tx-icon {
+  width: 32px; height: 32px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  background: var(--blue-dim);
+}
+.tx-icon.red { background: rgba(247,111,111,0.12); }
+.tx-body { flex: 1; min-width: 0; }
+.tx-name { font-size: 12px; font-weight: 500; color: #f0eeea; }
+.tx-cat { font-size: 9px; color: rgba(240,238,234,0.35); margin-top: 1px; }
+.tx-amt { font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+.tx-amt.inc { color: var(--blue); }
+.tx-amt.exp { color: var(--red); }
+
+/* ══════════════════════════════════════════════════════════════
+   OPTION B — GLASS / FROSTED
+   ══════════════════════════════════════════════════════════════ */
+.scene-b {
+  background: #0d0d12;
+  border-radius: 14px;
+  border: 1px solid rgba(240,238,234,0.06);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.scene-b::before {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(79,110,247,0.2) 0%, transparent 70%);
+  top: -40px; right: -40px;
+  pointer-events: none;
+}
+.scene-b::after {
+  content: '';
+  position: absolute;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(247,111,111,0.1) 0%, transparent 70%);
+  bottom: 40px; left: -30px;
+  pointer-events: none;
+}
+
+.scene-b .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; z-index: 1; }
+.scene-b .stat {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.scene-b .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(240,238,234,0.45); margin-bottom: 6px; }
+.scene-b .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.scene-b .stat-val.pos { color: var(--blue); }
+.scene-b .stat-val.neg { color: var(--red); }
+.scene-b .stat-sub { font-size: 9px; color: rgba(240,238,234,0.3); margin-top: 4px; }
+
+.scene-b .chart-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative; z-index: 1;
+}
+.scene-b .chart-title { font-size: 11px; font-weight: 600; color: rgba(240,238,234,0.5); margin-bottom: 10px; }
+
+.scene-b .tx-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 4px 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  position: relative; z-index: 1;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   OPTION C — CLEAN FLAT / TINTED
+   ══════════════════════════════════════════════════════════════ */
+.scene-c {
+  background: #0d0d12;
+  border-radius: 14px;
+  border: 1px solid rgba(240,238,234,0.06);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.scene-c .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.scene-c .stat {
+  background: #14141e;
+  border-radius: 12px;
+  padding: 14px;
+  border: none;
+}
+.scene-c .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(240,238,234,0.45); margin-bottom: 6px; }
+.scene-c .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.scene-c .stat-val.pos { color: var(--blue); }
+.scene-c .stat-val.neg { color: var(--red); }
+.scene-c .stat-sub { font-size: 9px; color: rgba(240,238,234,0.3); margin-top: 4px; }
+
+.scene-c .chart-card {
+  background: #14141e;
+  border-radius: 12px;
+  padding: 14px;
+}
+.scene-c .chart-title { font-size: 11px; font-weight: 600; color: rgba(240,238,234,0.5); margin-bottom: 10px; }
+
+.scene-c .tx-card {
+  background: #14141e;
+  border-radius: 12px;
+  padding: 4px 14px;
+}
+
+/* ── LIGHT MODE VARIANTS ──────────────────────────────────── */
+.light-strip {
+  margin-top: 40px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.light-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--blue);
+  padding-bottom: 8px; border-bottom: 1px solid rgba(240,238,234,0.07);
+  margin-bottom: 20px;
+}
+
+.light-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Light scene A */
+.light-a {
+  background: #f5f5f7;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.light-a .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.light-a .stat {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.light-a .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(0,0,0,0.4); margin-bottom: 6px; }
+.light-a .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: #1a1a2e; }
+.light-a .stat-val.pos { color: var(--blue); }
+.light-a .stat-val.neg { color: #e54545; }
+.light-a .stat-sub { font-size: 9px; color: rgba(0,0,0,0.35); margin-top: 4px; }
+.light-a .chart-card {
+  background: #ffffff; border-radius: 12px; padding: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.light-a .chart-title { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.45); margin-bottom: 10px; }
+.light-a .bar { background: rgba(79,110,247,0.15); }
+.light-a .bar.active { background: var(--blue); }
+.light-a .tx-card {
+  background: #ffffff; border-radius: 12px; padding: 4px 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.light-a .tx-name { color: #1a1a2e; }
+.light-a .tx-cat { color: rgba(0,0,0,0.4); }
+.light-a .tx + .tx { border-color: rgba(0,0,0,0.06); }
+
+/* Light scene B */
+.light-b {
+  background: #f0f1f5;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  position: relative; overflow: hidden;
+}
+.light-b::before {
+  content: '';
+  position: absolute; width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(79,110,247,0.12) 0%, transparent 70%);
+  top: -40px; right: -40px; pointer-events: none;
+}
+.light-b .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative; z-index: 1; }
+.light-b .stat {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px; padding: 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+.light-b .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(0,0,0,0.4); margin-bottom: 6px; }
+.light-b .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: #1a1a2e; }
+.light-b .stat-val.pos { color: var(--blue); }
+.light-b .stat-val.neg { color: #e54545; }
+.light-b .stat-sub { font-size: 9px; color: rgba(0,0,0,0.35); margin-top: 4px; }
+.light-b .chart-card {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px; padding: 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+  position: relative; z-index: 1;
+}
+.light-b .chart-title { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.45); margin-bottom: 10px; }
+.light-b .bar { background: rgba(79,110,247,0.15); }
+.light-b .bar.active { background: var(--blue); }
+.light-b .tx-card {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px; padding: 4px 14px;
+  border: 1px solid rgba(255,255,255,0.5);
+  position: relative; z-index: 1;
+}
+.light-b .tx-name { color: #1a1a2e; }
+.light-b .tx-cat { color: rgba(0,0,0,0.4); }
+.light-b .tx + .tx { border-color: rgba(0,0,0,0.06); }
+
+/* Light scene C */
+.light-c {
+  background: #f5f5f7;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.light-c .stat-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.light-c .stat {
+  background: #edeef2;
+  border-radius: 12px;
+  padding: 14px;
+}
+.light-c .stat-lbl { font-size: 10px; font-weight: 500; color: rgba(0,0,0,0.4); margin-bottom: 6px; }
+.light-c .stat-val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; color: #1a1a2e; }
+.light-c .stat-val.pos { color: var(--blue); }
+.light-c .stat-val.neg { color: #e54545; }
+.light-c .stat-sub { font-size: 9px; color: rgba(0,0,0,0.35); margin-top: 4px; }
+.light-c .chart-card { background: #edeef2; border-radius: 12px; padding: 14px; }
+.light-c .chart-title { font-size: 11px; font-weight: 600; color: rgba(0,0,0,0.45); margin-bottom: 10px; }
+.light-c .bar { background: rgba(79,110,247,0.15); }
+.light-c .bar.active { background: var(--blue); }
+.light-c .tx-card { background: #edeef2; border-radius: 12px; padding: 4px 14px; }
+.light-c .tx-name { color: #1a1a2e; }
+.light-c .tx-cat { color: rgba(0,0,0,0.4); }
+.light-c .tx + .tx { border-color: rgba(0,0,0,0.06); }
+
+/* ── ANNOTATIONS ─────────────────────────────────────────── */
+.note {
+  font-size: 10px;
+  color: rgba(240,238,234,0.35);
+  text-align: center;
+  line-height: 1.5;
+  padding: 6px 12px;
+}
+.note strong { color: rgba(240,238,234,0.6); }
+
+.light-a .note, .light-b .note, .light-c .note { color: rgba(0,0,0,0.35); }
+.light-a .note strong, .light-b .note strong, .light-c .note strong { color: rgba(0,0,0,0.55); }
+</style>
+</head>
+<body>
+
+<h1>Card & Surface Style — CASHFLOW.SYS Redesign</h1>
+<p class="subtitle">Three treatments shown in dark mode (top) and light mode (bottom) · DM Sans · Blue accent</p>
+
+<div class="grid">
+
+  <!-- ══ A — ELEVATION ════════════════════════════════════════ -->
+  <div class="option">
+    <div class="option-label">A — Subtle Elevation <span>Notion / Linear</span></div>
+    <div class="scene-a">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+        <div class="tx"><div class="tx-icon red">🛒</div><div class="tx-body"><div class="tx-name">Alfamart</div><div class="tx-cat">Groceries · May 31</div></div><div class="tx-amt exp">−Rp 145K</div></div>
+      </div>
+      <div class="note"><strong>Drop shadows</strong> give each card depth. Clean separation without borders.</div>
+    </div>
+  </div>
+
+  <!-- ══ B — GLASS ════════════════════════════════════════════ -->
+  <div class="option">
+    <div class="option-label">B — Glass / Frosted <span>iOS / Arc</span></div>
+    <div class="scene-b">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+        <div class="tx"><div class="tx-icon red">🛒</div><div class="tx-body"><div class="tx-name">Alfamart</div><div class="tx-cat">Groceries · May 31</div></div><div class="tx-amt exp">−Rp 145K</div></div>
+      </div>
+      <div class="note"><strong>Frosted glass</strong> with backdrop blur. Ambient color blobs bleed through. Premium iOS feel.</div>
+    </div>
+  </div>
+
+  <!-- ══ C — FLAT TINTED ══════════════════════════════════════ -->
+  <div class="option">
+    <div class="option-label">C — Clean Flat / Tinted <span>Revolut / Stripe</span></div>
+    <div class="scene-c">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+        <div class="tx"><div class="tx-icon red">🛒</div><div class="tx-body"><div class="tx-name">Alfamart</div><div class="tx-cat">Groceries · May 31</div></div><div class="tx-amt exp">−Rp 145K</div></div>
+      </div>
+      <div class="note"><strong>No shadows, no blur.</strong> Just tinted surface steps. Quietest, most minimal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── LIGHT MODE ROW ──────────────────────────────────────── -->
+<div class="light-strip">
+  <div class="light-label">Same three options in Light Mode</div>
+  <div class="light-grid">
+
+    <!-- Light A -->
+    <div class="light-a">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+      </div>
+      <div class="note"><strong>A — Elevation</strong> in light mode. White cards on soft gray.</div>
+    </div>
+
+    <!-- Light B -->
+    <div class="light-b">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+      </div>
+      <div class="note"><strong>B — Glass</strong> in light mode. Frosted white on warm gray.</div>
+    </div>
+
+    <!-- Light C -->
+    <div class="light-c">
+      <div class="stat-row">
+        <div class="stat"><div class="stat-lbl">Spending MTD</div><div class="stat-val neg">Rp 3.2M</div><div class="stat-sub">↑ 8% vs last month</div></div>
+        <div class="stat"><div class="stat-lbl">Net Balance</div><div class="stat-val pos">Rp 8.7M</div><div class="stat-sub">surplus</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Last 30 Days</div>
+        <div class="chart-bars">
+          <div class="bar" style="height:30%"></div><div class="bar" style="height:50%"></div><div class="bar" style="height:35%"></div>
+          <div class="bar" style="height:70%"></div><div class="bar active" style="height:90%"></div><div class="bar" style="height:55%"></div>
+          <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
+          <div class="bar" style="height:30%"></div>
+        </div>
+      </div>
+      <div class="tx-card">
+        <div class="tx"><div class="tx-icon">🍜</div><div class="tx-body"><div class="tx-name">Warung Sederhana</div><div class="tx-cat">Food · Today</div></div><div class="tx-amt exp">−Rp 32K</div></div>
+        <div class="tx"><div class="tx-icon">💼</div><div class="tx-body"><div class="tx-name">Monthly Salary</div><div class="tx-cat">Income · Jun 1</div></div><div class="tx-amt inc">+Rp 8.5M</div></div>
+      </div>
+      <div class="note"><strong>C — Flat</strong> in light mode. Tinted gray on lighter gray.</div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Design Tokens — CASHFLOW.SYS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #0d0d12;
+  color: #f0eeea;
+  min-height: 100vh;
+  padding: 32px 28px 60px;
+  font-size: 13px;
+}
+
+h1 {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+  text-transform: uppercase; color: rgba(240,238,234,0.4);
+  text-align: center; margin-bottom: 6px;
+}
+.subtitle { font-size: 11px; color: rgba(240,238,234,0.25); text-align: center; margin-bottom: 40px; }
+
+.wrap { max-width: 1100px; margin: 0 auto; }
+
+/* Section headers */
+.sec-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.16em;
+  text-transform: uppercase; color: #4f6ef7;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(240,238,234,0.07);
+  margin-bottom: 16px; margin-top: 40px;
+}
+.sec-label:first-child { margin-top: 0; }
+
+/* ── COLOR SWATCHES ───────────────────────────────────────── */
+.theme-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+.theme-block {
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.theme-block.dark { background: #0d0d12; border: 1px solid rgba(240,238,234,0.08); }
+.theme-block.light { background: #f5f5f7; border: 1px solid rgba(0,0,0,0.08); }
+
+.theme-title {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.theme-block.dark .theme-title { color: rgba(240,238,234,0.5); }
+.theme-block.light .theme-title { color: rgba(0,0,0,0.45); }
+
+.swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.swatch-color {
+  width: 52px; height: 52px; border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.theme-block.light .swatch-color { border-color: rgba(0,0,0,0.08); }
+.swatch-name { font-size: 8px; font-weight: 500; color: rgba(240,238,234,0.4); text-align: center; line-height: 1.3; }
+.theme-block.light .swatch-name { color: rgba(0,0,0,0.4); }
+.swatch-hex { font-size: 8px; color: rgba(240,238,234,0.25); font-variant-numeric: tabular-nums; }
+.theme-block.light .swatch-hex { color: rgba(0,0,0,0.3); }
+
+/* ── TYPOGRAPHY SCALE ─────────────────────────────────────── */
+.type-scale {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #13131a;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.type-row {
+  display: grid;
+  grid-template-columns: 120px 80px 80px 1fr;
+  align-items: baseline;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(240,238,234,0.05);
+  gap: 12px;
+}
+.type-row:last-child { border-bottom: none; }
+.type-label { font-size: 9px; font-weight: 500; color: rgba(240,238,234,0.35); letter-spacing: 0.06em; text-transform: uppercase; }
+.type-size { font-size: 9px; color: rgba(240,238,234,0.25); font-variant-numeric: tabular-nums; }
+.type-weight { font-size: 9px; color: rgba(240,238,234,0.25); }
+
+/* ── SPACING + RADIUS ─────────────────────────────────────── */
+.spacing-demo {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+.radius-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.radius-box {
+  width: 80px; height: 56px;
+  background: #13131a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: rgba(240,238,234,0.4); font-weight: 500;
+}
+.radius-label { font-size: 9px; color: rgba(240,238,234,0.3); text-align: center; margin-top: 4px; }
+
+/* ── SHADOW DEMO ──────────────────────────────────────────── */
+.shadow-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.shadow-demo {
+  border-radius: 12px;
+  padding: 20px;
+}
+.shadow-demo.dark { background: #0d0d12; border: 1px solid rgba(240,238,234,0.06); }
+.shadow-demo.light { background: #f5f5f7; border: 1px solid rgba(0,0,0,0.06); }
+.shadow-card {
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.shadow-demo.dark .shadow-card {
+  background: #13131a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.shadow-demo.light .shadow-card {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.shadow-label { font-size: 10px; font-weight: 600; }
+.shadow-demo.dark .shadow-label { color: #f0eeea; }
+.shadow-demo.light .shadow-label { color: #1a1a2e; }
+.shadow-sub { font-size: 9px; }
+.shadow-demo.dark .shadow-sub { color: rgba(240,238,234,0.35); }
+.shadow-demo.light .shadow-sub { color: rgba(0,0,0,0.4); }
+.shadow-code { font-size: 8px; margin-top: 8px; padding: 8px; border-radius: 6px; font-family: monospace; line-height: 1.5; }
+.shadow-demo.dark .shadow-code { background: rgba(240,238,234,0.04); color: rgba(240,238,234,0.4); }
+.shadow-demo.light .shadow-code { background: rgba(0,0,0,0.04); color: rgba(0,0,0,0.4); }
+
+/* ── FULL DASHBOARD PREVIEW ───────────────────────────────── */
+.preview-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dash-preview {
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dash-preview.dark {
+  background: #0d0d12;
+  border: 1px solid rgba(240,238,234,0.06);
+}
+.dash-preview.light {
+  background: #f5f5f7;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Dash topbar */
+.dp-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+.dp-title { font-size: 18px; font-weight: 700; }
+.dash-preview.dark .dp-title { color: #f0eeea; }
+.dash-preview.light .dp-title { color: #1a1a2e; }
+.dp-search {
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 10px;
+  font-family: 'DM Sans', sans-serif;
+  width: 180px;
+  border: none;
+}
+.dash-preview.dark .dp-search { background: #1a1a24; color: rgba(240,238,234,0.35); }
+.dash-preview.light .dp-search { background: #edeef2; color: rgba(0,0,0,0.35); }
+
+/* Stat cards */
+.dp-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.dp-stat { border-radius: 8px; padding: 12px; }
+.dash-preview.dark .dp-stat {
+  background: #13131a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.dash-preview.light .dp-stat {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.dp-stat-lbl { font-size: 9px; font-weight: 500; margin-bottom: 4px; }
+.dash-preview.dark .dp-stat-lbl { color: rgba(240,238,234,0.4); }
+.dash-preview.light .dp-stat-lbl { color: rgba(0,0,0,0.4); }
+.dp-stat-val { font-size: 16px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.dp-stat-sub { font-size: 8px; margin-top: 3px; }
+.dash-preview.dark .dp-stat-sub { color: rgba(240,238,234,0.3); }
+.dash-preview.light .dp-stat-sub { color: rgba(0,0,0,0.3); }
+
+.val-blue { color: #4f6ef7; }
+.val-red-dark { color: #f76f6f; }
+.val-red-light { color: #e54545; }
+.val-green-dark { color: #4ade80; }
+.val-ink-dark { color: #f0eeea; }
+.val-ink-light { color: #1a1a2e; }
+
+/* Charts row */
+.dp-charts { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
+.dp-chart { border-radius: 8px; padding: 12px; }
+.dash-preview.dark .dp-chart {
+  background: #13131a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.dash-preview.light .dp-chart {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.dp-chart-title { font-size: 10px; font-weight: 600; margin-bottom: 8px; }
+.dash-preview.dark .dp-chart-title { color: rgba(240,238,234,0.45); }
+.dash-preview.light .dp-chart-title { color: rgba(0,0,0,0.45); }
+
+.bars { display: flex; align-items: flex-end; gap: 3px; height: 60px; }
+.b { flex: 1; border-radius: 2px 2px 0 0; min-height: 3px; }
+.dash-preview.dark .b { background: rgba(79,110,247,0.15); }
+.dash-preview.light .b { background: rgba(79,110,247,0.12); }
+.b.on { background: #4f6ef7 !important; }
+
+.donut {
+  width: 60px; height: 60px; border-radius: 50%;
+  margin: 0 auto;
+}
+.dash-preview.dark .donut { border: 7px solid rgba(79,110,247,0.15); border-top-color: #4f6ef7; border-right-color: #4f6ef7; }
+.dash-preview.light .donut { border: 7px solid rgba(79,110,247,0.12); border-top-color: #4f6ef7; border-right-color: #4f6ef7; }
+
+/* TX rows */
+.dp-tx-card { border-radius: 8px; padding: 2px 12px; }
+.dash-preview.dark .dp-tx-card {
+  background: #13131a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+}
+.dash-preview.light .dp-tx-card {
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+}
+.dp-tx {
+  display: flex; align-items: center; gap: 8px; padding: 8px 0;
+}
+.dp-tx + .dp-tx { border-top: 1px solid rgba(128,128,128,0.1); }
+.dp-tx-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; flex-shrink: 0;
+  background: rgba(79,110,247,0.12);
+}
+.dp-tx-icon.red { background: rgba(247,111,111,0.12); }
+.dp-tx-body { flex: 1; min-width: 0; }
+.dp-tx-name { font-size: 11px; font-weight: 500; }
+.dash-preview.dark .dp-tx-name { color: #f0eeea; }
+.dash-preview.light .dp-tx-name { color: #1a1a2e; }
+.dp-tx-cat { font-size: 8px; margin-top: 1px; }
+.dash-preview.dark .dp-tx-cat { color: rgba(240,238,234,0.35); }
+.dash-preview.light .dp-tx-cat { color: rgba(0,0,0,0.35); }
+.dp-tx-amt { font-size: 11px; font-weight: 600; font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+.mode-label {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  text-align: center; margin-bottom: 8px;
+}
+.dash-preview.dark .mode-label { color: rgba(240,238,234,0.3); }
+.dash-preview.light .mode-label { color: rgba(0,0,0,0.3); }
+</style>
+</head>
+<body>
+
+<h1>Design Tokens — CASHFLOW.SYS Redesign</h1>
+<p class="subtitle">Complete token system: colors, type, spacing, shadows · Dark + Light</p>
+
+<div class="wrap">
+
+<!-- ══ COLORS ══════════════════════════════════════════════════ -->
+<div class="sec-label">1 — Color Palette</div>
+
+<div class="theme-row">
+  <!-- Dark -->
+  <div class="theme-block dark">
+    <div class="theme-title">Dark Mode</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-color" style="background:#0d0d12"></div><div class="swatch-name">Background</div><div class="swatch-hex">#0d0d12</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#13131a"></div><div class="swatch-name">Surface 1</div><div class="swatch-hex">#13131a</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1a1a24"></div><div class="swatch-name">Surface 2</div><div class="swatch-hex">#1a1a24</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#f0eeea"></div><div class="swatch-name">Ink</div><div class="swatch-hex">#f0eeea</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(240,238,234,0.55)"></div><div class="swatch-name">Ink Dim</div><div class="swatch-hex">55%</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(240,238,234,0.35)"></div><div class="swatch-name">Ink Faint</div><div class="swatch-hex">35%</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-color" style="background:#4f6ef7"></div><div class="swatch-name">Accent</div><div class="swatch-hex">#4f6ef7</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(79,110,247,0.12)"></div><div class="swatch-name">Accent Dim</div><div class="swatch-hex">12%</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#f76f6f"></div><div class="swatch-name">Danger</div><div class="swatch-hex">#f76f6f</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#4ade80"></div><div class="swatch-name">Success</div><div class="swatch-hex">#4ade80</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#f59e0b"></div><div class="swatch-name">Warning</div><div class="swatch-hex">#f59e0b</div></div>
+    </div>
+  </div>
+
+  <!-- Light -->
+  <div class="theme-block light">
+    <div class="theme-title">Light Mode</div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-color" style="background:#f5f5f7"></div><div class="swatch-name">Background</div><div class="swatch-hex">#f5f5f7</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#ffffff"></div><div class="swatch-name">Surface 1</div><div class="swatch-hex">#ffffff</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#edeef2"></div><div class="swatch-name">Surface 2</div><div class="swatch-hex">#edeef2</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1a1a2e"></div><div class="swatch-name">Ink</div><div class="swatch-hex">#1a1a2e</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(0,0,0,0.55)"></div><div class="swatch-name">Ink Dim</div><div class="swatch-hex">55%</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(0,0,0,0.35)"></div><div class="swatch-name">Ink Faint</div><div class="swatch-hex">35%</div></div>
+    </div>
+    <div class="swatch-row">
+      <div class="swatch"><div class="swatch-color" style="background:#4f6ef7"></div><div class="swatch-name">Accent</div><div class="swatch-hex">#4f6ef7</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:rgba(79,110,247,0.08)"></div><div class="swatch-name">Accent Dim</div><div class="swatch-hex">8%</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#e54545"></div><div class="swatch-name">Danger</div><div class="swatch-hex">#e54545</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#16a34a"></div><div class="swatch-name">Success</div><div class="swatch-hex">#16a34a</div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#d97706"></div><div class="swatch-name">Warning</div><div class="swatch-hex">#d97706</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TYPOGRAPHY ══════════════════════════════════════════════ -->
+<div class="sec-label">2 — Typography Scale</div>
+
+<div class="type-scale">
+  <div class="type-row">
+    <div class="type-label">Role</div>
+    <div class="type-size">Size</div>
+    <div class="type-weight">Weight</div>
+    <div class="type-label">Sample</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Page Title</div>
+    <div class="type-size">18px</div>
+    <div class="type-weight">700</div>
+    <div style="font-size:18px;font-weight:700;color:#f0eeea">Dashboard</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Section Title</div>
+    <div class="type-size">14px</div>
+    <div class="type-weight">600</div>
+    <div style="font-size:14px;font-weight:600;color:#f0eeea">Recent Transactions</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Card Label</div>
+    <div class="type-size">10px</div>
+    <div class="type-weight">500</div>
+    <div style="font-size:10px;font-weight:500;color:rgba(240,238,234,0.45);letter-spacing:0.02em">Spending MTD</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Hero Number</div>
+    <div class="type-size">20px</div>
+    <div class="type-weight">700</div>
+    <div style="font-size:20px;font-weight:700;color:#4f6ef7;font-variant-numeric:tabular-nums;letter-spacing:-0.02em">Rp 8,750,000</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Body</div>
+    <div class="type-size">13px</div>
+    <div class="type-weight">400</div>
+    <div style="font-size:13px;font-weight:400;color:#f0eeea">Warung Makan Sederhana</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Body Medium</div>
+    <div class="type-size">13px</div>
+    <div class="type-weight">500</div>
+    <div style="font-size:13px;font-weight:500;color:#f0eeea">Monthly Salary</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Caption</div>
+    <div class="type-size">11px</div>
+    <div class="type-weight">400</div>
+    <div style="font-size:11px;font-weight:400;color:rgba(240,238,234,0.35)">Food · Today · 12:30</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Micro Label</div>
+    <div class="type-size">9px</div>
+    <div class="type-weight">600</div>
+    <div style="font-size:9px;font-weight:600;color:rgba(240,238,234,0.4);letter-spacing:0.08em;text-transform:uppercase">Budget OK</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Nav Item</div>
+    <div class="type-size">12px</div>
+    <div class="type-weight">500</div>
+    <div style="font-size:12px;font-weight:500;color:#4f6ef7">Dashboard</div>
+  </div>
+  <div class="type-row">
+    <div class="type-label">Amount (inline)</div>
+    <div class="type-size">12px</div>
+    <div class="type-weight">600</div>
+    <div style="font-size:12px;font-weight:600;font-variant-numeric:tabular-nums">
+      <span style="color:#4f6ef7">+Rp 8.5M</span>
+      <span style="margin:0 10px;color:rgba(240,238,234,0.15)">|</span>
+      <span style="color:#f76f6f">−Rp 32K</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RADIUS ═════════════════════════════════════════════════ -->
+<div class="sec-label">3 — Corner Radius</div>
+
+<div class="radius-row">
+  <div><div class="radius-box" style="border-radius:4px">4px</div><div class="radius-label">Badges</div></div>
+  <div><div class="radius-box" style="border-radius:6px">6px</div><div class="radius-label">Icons, pills</div></div>
+  <div><div class="radius-box" style="border-radius:8px">8px</div><div class="radius-label">Cards, inputs</div></div>
+  <div><div class="radius-box" style="border-radius:12px">12px</div><div class="radius-label">Modals</div></div>
+  <div><div class="radius-box" style="border-radius:99px;width:100px">Full</div><div class="radius-label">Buttons, nav pills</div></div>
+</div>
+
+<!-- ══ SHADOWS ═════════════════════════════════════════════════ -->
+<div class="sec-label">4 — Card Shadows</div>
+
+<div class="shadow-row">
+  <div class="shadow-demo dark">
+    <div class="shadow-card">
+      <div class="shadow-label">Dark Mode Card</div>
+      <div class="shadow-sub">Elevated surface on deep navy</div>
+      <div class="shadow-code">box-shadow: 0 2px 8px rgba(0,0,0,0.35),<br/>            0 1px 3px rgba(0,0,0,0.25);</div>
+    </div>
+  </div>
+  <div class="shadow-demo light">
+    <div class="shadow-card">
+      <div class="shadow-label">Light Mode Card</div>
+      <div class="shadow-sub">White card on soft gray</div>
+      <div class="shadow-code">box-shadow: 0 1px 3px rgba(0,0,0,0.06),<br/>            0 1px 2px rgba(0,0,0,0.04);</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FULL DASHBOARD PREVIEW ═════════════════════════════════ -->
+<div class="sec-label">5 — Full Dashboard Preview (All Tokens Applied)</div>
+
+<div class="preview-row">
+  <!-- Dark dashboard -->
+  <div class="dash-preview dark">
+    <div class="mode-label">Dark Mode</div>
+    <div class="dp-topbar">
+      <div class="dp-title">Dashboard</div>
+      <div class="dp-search" style="text-align:left">Search transactions...</div>
+    </div>
+    <div class="dp-stats">
+      <div class="dp-stat"><div class="dp-stat-lbl">Spending</div><div class="dp-stat-val val-red-dark">Rp 3.2M</div><div class="dp-stat-sub">↑ 8%</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Income</div><div class="dp-stat-val val-blue">Rp 8.5M</div><div class="dp-stat-sub">1 txn</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Net</div><div class="dp-stat-val val-green-dark">Rp 8.7M</div><div class="dp-stat-sub">surplus</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Budget</div><div class="dp-stat-val val-ink-dark">Rp 1.8M</div><div class="dp-stat-sub">62% left</div></div>
+    </div>
+    <div class="dp-charts">
+      <div class="dp-chart">
+        <div class="dp-chart-title">Last 30 Days</div>
+        <div class="bars">
+          <div class="b" style="height:25%"></div><div class="b" style="height:42%"></div><div class="b" style="height:30%"></div>
+          <div class="b" style="height:60%"></div><div class="b" style="height:50%"></div><div class="b on" style="height:85%"></div>
+          <div class="b" style="height:45%"></div><div class="b" style="height:68%"></div><div class="b" style="height:55%"></div>
+          <div class="b" style="height:35%"></div><div class="b" style="height:62%"></div><div class="b" style="height:48%"></div>
+        </div>
+      </div>
+      <div class="dp-chart">
+        <div class="dp-chart-title">Categories</div>
+        <div class="donut"></div>
+      </div>
+    </div>
+    <div class="dp-tx-card">
+      <div class="dp-tx"><div class="dp-tx-icon">🍜</div><div class="dp-tx-body"><div class="dp-tx-name">Warung Sederhana</div><div class="dp-tx-cat">Food · Today</div></div><div class="dp-tx-amt val-red-dark">−Rp 32K</div></div>
+      <div class="dp-tx"><div class="dp-tx-icon">💼</div><div class="dp-tx-body"><div class="dp-tx-name">Monthly Salary</div><div class="dp-tx-cat">Income · Jun 1</div></div><div class="dp-tx-amt val-blue">+Rp 8.5M</div></div>
+      <div class="dp-tx"><div class="dp-tx-icon red">🛒</div><div class="dp-tx-body"><div class="dp-tx-name">Alfamart</div><div class="dp-tx-cat">Groceries · May 31</div></div><div class="dp-tx-amt val-red-dark">−Rp 145K</div></div>
+    </div>
+  </div>
+
+  <!-- Light dashboard -->
+  <div class="dash-preview light">
+    <div class="mode-label">Light Mode</div>
+    <div class="dp-topbar">
+      <div class="dp-title">Dashboard</div>
+      <div class="dp-search" style="text-align:left">Search transactions...</div>
+    </div>
+    <div class="dp-stats">
+      <div class="dp-stat"><div class="dp-stat-lbl">Spending</div><div class="dp-stat-val val-red-light">Rp 3.2M</div><div class="dp-stat-sub">↑ 8%</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Income</div><div class="dp-stat-val val-blue">Rp 8.5M</div><div class="dp-stat-sub">1 txn</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Net</div><div class="dp-stat-val" style="color:#16a34a">Rp 8.7M</div><div class="dp-stat-sub">surplus</div></div>
+      <div class="dp-stat"><div class="dp-stat-lbl">Budget</div><div class="dp-stat-val val-ink-light">Rp 1.8M</div><div class="dp-stat-sub">62% left</div></div>
+    </div>
+    <div class="dp-charts">
+      <div class="dp-chart">
+        <div class="dp-chart-title">Last 30 Days</div>
+        <div class="bars">
+          <div class="b" style="height:25%"></div><div class="b" style="height:42%"></div><div class="b" style="height:30%"></div>
+          <div class="b" style="height:60%"></div><div class="b" style="height:50%"></div><div class="b on" style="height:85%"></div>
+          <div class="b" style="height:45%"></div><div class="b" style="height:68%"></div><div class="b" style="height:55%"></div>
+          <div class="b" style="height:35%"></div><div class="b" style="height:62%"></div><div class="b" style="height:48%"></div>
+        </div>
+      </div>
+      <div class="dp-chart">
+        <div class="dp-chart-title">Categories</div>
+        <div class="donut"></div>
+      </div>
+    </div>
+    <div class="dp-tx-card">
+      <div class="dp-tx"><div class="dp-tx-icon">🍜</div><div class="dp-tx-body"><div class="dp-tx-name">Warung Sederhana</div><div class="dp-tx-cat">Food · Today</div></div><div class="dp-tx-amt val-red-light">−Rp 32K</div></div>
+      <div class="dp-tx"><div class="dp-tx-icon">💼</div><div class="dp-tx-body"><div class="dp-tx-name">Monthly Salary</div><div class="dp-tx-cat">Income · Jun 1</div></div><div class="dp-tx-amt val-blue">+Rp 8.5M</div></div>
+      <div class="dp-tx"><div class="dp-tx-icon red">🛒</div><div class="dp-tx-body"><div class="dp-tx-name">Alfamart</div><div class="dp-tx-cat">Groceries · May 31</div></div><div class="dp-tx-amt val-red-light">−Rp 145K</div></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

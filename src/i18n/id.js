@@ -1,11 +1,11 @@
 window.TRANSLATIONS = window.TRANSLATIONS || {};
 window.TRANSLATIONS.id = {
     /* ── AUTH ─────────────────────────────────────────────── */
-    'auth.eyebrow':        'Terminal Keuangan Pribadi',
+    'auth.eyebrow':        'Terminal Buku Besar · Perlu Autentikasi',
     'auth.wordmark':       'Cash',
     'auth.wordmark.span':  'flow',
-    'auth.tagline':        'Pantau · Kontrol · Tumbuh',
-    'auth.login.btn':      'Masuk dengan Google',
+    'auth.tagline':        '[ v2.6 ] · Privat · Mode Offline · GMT+7',
+    'auth.login.btn':      'Autentikasi · Google',
 
     /* ── SIDEBAR NAV ──────────────────────────────────────── */
     'nav.dashboard':       'Dashboard',
