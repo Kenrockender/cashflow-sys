@@ -1,11 +1,11 @@
 window.TRANSLATIONS = window.TRANSLATIONS || {};
 window.TRANSLATIONS.en = {
     /* ── AUTH ─────────────────────────────────────────────── */
-    'auth.eyebrow':        'Ledger Terminal · Auth Required',
     'auth.wordmark':       'Cash',
     'auth.wordmark.span':  'flow',
-    'auth.tagline':        '[ v2.6 ] · Private · Offline-Capable · GMT+7',
-    'auth.login.btn':      'Authenticate · Google',
+    'auth.tagline':        'Your money, calm and clear.',
+    'auth.login.btn':      'Continue with Google',
+    'auth.footnote':       'Private · Offline-capable · Synced to your account',
 
     /* ── SIDEBAR NAV ──────────────────────────────────────── */
     'nav.dashboard':       'Dashboard',

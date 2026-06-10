@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-  <title>CASHFLOW.SYS</title>
+  <title>Cashflow</title>
   <base href="./"/>
   <link rel="manifest" href="manifest.json"/>
   <link rel="icon" type="image/svg+xml" href="logo.svg"/>
@@ -12,15 +12,14 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Cashflow"/>
   <link rel="apple-touch-startup-image" href="splash.png">
-  <meta name="theme-color" content="#c8a96e"/>
+  <meta name="theme-color" content="#0e1211"/>
   <meta name="mobile-web-app-capable" content="yes"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@1,9..144,200..600;0,9..144,300..600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles/styles.css"/>
   <link rel="stylesheet" href="styles/mobile.css"/>
   <link rel="stylesheet" href="styles/reimburse.css"/>
-  <link rel="stylesheet" href="styles/cashflow-override.css"/>
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/11.0.0/firebase-app-compat.js"></script>
@@ -59,10 +58,8 @@
 <!-- ══ AUTH SCREEN ══════════════════════════════════════════ -->
 <div id="auth-screen" class="auth-screen">
   <div class="auth-box">
-    <div class="auth-eyebrow" data-i18n="auth.eyebrow">Ledger Terminal · Auth Required</div>
-    <div class="auth-wordmark">CASHFLOW<span>.SYS</span></div>
-    <div class="auth-tagline" data-i18n="auth.tagline">[ v2.6 ] · Private · Offline-Capable · GMT+7</div>
-    <div class="auth-divider"></div>
+    <div class="auth-wordmark">Cash<span>flow</span></div>
+    <div class="auth-tagline" data-i18n="auth.tagline">Your money, calm and clear.</div>
     <button id="btn-google-login" class="btn-login">
       <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
         <path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2C16.66 14.08 17.64 11.77 17.64 9.2z" fill="currentColor" opacity=".9"/>
@@ -70,27 +67,14 @@
         <path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="currentColor" opacity=".7"/>
         <path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="currentColor"/>
       </svg>
-      <span data-i18n="auth.login.btn">Authenticate · Google</span>
+      <span data-i18n="auth.login.btn">Continue with Google</span>
     </button>
-    <div style="margin-top:28px;font-family:var(--mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-faint);opacity:1">/ ID.001 / FY26 Q2 / SECURE CHANNEL</div>
+    <div class="auth-footnote" data-i18n="auth.footnote">Private · Offline-capable · Synced to your account</div>
   </div>
 </div>
 
 <!-- ══ APP SHELL ══════════════════════════════════════════════ -->
 <div id="app" class="shell hidden">
-
-  <!-- ── LIVE TICKER BAR ─────────────────────────────────── -->
-  <div class="ticker" id="ticker-bar">
-    <div class="ticker-brand">
-      <span>CASHFLOW</span><span class="sig">.SYS</span><span class="ver">[ v2.6 ]</span>
-    </div>
-    <div class="ticker-feed">
-      <span class="ticker-cell"><span class="blip"></span><span class="lbl">MTD</span><span class="val" id="tk-mtd">Rp —</span></span>
-      <span class="ticker-cell"><span class="lbl">TXN</span><span class="val" id="tk-txn">—</span></span>
-      <span class="ticker-cell is-signal"><span class="lbl">USD·IDR</span><span class="val" id="tk-fx">—</span></span>
-      <span class="ticker-cell is-time"><span class="lbl">/</span><span class="val" id="tk-time">00:00:00 GMT+7</span></span>
-    </div>
-  </div>
 
   <!-- Mobile sidebar overlay -->
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
@@ -102,23 +86,28 @@
         <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
         <polyline points="17 6 23 6 23 12"/>
       </svg>
-      <span class="sidebar-logo">OPS<span>.MENU</span></span>
+      <span class="sidebar-logo">Cash<span>flow</span></span>
     </div>
 
     <nav class="sidebar-nav">
-      <button class="tab active" data-tab="dashboard" data-num="01" title="Dashboard">
+      <button class="tab active" data-tab="dashboard" title="Dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span data-i18n="nav.dashboard">Dashboard</span>
       </button>
-      <button class="tab" data-tab="transactions" data-num="02" title="Transactions">
-        <span data-i18n="nav.transactions">Txns</span>
+      <button class="tab" data-tab="transactions" title="Transactions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1" fill="currentColor"/><circle cx="3.5" cy="12" r="1" fill="currentColor"/><circle cx="3.5" cy="18" r="1" fill="currentColor"/></svg>
+        <span data-i18n="nav.transactions">Transactions</span>
       </button>
-      <button class="tab" data-tab="budget" data-num="03" title="Budget">
+      <button class="tab" data-tab="budget" title="Budget">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.4 6.4"/></svg>
         <span data-i18n="nav.budget">Budget</span>
       </button>
-      <button class="tab" data-tab="goals" data-num="04" title="Goals">
+      <button class="tab" data-tab="goals" title="Goals">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>
         <span data-i18n="nav.goals">Goals</span>
       </button>
-      <button class="tab" data-tab="reports" data-num="05" title="Reports">
+      <button class="tab" data-tab="reports" title="Reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
         <span data-i18n="nav.reports">Reports</span>
       </button>
     </nav>
@@ -1039,7 +1028,7 @@
   <div style="display:flex;align-items:center;gap:12px;flex:1">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg>
     <div>
-      <strong>Install Cashflow.sys</strong><br>
+      <strong>Install Cashflow</strong><br>
       <span style="font-size:.8rem;opacity:.85">Add to home screen · Works offline · Lightning fast</span>
     </div>
   </div>

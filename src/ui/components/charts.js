@@ -1,5 +1,5 @@
 /* ══════════════════════════════════════════════════════════
-   CASHFLOW.SYS — charts.js
+   Cashflow — charts.js (Graphite Mint)
    Chart.js wrappers with dirty-flag optimization.
    Charts only re-render when data actually changes.
    Depends on: Chart.js (global)
@@ -18,12 +18,12 @@ const Charts = (() => {
 
   /* ── theme helpers ───────────────────────────────────────── */
   const css  = v  => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-  const FONT = () => ({ family: "'IBM Plex Mono',ui-monospace,monospace", size: 9, weight: '400' });
+  const FONT = () => ({ family: "'DM Sans',system-ui,sans-serif", size: 10, weight: '400' });
   const baseOpts = (extra = {}) => ({
     responsive: true,
     maintainAspectRatio: false,
     animation: { duration: 400, easing: 'easeOutQuart' },
-    plugins: { legend: { display: false }, tooltip: { backgroundColor: css('--bg3') || '#201d2a', titleColor: css('--gold') || '#d4a843', bodyColor: css('--text2') || 'rgba(240,232,245,0.62)', borderColor: css('--gold4') || 'rgba(212,168,67,0.34)', borderWidth: 1, padding: 10, titleFont: { family: "'IBM Plex Mono',ui-monospace,monospace", size: 10, weight: '500' }, bodyFont: { family: "'IBM Plex Mono',ui-monospace,monospace", size: 10 }, cornerRadius: 0, displayColors: false }, ...(extra.plugins || {}) },
+    plugins: { legend: { display: false }, tooltip: { backgroundColor: css('--surface-3') || '#222b27', titleColor: css('--text') || '#e9efec', bodyColor: css('--text2') || 'rgba(233,239,236,0.6)', borderColor: css('--line2') || '#33403a', borderWidth: 1, padding: 10, titleFont: { family: "'DM Sans',system-ui,sans-serif", size: 11, weight: '600' }, bodyFont: { family: "'DM Sans',system-ui,sans-serif", size: 11 }, cornerRadius: 8, displayColors: false }, ...(extra.plugins || {}) },
     scales: {
       x: { ticks: { color: css('--text3'), font: FONT(), maxTicksLimit: 8 }, grid: { color: css('--line'), drawBorder: false }, border: { color: 'transparent' } },
       y: { ticks: { color: css('--text3'), font: FONT(), callback: v => v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v }, grid: { color: css('--line'), drawBorder: false }, border: { color: 'transparent' } },
@@ -53,7 +53,7 @@ const Charts = (() => {
     }
     dc = new Chart(ctx, {
       type: 'bar',
-      data: { labels: days, datasets: [{ data: amounts, backgroundColor: amounts.map(a => a > 0 ? g + '55' : 'transparent'), borderColor: amounts.map(a => a > 0 ? g : 'transparent'), borderWidth: 1, borderRadius: 0, borderSkipped: false }] },
+      data: { labels: days, datasets: [{ data: amounts, backgroundColor: amounts.map(a => a > 0 ? g + '55' : 'transparent'), borderColor: amounts.map(a => a > 0 ? g : 'transparent'), borderWidth: 1, borderRadius: 4, borderSkipped: false }] },
       options: baseOpts(),
     });
     _lastDaily = h;
@@ -71,7 +71,7 @@ const Charts = (() => {
     const data   = keys.map(k => mm[k]);
     const g = css('--gold');
     if (mc) { mc.data.labels = labels; mc.data.datasets[0].data = data; mc.update('none'); _lastMonthly = h; return; }
-    mc = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Expense', data, backgroundColor: g + '88', borderColor: g, borderWidth: 1, borderRadius: 0, borderSkipped: false }] }, options: baseOpts() });
+    mc = new Chart(ctx, { type: 'bar', data: { labels, datasets: [{ label: 'Expense', data, backgroundColor: g + '88', borderColor: g, borderWidth: 1, borderRadius: 4, borderSkipped: false }] }, options: baseOpts() });
     _lastMonthly = h;
   };
 
@@ -87,8 +87,8 @@ const Charts = (() => {
     if (pc) { pc.destroy(); pc = null; }
     pc = new Chart(ctx, {
       type: 'doughnut',
-      data: { labels: cats.map(c => getCat(c.id).label), datasets: [{ data: cats.map(c => tot[c.id]), backgroundColor: cats.map(c => c.color + 'cc'), borderWidth: 1, borderColor: css('--bg') || '#000000' }] },
-      options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, cutout: '62%', plugins: { legend: { position: 'right', labels: { color: css('--text3'), font: FONT(), boxWidth: 8, padding: 10, usePointStyle: false, textTransform: 'uppercase' } } } },
+      data: { labels: cats.map(c => getCat(c.id).label), datasets: [{ data: cats.map(c => tot[c.id]), backgroundColor: cats.map(c => c.color + 'cc'), borderWidth: 2, borderColor: css('--bg1') || '#161c1a' }] },
+      options: { responsive: true, maintainAspectRatio: false, animation: { duration: 400 }, cutout: '66%', plugins: { legend: { position: 'right', labels: { color: css('--text2'), font: FONT(), boxWidth: 8, padding: 10, usePointStyle: true } } } },
     });
     _lastPie = h;
   };
@@ -103,17 +103,17 @@ const Charts = (() => {
     const inc  = months.map(ym => txs.filter(t => t.date?.startsWith(ym) && t.type === 'income').reduce((s, t) => s + (t.amount || 0), 0));
     const exp  = months.map(ym => txs.filter(t => t.date?.startsWith(ym) && t.type !== 'income').reduce((s, t) => s + (t.amount || 0), 0));
     const labels = months.map(k => { const [y, m] = k.split('-'); return new Date(+y, +m - 1).toLocaleDateString(getLang() === 'id' ? 'id-ID' : 'en-US', { month: 'short', year: '2-digit' }); });
-    const g = css('--gold'), ok = css('--ok') || '#27ae60';
+    const ok = css('--ok') || '#4ade80', ng = css('--danger') || '#f47171';
     if (cc) { cc.data.labels = labels; cc.data.datasets[0].data = inc; cc.data.datasets[1].data = exp; cc.update('none'); _lastCompare = h; return; }
     cc = new Chart(ctx, {
       type: 'bar',
       data: { labels, datasets: [
-        { label: 'Income',  data: inc, backgroundColor: ok + '44', borderColor: ok, borderWidth: 1, borderRadius: 0, borderSkipped: false },
-        { label: 'Expense', data: exp, backgroundColor: g  + '55', borderColor: g,  borderWidth: 1, borderRadius: 0, borderSkipped: false },
+        { label: 'Income',  data: inc, backgroundColor: ok + '55', borderColor: ok, borderWidth: 1, borderRadius: 4, borderSkipped: false },
+        { label: 'Expense', data: exp, backgroundColor: ng + '55', borderColor: ng, borderWidth: 1, borderRadius: 4, borderSkipped: false },
       ]},
       options: {
         responsive: true, maintainAspectRatio: false, animation: { duration: 400 },
-        plugins: { legend: { display: true, labels: { color: css('--text3'), font: FONT(), boxWidth: 12, usePointStyle: true } } },
+        plugins: { legend: { display: true, labels: { color: css('--text2'), font: FONT(), boxWidth: 12, usePointStyle: true } } },
         scales: {
           x: { ticks: { color: css('--text3'), font: FONT() }, grid: { color: css('--line') } },
           y: { ticks: { color: css('--text3'), font: FONT(), callback: v => v >= 1e6 ? (v / 1e6).toFixed(1) + 'M' : v >= 1000 ? (v / 1000).toFixed(0) + 'K' : v }, grid: { color: css('--line') } },

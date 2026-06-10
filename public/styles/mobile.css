@@ -1,9 +1,9 @@
 /* ════════════════════════════════════════════════════════════════════
-   CASHFLOW.SYS — mobile.css
+   Cashflow — mobile.css (Graphite Mint)
    ────────────────────────────────────────────────────────────────────
    Touch-device refinements, safe areas, tap targets.
-   Loads after styles.css. Light layer — most responsive behavior
-   already lives in styles.css media queries.
+   Loads after styles.css. Most responsive behavior already lives in
+   styles.css media queries.
    ──────────────────────────────────────────────────────────────────── */
 
 /* Safe area variables for notch / home indicator */
@@ -17,7 +17,7 @@
 /* Touch devices — always-visible row actions, larger tap targets */
 @media (hover: none), (pointer: coarse) {
   .tx-actions { opacity: 1 !important; display: flex; gap: 4px; flex-shrink: 0; }
-  .tx-act-btn { padding: 5px 7px; font-size: 9px; min-width: 30px; min-height: 30px; display: flex; align-items: center; justify-content: center; }
+  .tx-act-btn { padding: 6px 8px; font-size: 11px; min-width: 32px; min-height: 32px; display: flex; align-items: center; justify-content: center; }
   .tx-right { flex-direction: row-reverse; align-items: center; gap: 6px; }
   .tx-type-tag { display: none; }
   .tx-item { padding: 12px 8px; }
@@ -31,10 +31,10 @@
   .btn-filter-save, .btn-filter-clear, .btn-load-more,
   .btn-ob-action, .btn-mark-recurring, .btn-refresh-rates,
   .sidebar-action-btn, .reimb-open-btn {
-    min-height: 32px;
+    min-height: 36px;
   }
 
-  /* Prevent iOS auto-zoom on focus by ensuring 16px input baseline on small */
+  /* Prevent iOS auto-zoom on focus: 16px input baseline on small screens */
   @media (max-width: 480px) {
     .form-input, .quickadd-input, .bud-input, .currency-rate-input,
     .reports-period-select, .recurring-frequency-select, .recurring-day-select {
@@ -43,23 +43,23 @@
   }
 }
 
-/* Bottom nav respect safe area */
+/* Bottom nav respects safe area */
 @media (max-width: 900px) {
   .bottom-nav { padding-bottom: var(--sab); }
-  .pwa-install-bar { bottom: 56px; bottom: calc(56px + var(--sab)); }
+  .pwa-install-bar { bottom: calc(74px + var(--sab)); }
+  .toast { bottom: calc(80px + var(--sab)); }
 }
 
 /* Pull-to-refresh space */
 .main-content { overscroll-behavior-y: contain; }
 
-/* PWA standalone — extra top breathing room under iOS status bar */
+/* PWA standalone — breathing room under the iOS status bar */
 @media all and (display-mode: standalone) {
-  .ticker { padding-top: var(--sat); height: calc(26px + var(--sat)); }
-  .sidebar { top: calc(26px + var(--sat)); height: calc(100vh - 26px - var(--sat)); }
-  .topbar { top: calc(26px + var(--sat)); }
+  .topbar { padding-top: var(--sat); height: calc(60px + var(--sat)); }
+  .sidebar { padding-top: var(--sat); }
 }
 
-/* Disable text-selection chrome that fights the terminal aesthetic on touch */
+/* Avoid text-selection chrome on tap targets */
 @media (hover: none) {
   .tab, .bnav-btn, .mood-pill, .tx-chip, .period-btn, .btn-primary, .btn-login {
     -webkit-touch-callout: none;
