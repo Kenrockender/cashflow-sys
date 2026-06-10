@@ -135,10 +135,11 @@ async function exportPDFWithCharts() {
   const W = 210, H = 297, M = 14;
   let y = M;
 
-  // ── Color palette ─────────────────────────────────────────
+  // ── Color palette — Graphite Mint (print-safe mint on paper) ──
   const C = {
-    gold:      [200, 169, 110],
-    goldLight: [252, 246, 233],
+    gold:      [16,  150, 98],   /* mint, darkened for white paper */
+    goldLight: [230, 249, 240],
+    mintBright:[61,  220, 151],  /* full mint — only on dark footer bar */
     green:     [39,  174, 96],
     greenBg:   [235, 250, 241],
     red:       [192, 57,  43],
@@ -165,7 +166,7 @@ async function exportPDFWithCharts() {
   // Repeating page header for pages 2+
   const pageHeader = () => {
     doc.setFont('helvetica', 'bold'); doc.setFontSize(7); doc.setTextColor(...C.gold);
-    doc.text('CASHFLOW.SYS', M, y);
+    doc.text('Cashflow', M, y);
     doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.gray);
     doc.text(reportLabel, W - M, y, { align: 'right' });
     y += 2;
@@ -195,11 +196,11 @@ async function exportPDFWithCharts() {
   fill(0, H - 3.5, W, 3.5, C.gold); // Bottom accent bar (pre-draw for page 1)
 
   y = 12;
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(...C.gold);
-  doc.text('CASHFLOW', M, y);
-  const cashW = doc.getTextWidth('CASHFLOW');
-  doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.dark);
-  doc.text('.SYS', M + cashW, y);
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(20); doc.setTextColor(...C.dark);
+  doc.text('Cash', M, y);
+  const cashW = doc.getTextWidth('Cash');
+  doc.setTextColor(...C.gold);
+  doc.text('flow', M + cashW, y);
 
   doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5); doc.setTextColor(...C.gray);
   doc.text('Personal Finance Report', M, y + 5);
@@ -487,12 +488,12 @@ async function exportPDFWithCharts() {
   const totalPages = doc.internal.getNumberOfPages();
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    // Bottom bar
-    fill(0, H - 8, W, 8, C.dark);
-    doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.gold);
-    doc.text('CASHFLOW.SYS', M, H - 3.5);
+    // Bottom bar — graphite ground from the app theme
+    fill(0, H - 8, W, 8, [14, 18, 17]);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(6.5); doc.setTextColor(...C.mintBright);
+    doc.text('Cashflow', M, H - 3.5);
     doc.setFont('helvetica', 'normal'); doc.setTextColor(...C.gray);
-    doc.text('Personal Finance Terminal', M + doc.getTextWidth('CASHFLOW.SYS') + 3, H - 3.5);
+    doc.text('Personal finance report', M + doc.getTextWidth('Cashflow') + 3, H - 3.5);
     doc.text(`${t('pdf.col.page')} ${i} / ${totalPages}`, W - M, H - 3.5, { align: 'right' });
     // Top gold bar on pages 2+
     if (i > 1) fill(0, 0, W, 3.5, C.gold);
