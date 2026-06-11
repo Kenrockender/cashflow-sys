@@ -6,13 +6,15 @@
  * - Auth/token endpoints: network-only
  */
 
-const CACHE_NAME = 'cashflow-shell-v4';
+const CACHE_NAME = 'cashflow-shell-v5';
 
 const PRECACHE_URLS = [
   '/',
   '/public/index.html',
   '/public/styles/styles.css',
   '/public/styles/mobile.css',
+  '/public/styles/reimburse.css',
+  '/public/styles/polish.css',
   '/public/manifest.json',
   '/public/favicon.ico',
   // Core scripts
@@ -34,6 +36,9 @@ const PRECACHE_URLS = [
   // UI
   '/src/ui/components/charts.js',
   '/src/ui/components/events.js',
+  '/src/ui/components/skeleton.js',
+  '/src/ui/components/toast.js',
+  '/src/ui/components/command-palette.js',
   '/src/ui/render/ui-render.js',
   '/src/ui/render/dashboard-render.js',
   '/src/ui/render/transactions-render.js',
@@ -50,6 +55,8 @@ const PRECACHE_URLS = [
   '/src/features/goals/contributions.js',
   '/src/features/goals/milestones.js',
   '/src/features/budget/budget.js',
+  '/src/features/insights/forecast-math.js',
+  '/src/features/insights/insights.js',
   '/src/features/accounts/accounts.js',
   '/src/features/accounts/transfers.js',
   '/src/features/accounts/categories.js',
