@@ -41,7 +41,19 @@ function renderTxTab(resetPaging = false) {
   const allMonths = Object.keys(groups).sort().reverse();
   const el = document.getElementById('tx-month-groups');
 
-  if (!txs.length) { el.innerHTML = `<div class="empty">${t('empty.no.results')}</div>`; return; }
+  if (!txs.length) {
+    const hasAny = getTxView().length > 0;
+    el.innerHTML = hasAny
+      ? emptyStateHTML({
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>',
+          title: t('empty.noresults.title'), sub: t('empty.noresults.sub'),
+          ctaLabel: t('empty.noresults.cta'), ctaOnclick: 'clearAllFilters()' })
+      : emptyStateHTML({
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1" fill="currentColor"/><circle cx="3.5" cy="12" r="1" fill="currentColor"/><circle cx="3.5" cy="18" r="1" fill="currentColor"/></svg>',
+          title: t('empty.tx.title'), sub: t('empty.tx.sub'),
+          ctaLabel: t('empty.tx.cta'), ctaOnclick: "S.editingId=null;openModal('modal-add')" });
+    return;
+  }
 
   const visMonths   = allMonths.slice(0, _txMonthLimit);
   const hiddenCount = allMonths.length - visMonths.length;

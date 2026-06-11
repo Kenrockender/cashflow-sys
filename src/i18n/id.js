@@ -77,6 +77,12 @@ window.TRANSLATIONS.id = {
     'empty.transactions':  'Belum ada transaksi',
     'empty.no.results':    'Tidak ada transaksi',
     'empty.no.data':       'Belum ada data',
+    'empty.tx.title':      'Belum ada transaksi',
+    'empty.tx.sub':        'Tambahkan transaksi pertama Anda — ketik di bilah quick-add atau pakai tombol +.',
+    'empty.tx.cta':        '+ Tambah Transaksi',
+    'empty.noresults.title': 'Tidak ada yang cocok dengan filter ini',
+    'empty.noresults.sub':  'Coba kata kunci lain atau hapus filter untuk melihat semuanya lagi.',
+    'empty.noresults.cta':  'Hapus Filter',
 
     /* ── TRANSACTIONS TAB ─────────────────────────────────── */
     'tx.search.placeholder': 'Cari transaksi…',

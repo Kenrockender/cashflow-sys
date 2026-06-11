@@ -12,7 +12,10 @@ function renderGoalsTab() {
   const list = el.querySelector('.goals-list');
   if (!list) return;
   if (!S.goals.length) {
-    list.innerHTML = `<div class="empty">${t('goals.empty')}</div>`;
+    list.innerHTML = emptyStateHTML({
+      icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>',
+      title: t('goals.empty.title'), sub: t('goals.empty.sub'),
+      ctaLabel: t('goals.empty.cta'), ctaOnclick: 'openGoalModal()' });
     return;
   }
   list.innerHTML = S.goals.map(g => renderGoalCard(g)).join('');

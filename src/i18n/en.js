@@ -77,6 +77,12 @@ window.TRANSLATIONS.en = {
     'empty.transactions':  'No transactions yet',
     'empty.no.results':    'No transactions found',
     'empty.no.data':       'No data',
+    'empty.tx.title':      'No transactions yet',
+    'empty.tx.sub':        'Add your first transaction — type it in the quick-add bar or use the + button.',
+    'empty.tx.cta':        '+ Add Transaction',
+    'empty.noresults.title': 'Nothing matches these filters',
+    'empty.noresults.sub':  'Try a different search or clear the filters to see everything again.',
+    'empty.noresults.cta':  'Clear Filters',
 
     /* ── TRANSACTIONS TAB ─────────────────────────────────── */
     'tx.search.placeholder': 'Search transactions…',
