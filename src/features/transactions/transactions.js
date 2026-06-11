@@ -174,11 +174,14 @@ async function handleDelete(id) {
   Charts.invalidate(); render();
   toastUndo(t('toast.tx.deleted'), async () => {
     clearPendingDeleteTimer();
+    // The undo toast can outlive the soft-delete timer — restore if either
+    // the tx was already soft-deleted before, or the timer fired meanwhile.
+    const wasSoftDeleted = !!tx._softDeleted;
     tx._softDeleted = false;
     S.transactions = [tx, ...S.transactions];
     S.transactions.sort(sortTxByInput);
     Charts.invalidate(); render();
-    if (!id.startsWith('offline_') && hadSoftDeleted) await Store.restore(id);
+    if (!id.startsWith('offline_') && (hadSoftDeleted || wasSoftDeleted)) await Store.restore(id);
   });
   if (!id.startsWith('offline_')) {
     _pendingDelete = {

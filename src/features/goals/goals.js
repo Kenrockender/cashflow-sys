@@ -63,9 +63,17 @@ async function handleSaveGoal() {
 }
 
 async function handleDelGoal(id) {
-  if (!confirm(t('confirm.del.goal'))) return;
-  S.goals = S.goals.filter(g => g.id !== id);
-  renderGoalsTab();
-  toast(t('toast.goal.deleted'));
+  const g = S.goals.find(x => x.id === id); if (!g) return;
+  S.goals = S.goals.filter(x => x.id !== id);
+  renderGoalsTab(); render();
   Store.delGoal(id).catch(e => console.warn('Del goal error:', e.message));
+  showToast(t('toast.goal.deleted'), {
+    undo: async () => {
+      S.goals.push(g);
+      renderGoalsTab(); render();
+      const { id: _gid, ...data } = g;
+      await db.collection('users').doc(S.user.uid).collection('goals').doc(id)
+        .set({ ...data, createdAt: g.createdAt || firebase.firestore.FieldValue.serverTimestamp() });
+    }
+  });
 }

@@ -115,27 +115,4 @@ const raf = fn => {
 };
 
 /* ── TOAST ───────────────────────────────────────────────── */
-function toast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.remove('hidden');
-  el.classList.add('show');
-  setTimeout(() => { el.classList.remove('show'); el.classList.add('hidden'); }, 4000);
-}
-
-function toastUndo(msg, undoFn) {
-  if (_undoTimer2) { clearTimeout(_undoTimer2); _undoTimer2 = null; }
-  const el = document.getElementById('toast');
-  el.innerHTML = `${san(msg)} <button class="toast-undo-btn" onclick="execUndo()">${t('toast.tx.undo')}</button>`;
-  el.classList.remove('hidden'); el.classList.add('show');
-  _undoStack2 = undoFn;
-  _undoTimer2 = setTimeout(() => { el.classList.remove('show'); el.classList.add('hidden'); _undoStack2 = null; }, 4500);
-}
-
-async function execUndo() {
-  if (!_undoStack2) return;
-  const fn = _undoStack2; _undoStack2 = null;
-  clearTimeout(_undoTimer2);
-  document.getElementById('toast').classList.add('hidden');
-  await fn();
-}
+/* Implemented in src/ui/components/toast.js (stacked toasts + undo). */

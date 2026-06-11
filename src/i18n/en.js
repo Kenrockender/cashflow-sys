@@ -243,6 +243,7 @@ window.TRANSLATIONS.en = {
     'toast.tx.updated':        'Transaction updated',
     'toast.tx.deleted':        'Transaction deleted',
     'toast.tx.undo':           'Undo',
+    'toast.undo.failed':       'Undo failed',
     'toast.goal.added':        'Goal added',
     'toast.goal.updated':      'Goal updated',
     'toast.goal.deleted':      'Goal deleted',

@@ -243,6 +243,7 @@ window.TRANSLATIONS.id = {
     'toast.tx.updated':        'Transaksi diperbarui',
     'toast.tx.deleted':        'Transaksi dihapus',
     'toast.tx.undo':           'Undo',
+    'toast.undo.failed':       'Gagal membatalkan',
     'toast.goal.added':        'Target ditambahkan',
     'toast.goal.updated':      'Target diperbarui',
     'toast.goal.deleted':      'Target dihapus',

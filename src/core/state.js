@@ -46,7 +46,6 @@ let _contributingGoalId = null;
 let _trashItems     = [];
 let _ptrState       = { startY: 0, pulling: false, armed: false, busy: false };
 let _ptrEl          = null;
-let _undoStack2     = null, _undoTimer2 = null;
 let _pendingDelete  = null;
 
 /* ── STATE HELPERS ───────────────────────────────────────── */
