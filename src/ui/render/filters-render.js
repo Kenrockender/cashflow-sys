@@ -166,6 +166,7 @@ function toggleShortcutsPanel() {
 
 function initKeyboardShortcuts() {
   const SHORTCUTS = [
+    { key: 'Ctrl+K', desc: 'Command palette' },
     { key: 'Q',   desc: 'Focus quick-add bar' },
     { key: 'N',   desc: 'New transaction (modal)' },
     { key: '/',   desc: 'Search transactions' },

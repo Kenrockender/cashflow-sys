@@ -244,6 +244,18 @@ window.TRANSLATIONS.id = {
     'toast.tx.deleted':        'Transaksi dihapus',
     'toast.tx.undo':           'Undo',
     'toast.undo.failed':       'Gagal membatalkan',
+
+    /* ── COMMAND PALETTE ──────────────────────────────────── */
+    'palette.placeholder': 'Ketik perintah…',
+    'palette.empty':       'Tidak ada perintah yang cocok',
+    'palette.go':          'Buka {name}',
+    'palette.add.tx':      'Tambah transaksi',
+    'palette.add.goal':    'Tambah target tabungan',
+    'palette.import':      'Impor mutasi bank',
+    'palette.currency':    'Pengaturan mata uang',
+    'palette.trash':       'Buka sampah',
+    'palette.lang':        'Ganti bahasa (EN ↔ ID)',
+    'palette.logout':      'Keluar',
     'toast.goal.added':        'Target ditambahkan',
     'toast.goal.updated':      'Target diperbarui',
     'toast.goal.deleted':      'Target dihapus',

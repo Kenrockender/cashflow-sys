@@ -244,6 +244,18 @@ window.TRANSLATIONS.en = {
     'toast.tx.deleted':        'Transaction deleted',
     'toast.tx.undo':           'Undo',
     'toast.undo.failed':       'Undo failed',
+
+    /* ── COMMAND PALETTE ──────────────────────────────────── */
+    'palette.placeholder': 'Type a command…',
+    'palette.empty':       'No matching commands',
+    'palette.go':          'Go to {name}',
+    'palette.add.tx':      'Add transaction',
+    'palette.add.goal':    'Add savings goal',
+    'palette.import':      'Import bank statement',
+    'palette.currency':    'Currency settings',
+    'palette.trash':       'Open trash',
+    'palette.lang':        'Switch language (EN ↔ ID)',
+    'palette.logout':      'Log out',
     'toast.goal.added':        'Goal added',
     'toast.goal.updated':      'Goal updated',
     'toast.goal.deleted':      'Goal deleted',
