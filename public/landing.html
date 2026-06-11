@@ -52,7 +52,7 @@
 <!-- ── HERO ────────────────────────────────────────────────── -->
 <section class="lp-hero">
   <div class="lp-badge" data-l="hero.badge">Free · Private · Works offline</div>
-  <h1 class="lp-h1" data-l="hero.title">Your money, calm and clear.</h1>
+  <h1 class="lp-h1" data-l="hero.title">Your money, calm and <span class="lp-accent">clear</span>.</h1>
   <p class="lp-sub" data-l="hero.sub">Track spending, set budgets, and watch your net worth grow — in a fast, private app that syncs to your own account.</p>
   <a class="lp-btn lp-btn--primary lp-btn--lg" data-app-link href="/app?login=1">
     <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
@@ -72,31 +72,38 @@
         <div class="lp-mock-cards">
           <div class="lp-mock-card">
             <div class="lp-mock-lbl" data-l="mock.networth">Net worth</div>
-            <div class="lp-mock-val">Rp 142.3M</div>
+            <div class="lp-mock-val" data-count="142.3" data-prefix="Rp " data-suffix="M" data-dec="1">Rp 142.3M</div>
             <div class="lp-mock-sub lp-pos">+4.2%</div>
           </div>
           <div class="lp-mock-card">
             <div class="lp-mock-lbl" data-l="mock.spending">Spending</div>
-            <div class="lp-mock-val">Rp 2.7M</div>
+            <div class="lp-mock-val" data-count="2.7" data-prefix="Rp " data-suffix="M" data-dec="1">Rp 2.7M</div>
             <div class="lp-mock-sub" data-l="mock.thismonth">this month</div>
           </div>
           <div class="lp-mock-card">
             <div class="lp-mock-lbl" data-l="mock.budget">Budget left</div>
-            <div class="lp-mock-val">Rp 1.8M</div>
+            <div class="lp-mock-val" data-count="1.8" data-prefix="Rp " data-suffix="M" data-dec="1">Rp 1.8M</div>
             <div class="lp-mock-track"><div class="lp-mock-fill"></div></div>
           </div>
           <div class="lp-mock-card lp-mock-card--goal">
             <div class="lp-mock-lbl" data-l="mock.goal">Goal · Bali trip</div>
-            <div class="lp-mock-val">68%</div>
+            <div class="lp-mock-val" data-count="68" data-suffix="%" data-dec="0">68%</div>
             <div class="lp-mock-track"><div class="lp-mock-fill lp-mock-fill--goal"></div></div>
           </div>
         </div>
         <div class="lp-mock-chart">
           <div class="lp-mock-lbl"><span data-l="mock.forecast">Net worth · 6-month forecast</span></div>
           <svg viewBox="0 0 600 110" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="lp-area-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#3ddc97" stop-opacity="0.34"/>
+                <stop offset="100%" stop-color="#3ddc97" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <polygon id="lp-chart-area" points="0,95 65,88 130,80 195,82 260,66 325,52 390,40 460,30 530,22 600,12 600,110 0,110" fill="url(#lp-area-grad)"/>
             <line x1="390" y1="0" x2="390" y2="110" stroke="#33403a" stroke-width="1" stroke-dasharray="3,3"/>
             <polyline id="lp-chart-history" points="0,95 65,88 130,80 195,82 260,66 325,52 390,40" fill="none" stroke="#3ddc97" stroke-width="2.5" stroke-linecap="round"/>
-            <polyline id="lp-chart-projection" points="390,40 460,30 530,22 600,12" fill="none" stroke="#3ddc97" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6,6" opacity=".55"/>
+            <polyline id="lp-chart-projection" points="390,40 460,30 530,22 600,12" fill="none" stroke="#3ddc97" stroke-width="2.5" stroke-linecap="round"/>
           </svg>
         </div>
       </div>

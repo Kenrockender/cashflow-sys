@@ -6,7 +6,7 @@
  * - Auth/token endpoints: network-only
  */
 
-const CACHE_NAME = 'cashflow-shell-v6';
+const CACHE_NAME = 'cashflow-shell-v7';
 
 const PRECACHE_URLS = [
   '/',

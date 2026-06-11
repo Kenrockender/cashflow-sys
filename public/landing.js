@@ -20,7 +20,7 @@
     en: {
       'nav.open':        'Open app',
       'hero.badge':      'Free · Private · Works offline',
-      'hero.title':      'Your money, calm and clear.',
+      'hero.title':      'Your money, calm and <span class="lp-accent">clear</span>.',
       'hero.sub':        'Track spending, set budgets, and watch your net worth grow — in a fast, private app that syncs to your own account.',
       'hero.cta':        'Continue with Google',
       'mock.networth':   'Net worth',
@@ -48,7 +48,7 @@
     id: {
       'nav.open':        'Buka aplikasi',
       'hero.badge':      'Gratis · Privat · Bisa offline',
-      'hero.title':      'Uang Anda, tenang dan jelas.',
+      'hero.title':      'Uang Anda, tenang dan <span class="lp-accent">jelas</span>.',
       'hero.sub':        'Catat pengeluaran, atur budget, dan lihat kekayaan bersih Anda tumbuh — di aplikasi cepat dan privat yang tersinkron ke akun Anda sendiri.',
       'hero.cta':        'Lanjutkan dengan Google',
       'mock.networth':   'Kekayaan bersih',
@@ -124,6 +124,30 @@
   } else if (mock) {
     mock.classList.add('flat');
   }
+
+  /* ── Count-up stats on the mockup ────────────────────────── */
+  var counters = document.querySelectorAll('.lp-mock-val[data-count]');
+  function fmt(el, v) {
+    var dec = parseInt(el.getAttribute('data-dec') || '0', 10);
+    var prefix = el.getAttribute('data-prefix') || '';
+    var suffix = el.getAttribute('data-suffix') || '';
+    return prefix + v.toFixed(dec) + suffix;
+  }
+  function countUp(el) {
+    var target = parseFloat(el.getAttribute('data-count'));
+    if (REDUCED || isNaN(target)) { el.textContent = fmt(el, isNaN(target) ? 0 : target); return; }
+    var start = null, dur = 1100;
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min(1, (ts - start) / dur);
+      var e = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      el.textContent = fmt(el, target * e);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  // Kick off shortly after load, in step with the chart reveal.
+  setTimeout(function () { counters.forEach(countUp); }, REDUCED ? 0 : 700);
 
   /* ── Scroll reveals ──────────────────────────────────────── */
   var reveals = document.querySelectorAll('.lp-reveal');
