@@ -51,24 +51,24 @@ function renderDashboard() {
   const mNet = mI - mT;
   const totB = Object.values(S.budgets).reduce((a, b) => a + b, 0);
 
-  document.getElementById('month-amount').textContent = fmtCurrency(mT);
+  setAnimatedValue(document.getElementById('month-amount'), mT);
   const diff  = lT > 0 ? ((mT - lT) / lT * 100).toFixed(0) : 0;
   const vsEl  = document.getElementById('month-vs-last');
   vsEl.textContent  = +diff > 0 ? t('dash.up', {n: diff}) : +diff < 0 ? t('dash.down', {n: Math.abs(diff)}) : t('dash.same');
   vsEl.className    = 'card-sub' + (+diff > 10 ? ' negative' : +diff < 0 ? ' positive' : '');
 
-  document.getElementById('income-amount').textContent  = fmtCurrency(mI);
+  setAnimatedValue(document.getElementById('income-amount'), mI);
   document.getElementById('income-count').textContent   = `${mInc.length} ${t('dash.tx.count')}`;
 
   const netEl = document.getElementById('net-balance');
-  netEl.textContent = (mNet >= 0 ? '+' : '') + fmtCurrency(Math.abs(mNet));
+  setAnimatedValue(netEl, mNet, v => (v >= 0 ? '+' : '') + fmtCurrency(Math.abs(v)));
   netEl.className   = 'card-val ' + (mNet >= 0 ? 'net-positive' : 'net-negative');
   const netLbl = document.getElementById('net-label');
   netLbl.textContent = mNet >= 0 ? t('dash.net.surplus') : t('dash.net.deficit');
   netLbl.className   = 'card-sub ' + (mNet >= 0 ? 'positive' : 'negative');
 
   const effectiveBudget = totB + (S.rolloverEnabled ? (S.rolloverAmount || 0) : 0);
-  document.getElementById('budget-remaining').textContent = fmtCurrency(Math.max(0, effectiveBudget - mT));
+  setAnimatedValue(document.getElementById('budget-remaining'), Math.max(0, effectiveBudget - mT));
   const pct  = effectiveBudget > 0 ? Math.min(100, mT / effectiveBudget * 100) : 0;
   const fill = document.getElementById('budget-progress-fill');
   fill.style.width      = pct + '%';

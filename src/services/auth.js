@@ -238,6 +238,7 @@ auth.onAuthStateChanged(async user => {
     S.user = user; Store.setUser(user.uid);
     document.getElementById('auth-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
+    if (typeof Skeleton !== 'undefined') Skeleton.start();
 
     const dashEl = document.getElementById('tab-dashboard');
     if (dashEl && !window._dashboardHTML) window._dashboardHTML = dashEl.innerHTML;
@@ -290,6 +291,8 @@ auth.onAuthStateChanged(async user => {
     if (typeof I18n !== 'undefined') I18n.setLang(savedLang);
 
     render();
+    // render() defers to rAF — queue skeleton removal behind it so real content is in place
+    if (typeof Skeleton !== 'undefined') requestAnimationFrame(() => requestAnimationFrame(Skeleton.end));
 
     // Mark demo flag if real data already contains dummy transactions
     if (txs.length > 0 && !localStorage.getItem(`cf-has-demo-${user.uid}`)) {

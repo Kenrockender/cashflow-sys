@@ -1,0 +1,65 @@
+/* ════════════════════════════════════════════════════════════════════
+   Cashflow — polish.css
+   Design-polish layer on top of Graphite Mint (styles.css tokens):
+   loading skeletons, micro-interactions, empty states, toast stack,
+   command palette, net-worth insights card.
+   Spec: docs/superpowers/specs/2026-06-11-polish-and-insights-design.md
+   ──────────────────────────────────────────────────────────────────── */
+
+
+/* ──── LOADING SKELETONS ──────────────────────────────────────────── */
+@keyframes cf-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+body.cf-loading .card-val,
+body.cf-loading .card-sub,
+body.cf-loading #recent-list,
+body.cf-loading #category-list,
+body.cf-loading #dash-goals-preview,
+body.cf-loading .chart-wrap,
+body.cf-loading #networth-card {
+  color: transparent !important;
+  pointer-events: none;
+  user-select: none;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: cf-shimmer 1.4s linear infinite;
+}
+
+body.cf-loading #recent-list,
+body.cf-loading #category-list,
+body.cf-loading #dash-goals-preview { min-height: 120px; }
+body.cf-loading #networth-card      { min-height: 180px; }
+
+body.cf-loading .card-val *, body.cf-loading .card-sub *,
+body.cf-loading #recent-list *, body.cf-loading #category-list *,
+body.cf-loading #dash-goals-preview *, body.cf-loading .chart-wrap *,
+body.cf-loading #networth-card * { visibility: hidden; }
+
+
+/* ──── MICRO-INTERACTIONS ─────────────────────────────────────────── */
+@keyframes cf-fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.tab-content.active { animation: cf-fade-up 160ms var(--ease-out) both; }
+
+.summary-card, .chart-card { transition: border-color 140ms var(--ease-out); }
+.summary-card:hover, .chart-card:hover { border-color: var(--rule-strong); }
+
+button:not(:disabled):active { transform: scale(0.985); }
+
+
+/* ──── REDUCED MOTION ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  body.cf-loading .card-val, body.cf-loading .card-sub,
+  body.cf-loading #recent-list, body.cf-loading #category-list,
+  body.cf-loading #dash-goals-preview, body.cf-loading .chart-wrap,
+  body.cf-loading #networth-card { animation: none; }
+  .tab-content.active { animation: none; }
+  button:not(:disabled):active { transform: none; }
+}
