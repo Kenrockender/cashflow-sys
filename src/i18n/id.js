@@ -245,6 +245,14 @@ window.TRANSLATIONS.id = {
     'toast.tx.undo':           'Undo',
     'toast.undo.failed':       'Gagal membatalkan',
 
+    /* ── NET WORTH & FORECAST ─────────────────────────────── */
+    'networth.title':       'Kekayaan bersih',
+    'networth.vs.last':     'vs bulan lalu',
+    'networth.forecast':    'Proyeksi · {month}',
+    'networth.pace':        'dengan laju saat ini',
+    'networth.empty.title': 'Belum ada tren untuk ditampilkan',
+    'networth.empty.sub':   'Tambahkan transaksi selama beberapa bulan untuk melihat tren kekayaan bersih dan proyeksinya.',
+
     /* ── COMMAND PALETTE ──────────────────────────────────── */
     'palette.placeholder': 'Ketik perintah…',
     'palette.empty':       'Tidak ada perintah yang cocok',

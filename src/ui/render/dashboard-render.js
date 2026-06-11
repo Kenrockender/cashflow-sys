@@ -74,6 +74,7 @@ function renderDashboard() {
   fill.style.width      = pct + '%';
   fill.style.background = pct > 90 ? 'var(--danger)' : pct > 70 ? '#c4a032' : 'var(--ok)';
 
+  if (typeof Insights !== 'undefined') Insights.render();
   renderForecastStrip();
   renderRecurringPanel();
   renderSmartInsights();

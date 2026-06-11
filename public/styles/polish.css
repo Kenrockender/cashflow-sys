@@ -221,6 +221,48 @@ button:not(:disabled):active { transform: scale(0.985); }
 .cf-palette-empty { padding: 1.5rem; text-align: center; color: var(--ink-faint); font-size: 12px; }
 
 
+/* ──── NET WORTH & FORECAST CARD ──────────────────────────────────── */
+.networth-card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--r-card);
+  padding: 18px 20px 14px;
+  margin-bottom: 12px;
+  transition: border-color 140ms var(--ease-out);
+}
+.networth-card:hover { border-color: var(--rule-strong); }
+
+.networth-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 40px;
+  margin-bottom: 12px;
+}
+
+.networth-lbl { font-size: 11px; color: var(--ink-dim); margin-bottom: 4px; }
+
+.networth-val {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.networth-val--forecast { color: var(--accent); }
+
+.networth-sub { font-size: 11px; color: var(--ink-faint); margin-top: 2px; }
+.networth-sub.positive { color: var(--pos); }
+.networth-sub.negative { color: var(--neg); }
+
+.networth-chart-wrap { height: 170px; }
+
+@media (max-width: 640px) {
+  .networth-head { gap: 12px 24px; }
+  .networth-val { font-size: 22px; }
+  .networth-chart-wrap { height: 140px; }
+}
+
+
 /* ──── REDUCED MOTION ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   body.cf-loading .card-val, body.cf-loading .card-sub,

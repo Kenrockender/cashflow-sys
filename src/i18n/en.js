@@ -245,6 +245,14 @@ window.TRANSLATIONS.en = {
     'toast.tx.undo':           'Undo',
     'toast.undo.failed':       'Undo failed',
 
+    /* ── NET WORTH & FORECAST ─────────────────────────────── */
+    'networth.title':       'Net worth',
+    'networth.vs.last':     'vs last month',
+    'networth.forecast':    'Forecast · {month}',
+    'networth.pace':        'at current pace',
+    'networth.empty.title': 'No trend to show yet',
+    'networth.empty.sub':   'Add transactions across a couple of months to see your net worth trend and forecast.',
+
     /* ── COMMAND PALETTE ──────────────────────────────────── */
     'palette.placeholder': 'Type a command…',
     'palette.empty':       'No matching commands',
