@@ -6,11 +6,15 @@
  * - Auth/token endpoints: network-only
  */
 
-const CACHE_NAME = 'cashflow-shell-v5';
+const CACHE_NAME = 'cashflow-shell-v6';
 
 const PRECACHE_URLS = [
   '/',
+  '/app',
   '/public/index.html',
+  '/public/landing.html',
+  '/public/landing.js',
+  '/public/styles/landing.css',
   '/public/styles/styles.css',
   '/public/styles/mobile.css',
   '/public/styles/reimburse.css',

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cashflow — Your money, calm and clear</title>
+  <meta name="description" content="Track spending, set budgets, and watch your net worth grow — a fast, private personal finance app that works offline and syncs to your own account."/>
+
+  <!-- Social previews -->
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Cashflow — Your money, calm and clear"/>
+  <meta property="og:description" content="Track spending, set budgets, and watch your net worth grow. Free, private, works offline."/>
+  <meta property="og:image" content="icons/icon-512.png"/>
+  <meta name="twitter:card" content="summary"/>
+
+  <link rel="icon" type="image/svg+xml" href="logo.svg"/>
+  <meta name="theme-color" content="#0e1211"/>
+
+  <!-- Smart skip: returning users go straight to the app (override with ?stay=1) -->
+  <script>
+    (function () {
+      try {
+        var local = location.pathname.indexOf('/public/') === 0;
+        window.CF_APP_URL = local ? 'index.html' : '/app';
+        if (localStorage.getItem('cf-returning') && location.search.indexOf('stay=1') === -1) {
+          location.replace(window.CF_APP_URL);
+        }
+      } catch (e) { window.CF_APP_URL = '/app'; }
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles/landing.css"/>
+</head>
+<body>
+
+<!-- ── NAV ─────────────────────────────────────────────────── -->
+<header class="lp-nav">
+  <a class="lp-wordmark" href="?stay=1">Cash<span>flow</span></a>
+  <div class="lp-nav-right">
+    <div class="lp-lang" role="group" aria-label="Language">
+      <button type="button" class="lp-lang-btn" data-setlang="en">EN</button>
+      <span class="lp-lang-sep">·</span>
+      <button type="button" class="lp-lang-btn" data-setlang="id">ID</button>
+    </div>
+    <a class="lp-btn lp-btn--primary lp-btn--sm" data-app-link href="/app?login=1" data-l="nav.open">Open app</a>
+  </div>
+</header>
+
+<!-- ── HERO ────────────────────────────────────────────────── -->
+<section class="lp-hero">
+  <div class="lp-badge" data-l="hero.badge">Free · Private · Works offline</div>
+  <h1 class="lp-h1" data-l="hero.title">Your money, calm and clear.</h1>
+  <p class="lp-sub" data-l="hero.sub">Track spending, set budgets, and watch your net worth grow — in a fast, private app that syncs to your own account.</p>
+  <a class="lp-btn lp-btn--primary lp-btn--lg" data-app-link href="/app?login=1">
+    <svg width="16" height="16" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+      <path d="M17.64 9.2c0-.74-.06-1.28-.19-1.84H9v3.34h4.96c-.1.83-.64 2.08-1.84 2.92l2.84 2.2C16.66 14.08 17.64 11.77 17.64 9.2z" fill="currentColor" opacity=".9"/>
+      <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.84-2.2c-.76.53-1.78.9-3.12.9-2.38 0-4.4-1.57-5.12-3.74L.96 13.04C2.44 15.98 5.48 18 9 18z" fill="currentColor" opacity=".7"/>
+      <path d="M3.88 10.78A5.54 5.54 0 0 1 3.58 9c0-.62.11-1.22.29-1.78L.96 4.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l2.92-2.26z" fill="currentColor" opacity=".7"/>
+      <path d="M9 3.48c1.69 0 2.83.73 3.48 1.34l2.54-2.48C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.96l2.91 2.26C4.6 5.05 6.62 3.48 9 3.48z" fill="currentColor"/>
+    </svg>
+    <span data-l="hero.cta">Continue with Google</span>
+  </a>
+
+  <!-- Scroll-zoom dashboard mockup -->
+  <div class="lp-mock-stage">
+    <div class="lp-mock" id="lp-mock" aria-hidden="true">
+      <div class="lp-mock-bar"><span class="lp-dot"></span><span class="lp-dot"></span><span class="lp-dot"></span></div>
+      <div class="lp-mock-body">
+        <div class="lp-mock-cards">
+          <div class="lp-mock-card">
+            <div class="lp-mock-lbl" data-l="mock.networth">Net worth</div>
+            <div class="lp-mock-val">Rp 142.3M</div>
+            <div class="lp-mock-sub lp-pos">+4.2%</div>
+          </div>
+          <div class="lp-mock-card">
+            <div class="lp-mock-lbl" data-l="mock.spending">Spending</div>
+            <div class="lp-mock-val">Rp 2.7M</div>
+            <div class="lp-mock-sub" data-l="mock.thismonth">this month</div>
+          </div>
+          <div class="lp-mock-card">
+            <div class="lp-mock-lbl" data-l="mock.budget">Budget left</div>
+            <div class="lp-mock-val">Rp 1.8M</div>
+            <div class="lp-mock-track"><div class="lp-mock-fill"></div></div>
+          </div>
+          <div class="lp-mock-card lp-mock-card--goal">
+            <div class="lp-mock-lbl" data-l="mock.goal">Goal · Bali trip</div>
+            <div class="lp-mock-val">68%</div>
+            <div class="lp-mock-track"><div class="lp-mock-fill lp-mock-fill--goal"></div></div>
+          </div>
+        </div>
+        <div class="lp-mock-chart">
+          <div class="lp-mock-lbl"><span data-l="mock.forecast">Net worth · 6-month forecast</span></div>
+          <svg viewBox="0 0 600 110" preserveAspectRatio="none">
+            <line x1="390" y1="0" x2="390" y2="110" stroke="#33403a" stroke-width="1" stroke-dasharray="3,3"/>
+            <polyline id="lp-chart-history" points="0,95 65,88 130,80 195,82 260,66 325,52 390,40" fill="none" stroke="#3ddc97" stroke-width="2.5" stroke-linecap="round"/>
+            <polyline id="lp-chart-projection" points="390,40 460,30 530,22 600,12" fill="none" stroke="#3ddc97" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="6,6" opacity=".55"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ────────────────────────────────────────────── -->
+<section class="lp-features">
+  <div class="lp-feature lp-reveal">
+    <div class="lp-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+    <div class="lp-feature-title" data-l="feat.quick.title">Quick add</div>
+    <div class="lp-feature-desc" data-l="feat.quick.desc">Type "fried rice 25rb" and it's parsed instantly — amount, category, date. Voice input works too.</div>
+  </div>
+  <div class="lp-feature lp-reveal">
+    <div class="lp-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6.4 6.4"/></svg></div>
+    <div class="lp-feature-title" data-l="feat.budget.title">Budgets &amp; goals</div>
+    <div class="lp-feature-desc" data-l="feat.budget.desc">Per-category limits with rollover, plus savings goals with milestones and auto-contributions.</div>
+  </div>
+  <div class="lp-feature lp-reveal">
+    <div class="lp-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+    <div class="lp-feature-title" data-l="feat.forecast.title">Forecast</div>
+    <div class="lp-feature-desc" data-l="feat.forecast.desc">See your net worth trend and a 6-month projection based on how you actually spend.</div>
+  </div>
+  <div class="lp-feature lp-reveal">
+    <div class="lp-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+    <div class="lp-feature-title" data-l="feat.import.title">Import &amp; export</div>
+    <div class="lp-feature-desc" data-l="feat.import.desc">Import bank statements (CSV, XLSX, PDF), export clean reports whenever you need them.</div>
+  </div>
+</section>
+
+<!-- ── TRUST STRIP ─────────────────────────────────────────── -->
+<section class="lp-trust lp-reveal">
+  <div class="lp-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span data-l="trust.private">Your data stays in your account</span></div>
+  <div class="lp-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span data-l="trust.pwa">Installs as an app</span></div>
+  <div class="lp-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 9c4-4 9-6 11-6s7 2 11 6"/><path d="M5 13c2.5-2.5 5.5-4 7-4s4.5 1.5 7 4"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg><span data-l="trust.offline">Works offline</span></div>
+  <div class="lp-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20z"/></svg><span data-l="trust.lang">English &amp; Indonesian</span></div>
+</section>
+
+<!-- ── CLOSING CTA ─────────────────────────────────────────── -->
+<section class="lp-close lp-reveal">
+  <h2 class="lp-h2" data-l="close.title">Start tracking in under a minute.</h2>
+  <a class="lp-btn lp-btn--primary lp-btn--lg" data-app-link href="/app?login=1" data-l="hero.cta">Continue with Google</a>
+  <div class="lp-footnote" data-l="close.note">Free · No card required · Sign in with Google</div>
+</section>
+
+<footer class="lp-footer">
+  <span class="lp-wordmark lp-wordmark--sm">Cash<span>flow</span></span>
+  <span class="lp-footer-meta" data-l="footer.meta">Personal finance, minus the noise.</span>
+</footer>
+
+<script src="landing.js"></script>
+</body>
+</html>

@@ -236,6 +236,7 @@ auth.onAuthStateChanged(async user => {
   if (user) {
     try { if (window.__cfFirestoreReady) await window.__cfFirestoreReady; } catch (_) { }
     S.user = user; Store.setUser(user.uid);
+    try { localStorage.setItem('cf-returning', '1'); } catch (_) { } // landing page smart-skip
     document.getElementById('auth-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     if (typeof Skeleton !== 'undefined') Skeleton.start();
@@ -311,8 +312,9 @@ auth.onAuthStateChanged(async user => {
 
     // Handle deep-link query params
     const p = new URLSearchParams(window.location.search);
-    if (p.get('add') === '1') { openModal('modal-add'); history.replaceState({}, '', '/'); }
-    if (p.get('voice') === '1') { setTimeout(() => document.getElementById('btn-voice')?.click(), 500); history.replaceState({}, '', '/'); }
+    if (p.get('add') === '1') { openModal('modal-add'); history.replaceState({}, '', window.location.pathname); }
+    if (p.get('voice') === '1') { setTimeout(() => document.getElementById('btn-voice')?.click(), 500); history.replaceState({}, '', window.location.pathname); }
+    if (p.get('login') === '1') history.replaceState({}, '', window.location.pathname);
   } else {
     clearLiveListeners();
     stopCloudHealthMonitor();
@@ -321,5 +323,13 @@ auth.onAuthStateChanged(async user => {
     document.getElementById('app').classList.add('hidden');
     const gl = document.getElementById('btn-google-login');
     if (gl) { gl.disabled = false; const sp = gl.querySelector('span'); if (sp) sp.textContent = t('auth.login.btn'); }
+    // Landing page CTA deep link: trigger the Google popup right away.
+    // If the browser blocks the non-gesture popup, the auth screen with
+    // the login button is already visible as fallback.
+    const lp = new URLSearchParams(window.location.search);
+    if (lp.get('login') === '1') {
+      history.replaceState({}, '', window.location.pathname);
+      setTimeout(() => gl?.click(), 150);
+    }
   }
 });

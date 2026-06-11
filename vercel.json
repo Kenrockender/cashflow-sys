@@ -8,6 +8,8 @@
     { "source": "/logo.svg", "destination": "/public/logo.svg" },
     { "source": "/favicon.ico", "destination": "/public/favicon.ico" },
     { "source": "/service-worker.js", "destination": "/public/service-worker.js" },
-    { "source": "/", "destination": "/public/index.html" }
+    { "source": "/landing.js", "destination": "/public/landing.js" },
+    { "source": "/app", "destination": "/public/index.html" },
+    { "source": "/", "destination": "/public/landing.html" }
   ]
 }
