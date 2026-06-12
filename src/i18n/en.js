@@ -181,6 +181,26 @@ window.TRANSLATIONS.en = {
     'modal.save':          'Save',
     'modal.saving':        'Saving…',
 
+    /* ── MODAL: BULK ADD ──────────────────────────────────── */
+    'bulk.title':          'Add Multiple Transactions',
+    'bulk.btn':            'Bulk',
+    'bulk.sidebar':        'Add Multiple Transactions',
+    'bulk.hint':           'Set shared defaults below, then add a row per transaction. Any row can override the date or category.',
+    'bulk.shared.date':    'Shared date',
+    'bulk.shared.cat':     'Shared category',
+    'bulk.rows.lbl':       'Transactions',
+    'bulk.addrow':         'Add row',
+    'bulk.save':           'Save all',
+    'bulk.cat.shared':     '↳ {cat} (shared)',
+    'bulk.row.date.hint':  'Override date (leave blank to use shared date)',
+    'bulk.row.remove':     'Remove row',
+    'bulk.err.empty':      'Add at least one transaction first',
+    'bulk.err.amount':     'Every row needs a valid amount',
+    'bulk.err.desc':       'Every row needs a description',
+    'bulk.all.dupe':       'All {n} transactions already exist — nothing added',
+    'bulk.saved':          '{n} transactions added',
+    'bulk.saved.partial':  '{n} added · {skipped} duplicates skipped',
+
     /* ── MODAL: GOAL ──────────────────────────────────────── */
     'modal.goal.add':      'Add Savings Goal',
     'modal.goal.edit':     'Edit Goal',

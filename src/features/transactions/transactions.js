@@ -150,6 +150,175 @@ function handleEdit(id) {
   }, 0);
 }
 
+/* ── BULK ADD ────────────────────────────────────────────── */
+function openBulkModal() {
+  _bulkType = 'expense';
+  _bulkSharedCat = 'other';
+  fillBulkAccountSelect();
+  const d = document.getElementById('bulk-shared-date');
+  if (d) { d.max = todayKey(); d.value = todayKey(); }
+  buildBulkCatGrid();
+  bulkSelCat('other');
+  bulkSetType('expense');
+  const rows = document.getElementById('bulk-rows');
+  if (rows) { rows.innerHTML = ''; _bulkRowSeq = 0; addBulkRow(); addBulkRow(); addBulkRow(); }
+  updateBulkTotal();
+  document.getElementById('modal-bulk').classList.remove('hidden');
+}
+
+function fillBulkAccountSelect() {
+  const el = document.getElementById('bulk-shared-account');
+  if (!el) return;
+  el.innerHTML = S.accounts.map(a => `<option value="${a.id}">${san(a.name)}</option>`).join('');
+}
+
+function buildBulkCatGrid() {
+  const g = document.getElementById('bulk-cat-grid');
+  if (!g) return;
+  g.innerHTML = getAllCategories().map(c => `<button type="button" class="cat-chip" data-bcat="${c.id}" onclick="bulkSelCat('${c.id}')" style="color:${c.color}">${catSVG(c.id, 12, c.color)}<span style="color:var(--text2);font-size:.68rem">${getCat(c.id).label}</span></button>`).join('');
+}
+
+function bulkSelCat(id) {
+  _bulkSharedCat = id;
+  const cat = getCat(id);
+  document.querySelectorAll('#bulk-cat-grid .cat-chip').forEach(b => {
+    const a = b.dataset.bcat === id;
+    b.classList.toggle('selected', a);
+    b.style.background  = a ? cat.color + '22' : '';
+    b.style.borderColor = a ? cat.color : '';
+  });
+  // refresh the "(shared)" hint label on each row's category select
+  document.querySelectorAll('.bulk-row-cat option[value=""]').forEach(o => {
+    o.textContent = t('bulk.cat.shared', { cat: cat.label });
+  });
+}
+
+function bulkSetType(type) {
+  _bulkType = type;
+  document.getElementById('bulk-type-btn-expense').className = 'type-btn expense' + (type === 'expense' ? ' active' : '');
+  document.getElementById('bulk-type-btn-income').className  = 'type-btn income'  + (type === 'income'  ? ' active' : '');
+  const isInc = type === 'income';
+  document.getElementById('bulk-shared-cat-wrap')?.classList.toggle('hidden', isInc);
+  document.getElementById('bulk-rows')?.classList.toggle('bulk-income', isInc);
+}
+
+function bulkCatOptions() {
+  const shared = getCat(_bulkSharedCat);
+  let html = `<option value="">${t('bulk.cat.shared', { cat: shared.label })}</option>`;
+  html += getAllCategories().map(c => `<option value="${c.id}">${san(getCat(c.id).label)}</option>`).join('');
+  return html;
+}
+
+function addBulkRow() {
+  const wrap = document.getElementById('bulk-rows');
+  if (!wrap) return;
+  const i = _bulkRowSeq++;
+  const row = document.createElement('div');
+  row.className = 'bulk-row';
+  row.dataset.idx = i;
+  row.innerHTML = `
+    <input class="form-input bulk-row-amt" inputmode="numeric" placeholder="0" autocomplete="off"/>
+    <input class="form-input bulk-row-desc" type="text" placeholder="${t('modal.desc.lbl')}"/>
+    <select class="form-input bulk-row-cat">${bulkCatOptions()}</select>
+    <input class="form-input bulk-row-date" type="date" max="${todayKey()}" title="${t('bulk.row.date.hint')}"/>
+    <button type="button" class="bulk-row-del" onclick="removeBulkRow(this)" title="${t('bulk.row.remove')}">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>`;
+  wrap.appendChild(row);
+  const amt = row.querySelector('.bulk-row-amt');
+  amt.addEventListener('input', () => { bulkFormatAmount(amt); updateBulkTotal(); });
+}
+
+function bulkFormatAmount(el) {
+  const n = parseInt((el.value || '').replace(/\D/g, '') || '0');
+  el.value = n ? n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+}
+
+function removeBulkRow(btn) {
+  const row = btn.closest('.bulk-row');
+  if (!row) return;
+  row.remove();
+  if (!document.querySelectorAll('#bulk-rows .bulk-row').length) addBulkRow();
+  updateBulkTotal();
+}
+
+function readBulkRows() {
+  const out = [];
+  document.querySelectorAll('#bulk-rows .bulk-row').forEach(row => {
+    const amount = parseInt((row.querySelector('.bulk-row-amt')?.value || '').replace(/\D/g, '') || '0');
+    const description = (row.querySelector('.bulk-row-desc')?.value || '').trim();
+    const rowCat = row.querySelector('.bulk-row-cat')?.value || '';
+    const rowDate = row.querySelector('.bulk-row-date')?.value || '';
+    if (!amount && !description) return; // skip fully-empty rows
+    out.push({ amount, description, rowCat, rowDate });
+  });
+  return out;
+}
+
+function updateBulkTotal() {
+  const rows = readBulkRows();
+  const sum  = rows.reduce((a, r) => a + (r.amount || 0), 0);
+  const el = document.getElementById('bulk-total');
+  if (el) el.textContent = `${rows.length} · ${fmtFull(sum)}`;
+}
+
+function handleSaveBulk() {
+  const rows = readBulkRows();
+  if (!rows.length) { toast(t('bulk.err.empty')); return; }
+  const sharedDate    = document.getElementById('bulk-shared-date')?.value || todayKey();
+  const accountId     = document.getElementById('bulk-shared-account')?.value || S.accounts[0]?.id || 'main';
+  const type          = _bulkType;
+  const today         = todayKey();
+
+  // Validate every non-empty row
+  for (const r of rows) {
+    if (!r.amount || r.amount <= 0) { toast(t('bulk.err.amount')); return; }
+    if (!r.description)             { toast(t('bulk.err.desc'));   return; }
+    const date = r.rowDate || sharedDate;
+    if (!date)         { toast(t('toast.err.date')); return; }
+    if (date > today)  { toast(t('toast.err.future.date')); return; }
+  }
+
+  const txs = rows.map(r => {
+    const date     = r.rowDate || sharedDate;
+    const category = type === 'income' ? 'income' : (r.rowCat || _bulkSharedCat || 'other');
+    return { amount: r.amount, description: r.description, date, category, type, note: '', recurring: false, accountId };
+  });
+
+  // De-dupe against existing (same fingerprint) — mirrors import behaviour
+  const existing = new Set(S.transactions.map(t => `${t.date}|${t.amount}|${(t.description || '').toLowerCase().trim()}`));
+  const toAdd    = txs.filter(tx => !existing.has(`${tx.date}|${tx.amount}|${(tx.description || '').toLowerCase().trim()}`));
+  const skipped  = txs.length - toAdd.length;
+  if (!toAdd.length) { toast(t('bulk.all.dupe', { n: txs.length })); closeModal('modal-bulk'); return; }
+
+  // Optimistic UI
+  const tempTxs = toAdd.map((tx, i) => ({ id: 'bulk_' + Date.now() + '_' + i, _localTs: Date.now(), ...tx }));
+  S.transactions = [...tempTxs, ...S.transactions].sort(sortTxByInput);
+  closeModal('modal-bulk');
+  Charts.invalidate(); render();
+  toast(skipped > 0 ? t('bulk.saved.partial', { n: toAdd.length, skipped }) : t('bulk.saved', { n: toAdd.length }));
+
+  if (type === 'income') { const sum = toAdd.reduce((a, x) => a + x.amount, 0); if (sum > 0) processAutoContribute(sum); }
+
+  // Background persist
+  (async () => {
+    try {
+      const results = await Store.addBatch(toAdd);
+      S.transactions = S.transactions.map(tx => {
+        if (String(tx.id).startsWith('bulk_')) {
+          const realId = results.find(r => r.description === tx.description && r.date === tx.date && r.amount === tx.amount)?.id;
+          if (realId) return { ...tx, id: realId };
+        }
+        return tx;
+      });
+    } catch (e) {
+      console.warn('Bulk add batch error, queuing:', e.message);
+      for (const tx of toAdd) { try { await OQ.enqueue(tx); } catch (_) {} }
+      S.transactions = S.transactions.map(tx => String(tx.id).startsWith('bulk_') ? { ...tx, id: 'offline_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6) } : tx);
+    }
+  })();
+}
+
 /* ── DELETE TRANSACTION ──────────────────────────────────── */
 async function flushPendingSoftDelete() {
   if (!_pendingDelete) return;

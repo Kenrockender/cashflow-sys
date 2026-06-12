@@ -1329,6 +1329,76 @@ select.form-input option { background: var(--surface-2); color: var(--ink); }
 
 
 /* ════════════════════════════════════════════════════════════════════
+   BULK ADD MODAL
+   ──────────────────────────────────────────────────────────────────── */
+.bulk-hint {
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.45;
+  margin: 0 0 14px;
+}
+.bulk-rows-hdr {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 4px 0 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink-dim);
+}
+.bulk-total {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.bulk-rows { display: flex; flex-direction: column; gap: 6px; }
+.bulk-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 130px 140px 28px;
+  gap: 6px;
+  align-items: center;
+}
+.bulk-row .form-input { padding: 8px 10px; font-size: 13px; }
+.bulk-row-amt { text-align: right; font-variant-numeric: tabular-nums; }
+.bulk-rows.bulk-income .bulk-row-cat { display: none; }
+.bulk-rows.bulk-income .bulk-row {
+  grid-template-columns: 120px 1fr 140px 28px;
+}
+.bulk-row-del {
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  color: var(--ink-faint);
+  cursor: pointer;
+  transition: color .15s, background .15s, border-color .15s;
+}
+.bulk-row-del:hover { color: var(--neg); border-color: transparent; background: var(--neg-tint); }
+.bulk-addrow-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 12px;
+  padding: 8px 14px;
+  background: var(--surface-2);
+  border: 1px dashed var(--rule-strong);
+  border-radius: 8px;
+  color: var(--ink-dim);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color .15s, border-color .15s, background .15s;
+}
+.bulk-addrow-btn:hover { color: var(--ink); border-color: var(--accent, var(--rule-strong)); }
+@media (max-width: 640px) {
+  .bulk-row, .bulk-rows.bulk-income .bulk-row { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .bulk-row-desc { grid-column: 1 / -1; }
+  .bulk-row-del { grid-column: 2; justify-self: end; }
+}
+
+/* ════════════════════════════════════════════════════════════════════
    IMPORT MODAL
    ──────────────────────────────────────────────────────────────────── */
 .bank-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }

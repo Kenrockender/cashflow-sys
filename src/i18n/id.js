@@ -181,6 +181,26 @@ window.TRANSLATIONS.id = {
     'modal.save':          'Simpan',
     'modal.saving':        'Menyimpan…',
 
+    /* ── MODAL: BULK ADD ──────────────────────────────────── */
+    'bulk.title':          'Tambah Banyak Transaksi',
+    'bulk.btn':            'Massal',
+    'bulk.sidebar':        'Tambah Banyak Transaksi',
+    'bulk.hint':           'Atur nilai bersama di bawah, lalu tambahkan satu baris per transaksi. Tiap baris bisa menimpa tanggal atau kategori.',
+    'bulk.shared.date':    'Tanggal bersama',
+    'bulk.shared.cat':     'Kategori bersama',
+    'bulk.rows.lbl':       'Transaksi',
+    'bulk.addrow':         'Tambah baris',
+    'bulk.save':           'Simpan semua',
+    'bulk.cat.shared':     '↳ {cat} (bersama)',
+    'bulk.row.date.hint':  'Timpa tanggal (kosongkan untuk pakai tanggal bersama)',
+    'bulk.row.remove':     'Hapus baris',
+    'bulk.err.empty':      'Tambahkan minimal satu transaksi dulu',
+    'bulk.err.amount':     'Setiap baris perlu jumlah yang valid',
+    'bulk.err.desc':       'Setiap baris perlu deskripsi',
+    'bulk.all.dupe':       'Semua {n} transaksi sudah ada — tidak ada yang ditambahkan',
+    'bulk.saved':          '{n} transaksi ditambahkan',
+    'bulk.saved.partial':  '{n} ditambahkan · {skipped} duplikat dilewati',
+
     /* ── MODAL: GOAL ──────────────────────────────────────── */
     'modal.goal.add':      'Tambah Target Tabungan',
     'modal.goal.edit':     'Edit Target',

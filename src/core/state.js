@@ -32,6 +32,7 @@ let S = {
 
 /* ── FEATURE STATE ───────────────────────────────────────── */
 let _importPending  = [], _voiceRec = null, _catBuilt = false, _catLang = '', _txType = 'expense';
+let _bulkType = 'expense', _bulkSharedCat = 'other', _bulkRowSeq = 0;
 let _lastBudgetHash  = '';
 let _lastTxRenderHash = '';
 let _txMonthLimit   = 3;

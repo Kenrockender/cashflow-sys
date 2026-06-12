@@ -65,6 +65,7 @@ document.querySelectorAll('.modal').forEach(m => m.onclick = e => { if (e.target
 
 /* ── TRANSACTION FORM ────────────────────────────────────── */
 document.getElementById('btn-save-tx').onclick = handleSaveTx;
+document.getElementById('btn-save-bulk')?.addEventListener('click', handleSaveBulk);
 
 document.getElementById('form-recurring')?.addEventListener('change', function () {
   this.closest('.recurring-toggle')?.classList.toggle('active', this.checked);
