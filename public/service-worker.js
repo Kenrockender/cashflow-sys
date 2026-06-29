@@ -6,68 +6,27 @@
  * - Auth/token endpoints: network-only
  */
 
-const CACHE_NAME = 'cashflow-shell-v8';
+const CACHE_NAME = 'cashflow-shell-v10';
 
+// App shell. The JS/CSS bundles are content-hashed by Vite at build time, so
+// their exact filenames aren't known here — they're cached on first fetch by
+// the stale-while-revalidate handler below. Precache only stable shell URLs.
 const PRECACHE_URLS = [
   '/',
   '/app',
-  '/public/index.html',
-  '/public/landing.html',
-  '/public/landing.js',
-  '/public/styles/landing.css',
-  '/public/styles/styles.css',
-  '/public/styles/mobile.css',
-  '/public/styles/reimburse.css',
-  '/public/styles/polish.css',
-  '/public/manifest.json',
-  '/public/favicon.ico',
-  // Core scripts
-  '/src/core/constants.js',
-  '/src/core/state.js',
-  '/src/core/helpers.js',
-  // Data
-  '/src/data/firebase-config.js',
-  '/src/data/firebase-init.js',
-  '/src/data/store.js',
-  // i18n
-  '/src/i18n/en.js',
-  '/src/i18n/id.js',
-  '/src/i18n/i18n.js',
-  // Services
-  '/src/services/exchange-rates.js',
-  '/src/services/parser.js',
-  '/src/services/auth.js',
-  // UI
-  '/src/ui/components/charts.js',
-  '/src/ui/components/events.js',
-  '/src/ui/components/skeleton.js',
-  '/src/ui/components/toast.js',
-  '/src/ui/components/command-palette.js',
-  '/src/ui/render/ui-render.js',
-  '/src/ui/render/dashboard-render.js',
-  '/src/ui/render/transactions-render.js',
-  '/src/ui/render/budget-render.js',
-  '/src/ui/render/goals-render.js',
-  '/src/ui/render/reports-render.js',
-  '/src/ui/render/filters-render.js',
-  '/src/ui/render/modals-render.js',
-  // Features
-  '/src/features/transactions/transactions.js',
-  '/src/features/transactions/recurring.js',
-  '/src/features/transactions/import-export.js',
-  '/src/features/goals/goals.js',
-  '/src/features/goals/contributions.js',
-  '/src/features/goals/milestones.js',
-  '/src/features/budget/budget.js',
-  '/src/features/insights/forecast-math.js',
-  '/src/features/insights/insights.js',
-  '/src/features/accounts/accounts.js',
-  '/src/features/accounts/transfers.js',
-  '/src/features/accounts/categories.js',
-  '/src/features/reimbursement/reimburse.js',
-  '/src/features/ai-insights/ai-insights.js',
-  '/src/features/notifications/cf-notifications.js',
-  '/src/app.js',
+  '/index.html',
+  '/landing.html',
+  '/landing.js',
+  '/styles/landing.css',
+  '/styles/styles.css',
+  '/styles/mobile.css',
+  '/styles/reimburse.css',
+  '/styles/polish.css',
+  '/manifest.json',
+  '/favicon.ico',
+  '/logo.svg',
+  '/icons/icon-192.png',
+  '/icons/icon-512.png',
 ];
 
 // Never cache these - let them go straight to network
@@ -110,25 +69,33 @@ self.addEventListener('fetch', event => {
   // Only cache GET requests for app shell
   if (req.method !== 'GET') return;
 
-  event.respondWith(cacheFirstWithNetworkFallback(req));
+  event.respondWith(staleWhileRevalidate(req));
 });
 
-async function cacheFirstWithNetworkFallback(request) {
-  const cached = await caches.match(request);
-  if (cached) return cached;
-  try {
-    const res = await fetch(request);
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+
+  const networkFetch = fetch(request).then(res => {
     if (res && res.status === 200 && res.type !== 'opaque') {
-      const cache = await caches.open(CACHE_NAME);
       cache.put(request, res.clone());
     }
     return res;
-  } catch (_) {
-    if (request.destination === 'document') {
-      const indexCached = await caches.match('/index.html');
-      if (indexCached) return indexCached;
-    }
-    throw _;
+  }).catch(() => null);
+
+  if (cached) {
+    networkFetch.catch(() => {});
+    return cached;
   }
+
+  const res = await networkFetch;
+  if (res) return res;
+
+  if (request.destination === 'document') {
+    const indexCached = await cache.match('/index.html');
+    if (indexCached) return indexCached;
+  }
+
+  return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
 }
 

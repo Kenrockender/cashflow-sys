@@ -13,7 +13,9 @@ const getCat = id => {
   return { ...c, label: isCustom ? c.label : (typeof t === 'function' ? t('cat.' + c.id) : c.label) };
 };
 
+/** @param {Transaction} tx @returns {boolean} */
 const isIncomeTx  = tx => tx.type === 'income';
+/** @param {Transaction} tx @returns {boolean} */
 const isExpenseTx = tx => !isIncomeTx(tx);
 
 /* ── TRANSACTION SORT (date desc, then createdAt desc) ────── */
@@ -85,7 +87,9 @@ const weekStart = ()  => {
 };
 
 /* ── FUNCTIONAL HELPERS ──────────────────────────────────── */
+/** Total amount across transactions. @param {Transaction[]} txs @returns {number} */
 const sum = txs => txs.reduce((a, t) => a + (t.amount || 0), 0);
+/** Escape HTML-significant characters. @param {unknown} s @returns {string} */
 const san = s   => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 /** Basic debounce. */
@@ -114,5 +118,28 @@ const raf = fn => {
   };
 };
 
+/* ── LAZY-LOAD HEAVY LIBS (pdf.js, jsPDF, SheetJS) ──────── */
+function _loadScript(src) {
+  if (document.querySelector(`script[src="${src}"]`)) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+async function loadPdfJs() {
+  if (window.pdfjsLib) return;
+  await _loadScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+}
+
+async function loadJsPdf() {
+  if (window.jspdf) return;
+  await _loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+}
+
 /* ── TOAST ───────────────────────────────────────────────── */
 /* Implemented in src/ui/components/toast.js (stacked toasts + undo). */
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { getCat, isIncomeTx, isExpenseTx, sortTxByInput, catSVG, fmtCurrency, fmtFull, convertToPrimary, todayKey, thisMonth, prevMonth, weekStart, sum, san, deb, debImmediate, raf, _loadScript, loadPdfJs, loadJsPdf });

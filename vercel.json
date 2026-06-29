@@ -1,15 +1,25 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": ".",
+  "buildCommand": "vite build",
+  "outputDirectory": "dist",
   "rewrites": [
-    { "source": "/styles/:path*", "destination": "/public/styles/:path*" },
-    { "source": "/icons/:path*", "destination": "/public/icons/:path*" },
-    { "source": "/manifest.json", "destination": "/public/manifest.json" },
-    { "source": "/logo.svg", "destination": "/public/logo.svg" },
-    { "source": "/favicon.ico", "destination": "/public/favicon.ico" },
-    { "source": "/service-worker.js", "destination": "/public/service-worker.js" },
-    { "source": "/landing.js", "destination": "/public/landing.js" },
-    { "source": "/app", "destination": "/public/index.html" },
-    { "source": "/", "destination": "/public/landing.html" }
+    { "source": "/app", "destination": "/index.html" },
+    { "source": "/", "destination": "/landing.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://apis.google.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; worker-src 'self' blob:; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com wss://*.firebaseio.com https://*.firebaseapp.com https://open.er-api.com https://api.exchangerate.host; frame-src 'self' https://*.firebaseapp.com https://accounts.google.com https://apis.google.com; manifest-src 'self'"
+        },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=(), payment=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" }
+      ]
+    }
   ]
 }

@@ -90,3 +90,5 @@ function closeMilestone() {
   document.getElementById('modal-milestone')?.classList.add('hidden');
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { renderGoalsTab, renderGoalCard, renderGoalProjection, showMilestone, closeMilestone });

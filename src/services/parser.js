@@ -608,6 +608,7 @@ const ImportParser = (() => {
   };
 
   const extractPDF = async file => {
+    await loadPdfJs();
     const lib = window['pdfjs-dist/build/pdf'] || window.pdfjsLib;
     if (!lib) throw new Error('PDF.js not loaded');
     lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -660,3 +661,6 @@ const ImportParser = (() => {
 
   return { importFile, parseBCA, parseIDR, normDate };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { Parser, ImportParser });

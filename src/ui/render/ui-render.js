@@ -112,3 +112,5 @@ function hidePullIndicator() {
   _ptrEl.style.paddingTop = '0';
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { render, _doRender, updateResetDemoBtn, syncBottomNav, toggleSidebar, closeSidebar, switchTab, applyMood, ensurePullIndicator, showPullIndicator, hidePullIndicator });

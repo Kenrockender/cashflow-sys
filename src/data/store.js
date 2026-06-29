@@ -7,7 +7,9 @@
 // Export to window for app.js access
 window.txSyncFingerprint = function txSyncFingerprint(t) {
   const amt = Number(t.amount);
-  return `${t.date}|${amt}|${String(t.description || '').trim().toLowerCase()}`;
+  const cat = t.category || '';
+  const acct = t.accountId || '';
+  return `${t.date}|${amt}|${String(t.description || '').trim().toLowerCase()}|${cat}|${acct}`;
 };
 const txSyncFingerprint = window.txSyncFingerprint;
 
@@ -264,3 +266,6 @@ const Store = (() => {
 
   return { setUser, add, addBatch, update, del, softDelete, restore, permDelete, getDeleted, emptyTrash, getRecent, getLatest, getPage, saveBudgets, getBudgets, saveBudgetsFull, getBudgetsFull, addGoal, updateGoal, delGoal, getGoals };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { txSyncFingerprint, isOfflineFirestoreError, firestoreQueryGet, firestoreDocGet, OQ, Store });

@@ -72,3 +72,6 @@ async function processRecurring() {
     else console.warn('processRecurring:', e);
   }
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { skipRecurringNextMonth, processRecurring });

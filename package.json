@@ -3,9 +3,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vitest run"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "terser": "^5.48.0",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.5",
     "vitest": "^3.0.5"
   }
 }

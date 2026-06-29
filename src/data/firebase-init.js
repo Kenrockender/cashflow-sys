@@ -16,4 +16,15 @@ var auth = firebase.auth();
 // Enable offline persistence (optional - fails silently in private browsing)
 window.__cfFirestoreReady = Promise.resolve(); // Skip persistence for now
 
+// App Check: activate if reCAPTCHA site key is configured
+// To enable: set window.RECAPTCHA_SITE_KEY before this script loads,
+// and add the appcheck-compat SDK to index.html.
+if (window.RECAPTCHA_SITE_KEY && firebase.appCheck) {
+  firebase.appCheck().activate(window.RECAPTCHA_SITE_KEY, /* isTokenAutoRefreshEnabled */ true);
+  console.log('[FIREBASE] App Check activated');
+}
+
 console.log('[FIREBASE] Init complete. db:', !!db, 'auth:', !!auth);
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { db, auth });

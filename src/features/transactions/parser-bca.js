@@ -377,6 +377,7 @@ function extractMeta(fullText) {
  * Preserves line structure by detecting vertical position breaks.
  */
 async function extractPDFText(file) {
+  await loadPdfJs();
   const arrayBuffer = await file.arrayBuffer();
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
   const pages = [];
@@ -551,3 +552,6 @@ function toAppTransactions(bcaTransactions) {
 //   'food', 'transport', 'shopping', 'health', 'bills',
 //   'entertainment', 'education', 'personal', 'housing',
 //   'subscriptions', 'social', 'savings', 'income', 'other'
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { TX, TX_TYPES_ORDERED, parseAmount, isDebit, buildDate, MONTH_ID, yearFromPeriod, CATEGORY_RULES, detectCategory, isNoiseLine, buildDescription, DATE_LINE_RE, AMOUNT_RE, parsePageText, extractMeta, extractPDFText, deduplicate, isBCAStatement, parseBCAStatement, parseBCAStatements, toAppTransactions });

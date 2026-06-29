@@ -2,30 +2,73 @@ rules_version = '2';
 
 // Deploy: firebase deploy --only firestore:rules
 // Console: Firebase → Firestore → Rules
-//
-// Household / shared workspace (future): use a workspace doc, e.g.
-// workspaces/{wsId}/members/{uid} and scope reads/writes with
-// get(/databases/$(database)/documents/workspaces/$(wsId)/members/$(request.auth.uid)).
-// Keep per-user paths until you add that schema and migrate data.
 
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // All user data lives under users/{userId}/...
-    match /users/{userId}/{collection}/{docId} {
-      allow read, write: if request.auth != null
+    // ── Per-user data ────────────────────────────────────────
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Transactions — validated on create/update
+      match /transactions/{docId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validTransaction(request.resource.data);
+        allow update: if isOwner(userId) && validTransactionUpdate(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      // Goals — validated on create
+      match /goals/{docId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && validGoal(request.resource.data);
+        allow update: if isOwner(userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // Settings (budgets, preferences)
+      match /settings/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // ── Deny everything else ─────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // ── Helper functions ─────────────────────────────────────
+    function isOwner(userId) {
+      return request.auth != null
         && request.auth.uid == userId
         && userId.size() > 0;
     }
 
-    // Optional top-level user profile doc (if you add it later)
-    match /users/{userId} {
-      allow read, write: if request.auth != null
-        && request.auth.uid == userId;
+    function validTransaction(data) {
+      return data.keys().hasAll(['amount', 'date'])
+        && data.amount is number
+        && data.amount >= -999999999 && data.amount <= 999999999
+        && data.date is string
+        && data.date.size() == 10
+        && (!('description' in data) || (data.description is string && data.description.size() <= 500))
+        && (!('category' in data) || (data.category is string && data.category.size() <= 100))
+        && (!('note' in data) || (data.note is string && data.note.size() <= 1000))
+        && (!('type' in data) || data.type in ['income', 'expense'])
+        && (!('accountId' in data) || (data.accountId is string && data.accountId.size() <= 100));
     }
 
-    match /{document=**} {
-      allow read, write: if false;
+    function validTransactionUpdate(data) {
+      return (!('amount' in data) || (data.amount is number && data.amount >= -999999999 && data.amount <= 999999999))
+        && (!('description' in data) || (data.description is string && data.description.size() <= 500))
+        && (!('note' in data) || (data.note is string && data.note.size() <= 1000));
+    }
+
+    function validGoal(data) {
+      return data.keys().hasAll(['name', 'target'])
+        && data.name is string
+        && data.name.size() > 0 && data.name.size() <= 200
+        && data.target is number
+        && data.target > 0 && data.target <= 999999999999;
     }
   }
 }

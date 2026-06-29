@@ -158,3 +158,6 @@ const Insights = (() => {
 
   return { render, invalidate };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { Insights });

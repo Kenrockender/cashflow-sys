@@ -166,7 +166,7 @@ const Reimburse = (() => {
   <div class="reimb-item-info">
     <div class="reimb-item-desc">${_esc(tx.description || 'No description')}</div>
     <div class="reimb-item-meta">
-      <span>${tx.date || '—'}</span><span class="reimb-dot">·</span><span>${tx.category || 'Other'}</span>
+      <span>${tx.date || '—'}</span><span class="reimb-dot">·</span><span>${_esc(tx.category || 'Other')}</span>
       ${tx.reimbursed && tx.reimbursedDate ? `<span class="reimb-dot">·</span><span class="reimb-rcvd">Rcvd ${tx.reimbursedDate}</span>` : ''}
       ${tx.reimbursedNote ? `<span class="reimb-dot">·</span><span class="reimb-note-lbl">${_esc(tx.reimbursedNote)}</span>` : ''}
       ${tx.reimbursed && tx.reimbursedAmount != null && Math.abs(tx.reimbursedAmount) !== Math.abs(Number(tx.amount))
@@ -224,3 +224,6 @@ const Reimburse = (() => {
 
   return { register, toggle, openModal: openReimburseModal, setFilter, updateBadge };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { Reimburse });

@@ -6,6 +6,8 @@
 ══════════════════════════════════════════════════════════ */
 
 /* ── MODAL HELPERS ───────────────────────────────────────── */
+let _modalReturnFocus = null;
+
 function openModal(id) {
   if (id === 'modal-add') {
     buildCatGrid();
@@ -20,11 +22,30 @@ function openModal(id) {
       if (scb) scb.checked = false;
     }
   }
-  document.getElementById(id).classList.remove('hidden');
+  _modalReturnFocus = document.activeElement;
+  const modal = document.getElementById(id);
+  modal.classList.remove('hidden');
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  const first = modal.querySelector('input, button, select, textarea, [tabindex]');
+  if (first) first.focus();
+  modal._trapKeydown = e => {
+    if (e.key === 'Escape') { closeModal(id); return; }
+    if (e.key !== 'Tab') return;
+    const focusable = modal.querySelectorAll('input:not([disabled]), button:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+    if (!focusable.length) return;
+    const firstEl = focusable[0], lastEl = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+    else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); firstEl.focus(); }
+  };
+  modal.addEventListener('keydown', modal._trapKeydown);
 }
 
 function closeModal(id) {
-  document.getElementById(id).classList.add('hidden');
+  const modal = document.getElementById(id);
+  modal.classList.add('hidden');
+  if (modal._trapKeydown) { modal.removeEventListener('keydown', modal._trapKeydown); modal._trapKeydown = null; }
+  if (_modalReturnFocus) { try { _modalReturnFocus.focus(); } catch (_) {} _modalReturnFocus = null; }
   if (id === 'modal-add') {
     ['form-amount', 'form-desc', 'form-date', 'form-note'].forEach(i => document.getElementById(i).value = '');
     const recCb = document.getElementById('form-recurring'); if (recCb) recCb.checked = false;
@@ -47,7 +68,7 @@ function buildCatGrid() {
   const lang = typeof getLang === 'function' ? getLang() : 'en';
   if (_catBuilt && _catLang === lang) return;
   const g = document.getElementById('cat-grid');
-  g.innerHTML = getAllCategories().map(c => `<button class="cat-chip" data-cat="${c.id}" onclick="selCat('${c.id}')" style="color:${c.color}">${catSVG(c.id, 12, c.color)}<span style="color:var(--text2);font-size:.68rem">${getCat(c.id).label}</span></button>`).join('');
+  g.innerHTML = getAllCategories().map(c => `<button class="cat-chip" data-cat="${c.id}" onclick="selCat('${c.id}')" style="color:${c.color}">${catSVG(c.id, 12, c.color)}<span style="color:var(--text2);font-size:.68rem">${san(getCat(c.id).label)}</span></button>`).join('');
   _catBuilt = true;
   _catLang = lang;
 }
@@ -185,3 +206,5 @@ function renderAccountsList() {
     </div>`).join('');
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { openModal, closeModal, buildCatGrid, selCat, setTxType, setupAmountInput, initAmountInputs, openCurrencySettings, renderExchangeRatesList, saveCurrencySettings, openCustomCategoriesModal, renderCustomCategoriesList, openAccountsModal, renderAccountsList });

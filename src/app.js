@@ -84,3 +84,6 @@ function initCurrencyInputFormatting() {
     return input ? (input.dataset.rawValue || getRawValue(input.value) || '0') : '0';
   };
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { initCurrencyInputFormatting });

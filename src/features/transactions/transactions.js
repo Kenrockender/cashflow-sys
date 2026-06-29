@@ -175,7 +175,7 @@ function fillBulkAccountSelect() {
 function buildBulkCatGrid() {
   const g = document.getElementById('bulk-cat-grid');
   if (!g) return;
-  g.innerHTML = getAllCategories().map(c => `<button type="button" class="cat-chip" data-bcat="${c.id}" onclick="bulkSelCat('${c.id}')" style="color:${c.color}">${catSVG(c.id, 12, c.color)}<span style="color:var(--text2);font-size:.68rem">${getCat(c.id).label}</span></button>`).join('');
+  g.innerHTML = getAllCategories().map(c => `<button type="button" class="cat-chip" data-bcat="${c.id}" onclick="bulkSelCat('${c.id}')" style="color:${c.color}">${catSVG(c.id, 12, c.color)}<span style="color:var(--text2);font-size:.68rem">${san(getCat(c.id).label)}</span></button>`).join('');
 }
 
 function bulkSelCat(id) {
@@ -204,7 +204,7 @@ function bulkSetType(type) {
 
 function bulkCatOptions() {
   const shared = getCat(_bulkSharedCat);
-  let html = `<option value="">${t('bulk.cat.shared', { cat: shared.label })}</option>`;
+  let html = `<option value="">${t('bulk.cat.shared', { cat: san(shared.label) })}</option>`;
   html += getAllCategories().map(c => `<option value="${c.id}">${san(getCat(c.id).label)}</option>`).join('');
   return html;
 }
@@ -470,3 +470,6 @@ async function resetDemoData() {
     return b.commit();
   })).catch(e => console.warn('Background reset error:', e.message));
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { isTransientFirestoreError, withFirestoreDeadline, mergeTransactionsAfterQueueFlush, handleSaveTx, handleEdit, openBulkModal, fillBulkAccountSelect, buildBulkCatGrid, bulkSelCat, bulkSetType, bulkCatOptions, addBulkRow, bulkFormatAmount, removeBulkRow, readBulkRows, updateBulkTotal, handleSaveBulk, flushPendingSoftDelete, clearPendingDeleteTimer, handleDelete, restoreFromTrash, permDeleteFromTrash, emptyAllTrash, quickDuplicateTx, duplicateTx, loadOlderTx, clearAllData, loadDemoData, resetDemoData });

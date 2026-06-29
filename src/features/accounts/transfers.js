@@ -16,7 +16,7 @@ function openTransferModal() {
 async function confirmTransfer() {
   const fromId = document.getElementById('transfer-from-account')?.value;
   const toId   = document.getElementById('transfer-to-account')?.value;
-  const amount = parseFloat((document.getElementById('transfer-amount')?.value || '').replace(/[.,]/g, '')) || 0;
+  const amount = Math.round(parseFloat((document.getElementById('transfer-amount')?.value || '').replace(/[.,]/g, '')) || 0);
   const date   = document.getElementById('transfer-date')?.value;
   if (!fromId || !toId || fromId === toId) { toast(t('transfer.err.accounts')); return; }
   if (!amount || amount <= 0)              { toast(t('toast.err.amount'));        return; }
@@ -32,3 +32,6 @@ async function confirmTransfer() {
     toast(t('transfer.done'));
   } catch (e) { toast(t('transfer.err.save') + (e.message || '')); }
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { openTransferModal, confirmTransfer });

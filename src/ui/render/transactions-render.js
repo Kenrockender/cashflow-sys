@@ -89,7 +89,7 @@ function renderTxItems(txs, actions) {
       <div class="tx-cat-icon" style="color:${cat.color}">${catSVG(cat.id, 14, cat.color)}</div>
       <div class="tx-info">
         <span class="tx-desc">${san(tx.description) || '-'}${isOff ? `<span class="offline-badge">${t('tx.offline.badge')}</span>` : ''}${isInc ? `<span class="tx-type-tag income" style="margin-left:.4rem">${t('tx.income.tag')}</span>` : ''}${tx.recurring ? '<span class="tx-recurring-badge">' + icon('repeat', '', 14) + '</span>' : ''}</span>
-        <span class="tx-meta">${ds}${isInc ? '' : ' · ' + cat.label}${tx.accountId ? ' · ' + san(accountLabel(tx.accountId)) : ''}${tx.note ? ' · ' + san(tx.note) : ''}${tx.reimbursable ? `<span class="reimb-pill ${tx.reimbursed ? 'reimb-pill--done' : 'reimb-pill--pending'}" onclick="event.stopPropagation();Reimburse.toggle('${tx.id}')" title="${tx.reimbursed ? 'Reimbursed ✓' : 'Pending reimbursement — click to mark received'}">${tx.reimbursed ? '<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><circle cx="12" cy="12" r="9"/></svg>'}REIMB</span>` : ''}</span>
+        <span class="tx-meta">${ds}${isInc ? '' : ' · ' + san(cat.label)}${tx.accountId ? ' · ' + san(accountLabel(tx.accountId)) : ''}${tx.note ? ' · ' + san(tx.note) : ''}${tx.reimbursable ? `<span class="reimb-pill ${tx.reimbursed ? 'reimb-pill--done' : 'reimb-pill--pending'}" onclick="event.stopPropagation();Reimburse.toggle('${tx.id}')" title="${tx.reimbursed ? 'Reimbursed ✓' : 'Pending reimbursement — click to mark received'}">${tx.reimbursed ? '<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' : '<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/><circle cx="12" cy="12" r="9"/></svg>'}REIMB</span>` : ''}</span>
       </div>
       <div class="tx-right">
         <span class="tx-amount${isInc ? ' income' : ''}">${isInc ? '+' : ''}${fmtCurrency(tx.amount)}</span>
@@ -166,7 +166,7 @@ function renderTrashList() {
     const deletedAt = tx.deletedAt?.toDate ? tx.deletedAt.toDate().toLocaleDateString() : '';
     return `<div class="trash-item" data-id="${tx.id}">
       <div class="tx-cat-icon" style="color:${cat.color}">${catSVG(cat.id, 14, cat.color)}</div>
-      <div class="tx-info"><span class="tx-desc">${san(tx.description) || '-'}</span><span class="tx-meta">${ds} · ${cat.label}${deletedAt ? ` · ${t('trash.deleted.on')} ${deletedAt}` : ''}</span></div>
+      <div class="tx-info"><span class="tx-desc">${san(tx.description) || '-'}</span><span class="tx-meta">${ds} · ${san(cat.label)}${deletedAt ? ` · ${t('trash.deleted.on')} ${deletedAt}` : ''}</span></div>
       <div class="tx-right"><span class="tx-amount">${fmtCurrency(tx.amount)}</span>
         <div class="trash-actions">
           <button class="btn-trash-restore" onclick="restoreFromTrash('${tx.id}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
@@ -177,3 +177,5 @@ function renderTrashList() {
   }).join('');
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { renderTxTab, renderTxItems, initSwipeToDelete, openTrashModal, closeTrashModal, loadTrash, renderTrashList });

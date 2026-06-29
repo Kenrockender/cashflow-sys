@@ -137,3 +137,6 @@ const Charts = (() => {
 
   return { renderDaily, renderMonthly, renderPie, renderCompare, updateColors, invalidate };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { Charts });

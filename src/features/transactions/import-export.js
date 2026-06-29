@@ -126,6 +126,7 @@ function getReportPeriodSelection() {
 }
 
 async function exportPDFWithCharts() {
+  try { await loadJsPdf(); } catch (_) { toast(t('toast.export.error')); return; }
   if (!window.jspdf) { toast(t('toast.export.error')); return; }
   const { jsPDF } = window.jspdf;
   toast(t('toast.pdf.generating'));
@@ -507,3 +508,61 @@ async function exportPDFWithCharts() {
 function generatePDF() {
   exportPDFWithCharts();
 }
+
+/* ── FULL JSON BACKUP & RESTORE ─────────────────────────── */
+function exportJSON() {
+  const payload = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    transactions: S.transactions.map(({ id, ...rest }) => rest),
+    goals: S.goals.map(({ id, ...rest }) => rest),
+    budgets: S.budgets,
+    budgetPercents: S.budgetPercents || {},
+    totalIncome: S.totalIncome,
+    accounts: S.accounts,
+    customCategories: S.customCategories,
+    currency: S.currency,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `cashflow-backup-${todayKey()}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast(t('toast.json.exported') || 'Backup exported');
+}
+
+async function importJSON(file) {
+  try {
+    const text = await file.text();
+    const data = JSON.parse(text);
+    if (!data.version || !Array.isArray(data.transactions)) {
+      toast(t('toast.json.invalid') || 'Invalid backup file'); return;
+    }
+    const count = data.transactions.length;
+    if (!confirm(`Restore ${count} transactions, ${(data.goals || []).length} goals, and all settings from this backup?`)) return;
+
+    if (data.transactions.length) await Store.addBatch(data.transactions);
+    if (data.goals?.length) {
+      for (const g of data.goals) await Store.addGoal(g);
+    }
+    if (data.budgets) {
+      await Store.saveBudgetsFull(data.budgets, data.budgetPercents || {}, data.totalIncome || S.totalIncome);
+    }
+    if (data.accounts) { S.accounts = data.accounts; persistAccounts(); }
+    if (data.customCategories) {
+      S.customCategories = data.customCategories;
+      localStorage.setItem('cf-custom-cats', JSON.stringify(data.customCategories));
+    }
+    if (data.currency) { S.currency = data.currency; localStorage.setItem('cf-currency', data.currency); }
+
+    await refreshFromFirestore();
+    toast(t('toast.json.imported') || `Restored ${count} transactions`);
+  } catch (e) {
+    console.error('[importJSON]', e);
+    toast(t('toast.json.error') || 'Restore failed: ' + e.message);
+  }
+}
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { handleImportFile, handleConfirmImport, exportCSV, exportXLSX, getReportPeriodSelection, exportPDFWithCharts, generatePDF, exportJSON, importJSON });

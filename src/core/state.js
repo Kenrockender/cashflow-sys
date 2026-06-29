@@ -68,7 +68,7 @@ function accountLabel(accountId) {
 
 function fillAccountSelects() {
   ['form-account', 'transfer-from-account', 'transfer-to-account'].forEach(id => {
-    const el = document.getElementById(id);
+    const el = /** @type {HTMLSelectElement|null} */ (document.getElementById(id));
     if (!el) return;
     const cur = el.value;
     el.innerHTML = '';
@@ -101,3 +101,6 @@ function getRecurringSkipSet() {
 function saveRecurringSkipSet(set) {
   localStorage.setItem('cf-recurring-skip', JSON.stringify([...set]));
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { S, _importPending, _voiceRec, _catBuilt, _catLang, _txType, _bulkType, _bulkSharedCat, _bulkRowSeq, _lastBudgetHash, _lastTxRenderHash, _txMonthLimit, _favorites, _savedFilters, _shortcutsOpen, _recurringProcessed, _liveUnsubs, _cloudHealthTimer, _renderScheduled, _contributingGoalId, _trashItems, _ptrState, _ptrEl, _pendingDelete, getAllCategories, persistAccounts, accountLabel, fillAccountSelects, getTxView, getRecurringSkipSet, saveRecurringSkipSet });

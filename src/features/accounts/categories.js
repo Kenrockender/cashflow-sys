@@ -5,8 +5,10 @@
 ══════════════════════════════════════════════════════════ */
 
 function addCustomCategory() {
-  const label = document.getElementById('new-cat-label')?.value?.trim();
+  const rawLabel = document.getElementById('new-cat-label')?.value?.trim();
   const color = document.getElementById('new-cat-color')?.value || '#6b7280';
+  if (!rawLabel) { toast(t('cat.custom.err.name')); return; }
+  const label = rawLabel.replace(/[<>"'&]/g, '').slice(0, 50);
   if (!label) { toast(t('cat.custom.err.name')); return; }
   const id = 'custom_' + Date.now().toString(36);
   S.customCategories.push({ id, label, color });
@@ -27,3 +29,6 @@ function removeCustomCategory(id) {
   renderCustomCategoriesList();
   render();
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { addCustomCategory, removeCustomCategory });

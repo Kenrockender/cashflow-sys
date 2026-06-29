@@ -58,3 +58,6 @@ function emptyStateHTML(o) {
     ${o.ctaLabel ? `<button type="button" class="empty-rich-cta" onclick="${o.ctaOnclick || ''}">${o.ctaLabel}</button>` : ''}
   </div>`;
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { Skeleton, prefersReducedMotion, _countUpRafs, setAnimatedValue, emptyStateHTML });

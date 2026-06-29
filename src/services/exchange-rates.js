@@ -98,3 +98,6 @@ window.checkExchangeRatesFreshness = function checkExchangeRatesFreshness() {
   const hoursSince = (Date.now() - new Date(lastUpdate).getTime()) / (1000 * 60 * 60);
   if (hoursSince > 24) window.fetchExchangeRates().catch(() => {});
 };
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { cfFetchJson });

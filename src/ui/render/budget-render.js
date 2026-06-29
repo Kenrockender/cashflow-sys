@@ -70,7 +70,7 @@ function renderBudgetTab() {
 
     return `<div class="budget-row">
       <div class="bud-cat-icon" style="color:${cat.color}">${catSVG(cat.id, 14, cat.color)}</div>
-      <span class="bud-cat-name">${getCat(cat.id).label}</span>
+      <span class="bud-cat-name">${san(getCat(cat.id).label)}</span>
       ${calcHtml}
       <span class="bud-suffix">${suffix}</span>
       <input
@@ -177,7 +177,7 @@ function renderWeeklyBudget() {
     const status = pct >= 100 ? 'over' : pct >= 80 ? 'warn' : 'ok';
     html += `<div class="weekly-cat-row">
       <div class="weekly-cat-icon" style="color:${cat.color}">${catSVG(cat.id, 12, cat.color)}</div>
-      <div class="weekly-cat-info"><span class="weekly-cat-name">${getCat(cat.id).label}</span><span class="weekly-cat-amounts">${fmtCurrency(spent)} / ${fmtCurrency(weeklyBudget)}</span></div>
+      <div class="weekly-cat-info"><span class="weekly-cat-name">${san(getCat(cat.id).label)}</span><span class="weekly-cat-amounts">${fmtCurrency(spent)} / ${fmtCurrency(weeklyBudget)}</span></div>
       <div class="weekly-bar-track"><div class="weekly-bar-fill ${status}" style="width:${pct}%"></div></div>
     </div>`;
   });
@@ -197,3 +197,5 @@ function renderRolloverPanel() {
     <button class="btn-small btn-secondary" onclick="resetRollover()">${t('budget.rollover.reset')}</button>`;
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { renderBudgetTab, renderBudgetExtras, setBudgetMode, updatePctSummary, renderWeeklyBudget, renderRolloverPanel });

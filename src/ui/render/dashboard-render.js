@@ -307,7 +307,7 @@ function renderCatList() {
     const statusIcon  = over ? icon('warning', '', 12) + ' '  : warn ? icon('bolt', '', 12) + ' '  : '';
     return `<div class="cat-item" onclick="filterByCat('${cat.id}')">
       <div class="cat-icon-wrap" style="color:${cat.color}">${catSVG(cat.id, 14, cat.color)}</div>
-      <div class="cat-info"><div class="cat-name">${getCat(cat.id).label}</div>${budget > 0 ? `<div class="cat-budget-info ${statusClass}">${statusIcon}${fmtCurrency(spent)} / ${fmtCurrency(budget)}</div>` : ''}</div>
+      <div class="cat-info"><div class="cat-name">${san(getCat(cat.id).label)}</div>${budget > 0 ? `<div class="cat-budget-info ${statusClass}">${statusIcon}${fmtCurrency(spent)} / ${fmtCurrency(budget)}</div>` : ''}</div>
       <div class="cat-right"><div class="cat-val">${fmtCurrency(spent)}</div><span class="cat-pct">${pct}%</span></div>
       <div class="cat-bar-row"><div class="cat-bar-fill" style="width:${pct}%;background:${cat.color}"></div></div>
     </div>`;
@@ -353,3 +353,5 @@ function renderOnboarding() {
     </div></div>`;
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { toggleFavorite, renderFavoritesBar, renderDashboard, renderForecastStrip, renderRecurringPanel, getSmartInsights, renderSmartInsights, applyInsightAction, renderCatList, renderDashGoalsPreview, renderOnboarding });

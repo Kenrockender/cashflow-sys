@@ -65,3 +65,6 @@ function updateAutoContributePercent(goalId, percent) {
   if (i >= 0) S.goals[i] = goal;
   Store.updateGoal(goalId, { autoContributePercent: goal.autoContributePercent }).catch(e => console.warn('Update auto-contrib % error:', e.message));
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { openContributeModal, handleContribute, processAutoContribute, toggleAutoContribute, updateAutoContributePercent });

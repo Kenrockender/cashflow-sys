@@ -153,7 +153,7 @@ function renderTxFilterChips() {
     .slice(0, 6);
   el.innerHTML = cats.map(c => {
     const cat = getCat(c.id);
-    return `<button class="tx-chip-cat${_activeChipCat === c.id ? ' active' : ''}" data-cat="${c.id}" onclick="applyChipCatFilter('${c.id}')" style="--chip-color:${c.color}">${cat.label}</button>`;
+    return `<button class="tx-chip-cat${_activeChipCat === c.id ? ' active' : ''}" data-cat="${c.id}" onclick="applyChipCatFilter('${c.id}')" style="--chip-color:${c.color}">${san(cat.label)}</button>`;
   }).join('');
 }
 
@@ -211,3 +211,5 @@ function initKeyboardShortcuts() {
   });
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { refreshCatFilterOptions, filterByCat, toggleTxFilters, saveCurrentFilter, loadSavedFilter, deleteSavedFilter, clearAllFilters, renderSavedFilters, applyChipFilter, applyChipCatFilter, updateChipActiveState, renderTxFilterChips, toggleShortcutsPanel, initKeyboardShortcuts });

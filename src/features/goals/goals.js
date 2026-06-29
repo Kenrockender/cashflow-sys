@@ -77,3 +77,6 @@ async function handleDelGoal(id) {
     }
   });
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { openGoalModal, handleSaveGoal, handleDelGoal });

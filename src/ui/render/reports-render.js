@@ -69,3 +69,5 @@ function renderYoY() {
     </div>`;
 }
 
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { renderReports, renderReportPdfPeriodControls, renderYoY });

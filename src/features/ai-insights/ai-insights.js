@@ -5,8 +5,7 @@
 ══════════════════════════════════════════════════════════ */
 
 const AIInsights = (() => {
-  const GEMINI_KEY = 'AIzaSyD7QU6DIKv4AufhplH0ba_0VUd-PbBVZrc';
-  const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`;
+  const GEMINI_URL = '/api/gemini';
 
   const TYPE_COLOR = {
     warning: '#f59e0b',
@@ -212,3 +211,6 @@ ${top5}`;
   /* ── public API ───────────────────────────────────────────── */
   return { generate };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { AIInsights });

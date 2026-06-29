@@ -61,9 +61,15 @@ function setCloudStatus(kind, text) {
   const pill = document.getElementById('cloud-status-pill');
   const label = document.getElementById('cloud-status-text');
   if (!pill || !label) return;
-  pill.classList.remove('online', 'offline', 'cache');
+  pill.classList.remove('online', 'offline', 'cache', 'syncing');
   if (kind) pill.classList.add(kind);
   label.textContent = text || '';
+  pill.onclick = kind === 'cache' ? () => {
+    setCloudStatus('syncing', t('status.syncing') || 'Syncing…');
+    syncQueuedTransactionsIfAny({ manual: true }).finally(() => checkCloudHealth());
+  } : null;
+  pill.style.cursor = kind === 'cache' ? 'pointer' : '';
+  pill.title = kind === 'cache' ? (t('status.tap.sync') || 'Tap to sync now') : '';
 }
 
 async function withTimeout(promise, ms = 4500, code = 'cf-timeout') {
@@ -333,3 +339,6 @@ auth.onAuthStateChanged(async user => {
     }
   }
 });
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { clearLiveListeners, setupLiveListeners, setCloudStatus, withTimeout, checkCloudHealth, startCloudHealthMonitor, stopCloudHealthMonitor, syncQueuedTransactionsIfAny, refreshFromFirestore, checkFirestoreRules, initPullToRefresh });

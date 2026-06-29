@@ -134,3 +134,6 @@ const CommandPalette = (() => {
 
   return { open, close, toggle };
 })();
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { CommandPalette });

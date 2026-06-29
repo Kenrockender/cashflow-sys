@@ -198,3 +198,6 @@ const DUMMY_TX = (() => {
     {date:d(-2,2), description:'Netflix Premium',          type:'expense',category:'subscription', amount:54000, note:'monthly',recurring:true,recurringId:'rec_netflix'},
   ];
 })()
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { CAT_ICONS, ICON_SVGS, icon, CATS, DEF_BUDGETS, DEF_PERCENTS, CAT_KW, INCOME_KW, SHORTHANDS, CURRENCIES, DEFAULT_EXCHANGE_RATES, DUMMY_TX });

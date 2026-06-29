@@ -89,7 +89,7 @@ if (qInput) {
     const p = Parser.parseLocal(v); if (!p.amount) { prev.classList.add('hidden'); return; }
     const isInc = p.type === 'income';
     const cat = isInc ? { id: 'income', label: t('cat.income'), color: 'var(--ok)' } : getCat(p.category);
-    prev.innerHTML = `<span class="ai-badge">AI</span><span class="ai-type-badge ${p.type}">${isInc ? t('tx.income.tag') : getCat(p.category).label}</span><span style="display:flex;align-items:center;gap:.4rem">${catSVG(cat.id, 12, cat.color)} ${san(p.description)}</span><span class="ai-amount" style="color:${isInc ? 'var(--ok)' : 'var(--gold)'}">${fmtFull(p.amount)}</span>`;
+    prev.innerHTML = `<span class="ai-badge">AI</span><span class="ai-type-badge ${p.type}">${isInc ? t('tx.income.tag') : san(getCat(p.category).label)}</span><span style="display:flex;align-items:center;gap:.4rem">${catSVG(cat.id, 12, cat.color)} ${san(p.description)}</span><span class="ai-amount" style="color:${isInc ? 'var(--ok)' : 'var(--gold)'}">${fmtFull(p.amount)}</span>`;
     prev.classList.remove('hidden');
   }, 80));
   qInput.addEventListener('keydown', e => { if (e.key === 'Enter') doQuickAdd(); });
@@ -184,3 +184,6 @@ document.addEventListener('visibilitychange', () => {
 setInterval(() => {
   if (auth.currentUser && document.visibilityState === 'visible') void syncQueuedTransactionsIfAny({ silent: true });
 }, 90000);
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { _logoutBtn, bindMoodPills, moodObserver, qInput, doQuickAdd, voiceBtn, drop, fi });

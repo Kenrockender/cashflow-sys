@@ -35,3 +35,6 @@ function resetRollover() {
   renderRolloverPanel();
   toast(t('toast.rollover.reset'));
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { toggleRollover, calculateRollover, resetRollover });

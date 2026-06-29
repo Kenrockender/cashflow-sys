@@ -40,7 +40,7 @@ const I18n = (() => {
     // Text content
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
-      el.innerHTML = t(key);
+      el.textContent = t(key);
     });
     // Placeholder
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
@@ -79,3 +79,6 @@ window.setLang = I18n.setLang.bind(I18n);
 window.getLang = I18n.getLang.bind(I18n);
 
 document.addEventListener('DOMContentLoaded', I18n.init);
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { I18n });

@@ -19,3 +19,6 @@ function checkGoalMilestones(goalId) {
     }
   }
 }
+
+/* ─── ESM window bridge (auto-generated) ─── */
+Object.assign(window, { checkGoalMilestones });
